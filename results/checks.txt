@@ -1,0 +1,13 @@
+test_duplicate_union (__main__.test.<locals>.Checks.test_duplicate_union) ... ok
+test_excluded_not_missing (__main__.test.<locals>.Checks.test_excluded_not_missing) ... ok
+test_missing_category_abstains (__main__.test.<locals>.Checks.test_missing_category_abstains) ... ok
+test_multilingual_html (__main__.test.<locals>.Checks.test_multilingual_html) ... ok
+test_saved_split_disjoint (__main__.test.<locals>.Checks.test_saved_split_disjoint) ... ok
+test_score_range_is_preserved (__main__.test.<locals>.Checks.test_score_range_is_preserved) ... ok
+test_snapshot_integrity (__main__.test.<locals>.Checks.test_snapshot_integrity) ... ok
+test_zero_is_valid (__main__.test.<locals>.Checks.test_zero_is_valid) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 7.368s
+
+OK

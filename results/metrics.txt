@@ -1,0 +1,54 @@
+seed: 20261027
+scope: Main languages en/fr/es, ingredient text >=15 characters, score applicable; France-context target; category input optional
+sample_records: 12288
+numeric_label_records: 4039
+eligible_labelled: 1629
+labelled_other_scope: 2410
+missing_score_by_reason: {'other unknown or absent score': 1461, 'missing category': 4538, 'no Agribalyse match': 2101, 'not applicable': 149}
+label_input_coverage: {'ingredients': {'labelled': 2199, 'unlabelled_applicable': 3140}, 'categories': {'labelled': 4039, 'unlabelled_applicable': 3562}}
+unlabelled_applicable: 8100
+eligible_unlabelled: 2585
+language_counts: {'en': 3270, 'fr': 6126, 'de': 575, 'nl': 250, 'es': 947, 'sv': 9, 'nb': 7, 'pt': 29, 'xx': 9, 'it': 872, 'el': 5, 'ru': 23, 'pl': 45, 'hr': 3, 'fa': 4, 'ro': 19, 'fi': 9, 'no': 1, 'zh': 1, 'sr': 5, 'bg': 4, 'da': 6, 'cs': 17, 'th': 6, 'ar': 5, 'hu': 12, 'ja': 4, 'ca': 5, 'hi': 1, 'sl': 2, 'id': 2, 'tr': 8, 'lt': 1, 'rm': 1, 'uk': 3, 'et': 1, 'az': 1}
+target_sources: {'scores.fr': 1629}
+target_range: [-20.0, 123.0]
+zero_labels: 2
+train_n: 1056
+calibration_n: 233
+test_n: 340
+duplicate_groups: 1563
+test_seen_category_n: 145
+global_median_mae: 23.61470588235294
+category_median_mae: 12.686764705882354
+combined_model_mae: 15.86688971580447
+ingredient_only_mae: 19.23239317919086
+combined_categories_masked_mae: 21.310890726144
+relative_improvement_vs_category: -0.2506647741679656
+interval_nominal_coverage: 0.9
+interval_radius_points: 34.94688131115871
+interval_test_coverage: 0.9382352941176471
+test_median_absolute_error: 14.249387521057171
+test_p90_absolute_error: 30.918607494879492
+warning: Labelled-sample error is not evidence of accuracy on genuinely unlabelled products; intervals may fail under distribution shift. No manual review precision has been measured.
+category_class_count: 20
+category_train_n: 428
+category_calibration_n: 93
+category_test_all_n: 473
+category_test_supported_n: 154
+category_test_supported_fraction: 0.32558139534883723
+category_top1_accuracy: 0.7792207792207793
+category_top3_accuracy: 0.9415584415584416
+category_top3_accuracy_all_test: 0.30655391120507397
+category_macro_f1: 0.5963874458874459
+category_majority_accuracy: 0.18831168831168832
+category_accept_threshold: 0.5
+category_test_accepted_n: 84
+category_test_accepted_accuracy: 0.9642857142857143
+category_top1_accuracy_all_test: 0.2536997885835095
+category_all_test_accepted_n: 123
+category_all_test_accepted_accuracy: 0.6585365853658537
+category_calibration_accepted_n: 56
+category_calibration_accepted_accuracy: 0.9642857142857143
+category_scope_note: Category label is the last recorded category tag; classes need at least 8 training examples and occur on a numerically scored product in this sample. Reported accuracy on supported classes excludes out-of-scope true labels; all-test top3 counts those as failures. These are recorded-category labels, not verified corrections.
+decision: Direct score regression failed to beat the category median. Refine the main prototype to category suggestions with contributor review; keep score regression as a documented negative experiment.
+category_three_rule_accuracy_all: 0.07822410147991543
+category_three_rule_accuracy_supported: 0.22727272727272727

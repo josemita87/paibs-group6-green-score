@@ -1,0 +1,42 @@
+{
+  "dataset": "openfoodfacts/product-database",
+  "source_url": "https://huggingface.co/datasets/openfoodfacts/product-database",
+  "download_url": "https://huggingface.co/datasets/openfoodfacts/product-database/resolve/89cfb571db20b1f1b246f27cab71837fc96225b1/food.parquet",
+  "revision": "89cfb571db20b1f1b246f27cab71837fc96225b1",
+  "retrieved_utc": "2026-10-27T12:22:48.369959+00:00",
+  "seed": 20261027,
+  "row_groups": [
+    105,
+    113,
+    204,
+    414,
+    530,
+    626,
+    768,
+    780,
+    931,
+    1672,
+    1726,
+    2017
+  ],
+  "sampling": "12 pseudorandom Parquet row groups, complete rows within each group; barcode-order cluster sample, not an iid sample of all products",
+  "population_rows": 2117571,
+  "sample_rows": 12288,
+  "selected_fields": [
+    "code",
+    "product_name",
+    "brands",
+    "categories_tags",
+    "ingredients_text",
+    "lang",
+    "countries_tags",
+    "origins_tags",
+    "labels_tags",
+    "packaging_tags",
+    "environmental_score_score",
+    "environmental_score_grade",
+    "environmental_score_data"
+  ],
+  "sha256": "3449e2da9d6739f1b5385ef2b3db903fc2014ec0e49be2ca9e719b6f3167edc3",
+  "license": "Open Database License (ODbL); individual contents Database Contents License"
+}
