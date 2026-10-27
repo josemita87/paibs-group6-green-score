@@ -1,5 +1,7 @@
 # PAIBS Group 6 category completion and review
 
+[![checks](https://github.com/josemita87/paibs-group6-green-score/actions/workflows/checks.yml/badge.svg)](https://github.com/josemita87/paibs-group6-green-score/actions/workflows/checks.yml)
+
 A working research prototype that suggests product categories from ingredient text for Open Food Facts contributors to review. The original Green-Score regression experiment is retained as a negative result.
 
 ## Main findings
@@ -11,6 +13,20 @@ A working research prototype that suggests product categories from ingredient te
 - A fixed class-score threshold of 0.50 yields 123 accepted test predictions; 65.9% match the recorded label across all test classes. This is **not** accuracy on genuine missing categories.
 - An assisted text-only desk review of 20 pre-filter suggestions found four plausible new categories, eight already present, five too broad, two ambiguous and one implausible. It is not contributor-validated precision.
 - The final queue exposes 131 suggestions after suppressing a category already present and the generic groceries category. Remaining rows abstain. Post-filter precision has not been measured.
+
+## Results at a glance
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="results/figures/regression_mae_dark.svg">
+  <img alt="Score regression mean absolute error: global median 23.6, category median baseline 12.7, ingredients only 19.2, ingredients plus categories 15.9, combined with categories masked 21.3." src="results/figures/regression_mae_light.svg">
+</picture>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="results/figures/category_accuracy_dark.svg">
+  <img alt="Category top-1 accuracy. Supported labels: majority class 18.8%, three-rule diagnostic 22.7%, trained classifier 77.9%. All test labels: three-rule diagnostic 7.8%, trained classifier 25.4%." src="results/figures/category_accuracy_light.svg">
+</picture>
+
+Both figures are drawn from `results/metrics.json` by `python make_figures.py`; no number in them is typed by hand. CI regenerates them and fails if they drift from the committed metrics.
 
 ## Run the included demo
 
