@@ -28,6 +28,41 @@ A working research prototype that suggests product categories from ingredient te
 
 Both figures are drawn from `results/metrics.json` by `python make_figures.py`; no number in them is typed by hand. CI regenerates them and fails if they drift from the committed metrics.
 
+## Claim audit: does the label agree with the ingredient list?
+
+Second experiment, deterministic baseline. It checks products whose label makes a
+claim the ingredient list can contradict — vegan, vegetarian, gluten-free,
+lactose-free, palm-oil-free — using multilingual term lists with explicit
+exceptions. No learning yet; an embedding matcher will be measured against these
+numbers.
+
+```sh
+python contradictions.py test    # 24 self-checks on tricky strings
+python contradictions.py scan    # writes results/contradictions.csv
+```
+
+1,145 claims in the sample carry usable ingredient text. The first version raised
+66 flags. Reading them showed almost all were **cross-contamination warnings**
+("may contain traces of milk" is normal on a vegan product) and **negations**
+("ohne Fleisch", "fără gluten"). Filtering those clauses leaves 39 flags.
+
+An assisted desk review of the 12 non-lactose flags (`results/contradictions_desk_review.csv`)
+found 5 candidate label errors, 4 domain ambiguities and 3 false positives. The
+candidates include a gluten-free soy sauce declaring wheat, a gluten-free cracker
+whose first ingredient is wholemeal wheat flour, and a gluten-free beer whose text
+reads CONTAINS BARLEY.
+
+All 27 lactose flags are dairy products carrying a lactose-free claim, and most
+are aged hard cheeses — Gruyère, Grana Padano, Appenzeller, Pecorino — which are
+naturally almost lactose-free. The claim and the ingredient are both correct. A
+term list cannot resolve this; it needs domain knowledge. That case, the
+wheatgrass records and the gluten-removed beer are the motivation for the next
+layer rather than evidence against the approach.
+
+These are review requests, not confirmed errors: the ingredient text itself can be
+wrong, truncated or OCR-damaged, and nothing here has been checked against a
+product photo or confirmed by an Open Food Facts contributor.
+
 ## Run the included demo
 
 Python 3.12 was used. No API key or GPU is needed.
