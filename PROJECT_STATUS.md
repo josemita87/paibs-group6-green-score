@@ -63,6 +63,17 @@ file with implementation evidence before committing.
 
 ## Change log
 
+### 2026-10-28 — Work 2a stack PDF
+
+- Added `output/pdf/group_6_work_2a_your_stack.pdf`: a one-page English stack table
+  for Group 6, covering components, tools, levels, prior use and alternatives.
+- Levels 2-3 are provisional estimates requested by the user. Prior team experience
+  remains unconfirmed; coaching priorities are conditional on the team's review.
+- Validation: rendered and visually reviewed the PDF; checked one-page layout and
+  extracted text. Runtime tests were not needed for this document-only addition.
+- No pipeline step advanced. Next implementation task remains step 1.
+
+
 ### 2026-10-28 — Shared contributor workflow
 
 - Added root contributor instructions and this shared status tracker; linked both
