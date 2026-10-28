@@ -4,10 +4,13 @@ The proposed system combines two technical components: a model fine-tuned to
 recognize acceptable product substitutes and a mathematical optimizer that selects
 changes for the complete basket. Both can run locally without a chat API.
 
-**Current status:** raw catalog acquisition is implemented. The repository contains
-the original sample, an expanded catalog, coverage report, data verification/download
-scripts and design documentation. The training pipeline,
-recommender, optimizer and interface below are proposed work, not implemented
+**Current status:** raw catalog acquisition (step 2) and the basket input flow
+(step 1: product selection, quantities, units, locks, change limit, declared
+preference and constraint fields, validation) are implemented. The repository
+contains the original sample, an expanded catalog, coverage report, data
+verification/download scripts, the `basket` package, a Streamlit input screen and
+design documentation. The comparable catalog, training pipeline, recommender,
+optimizer and recommendation interface below are proposed work, not implemented
 features or measured results.
 
 ## 1. User input

@@ -9,9 +9,10 @@ version history; this file explains what is ready and what to do next.
 
 ## Current focus
 
-Raw catalog acquisition is implemented. The recommender, training pipeline,
-optimizer and user interface are not implemented. The next task is **step 1:
-define and validate basket input**.
+Raw catalog acquisition (step 2) and the basket input flow (step 1) are implemented.
+The comparable catalog, recommender, training pipeline, optimizer and recommendation
+interface are not implemented. The next task is **step 3: build a comparable,
+usable catalog**.
 
 Earlier conversation called raw acquisition “step 1.” In the canonical pipeline
 it is **step 2**. Use the document's 1–13 numbering from now on; do not rename steps.
@@ -20,7 +21,7 @@ it is **step 2**. Use the document's 1–13 numbering from now on; do not rename
 
 | Step | Deliverable | Status | Evidence or remaining work |
 |---|---|---|---|
-| 1 | User input | Not started | Define basket items, quantities, preferences, locked products and change limit; implement input validation and a minimal input flow. |
+| 1 | User input | Done — minimal flow | `basket/` Pydantic models and catalog lookup, `app/streamlit_app.py`, `tests/test_basket.py`. Preferences and nutritional constraints are declared fields only (`declared_not_checked`); enforcement belongs to steps 9–10. |
 | 2 | Acquire and version the product catalog | Done — raw sample | `scripts/fetch_data.py --catalog`, catalog snapshot, manifest and coverage audit. Broader catalog acquisition can follow if coverage requires it. |
 | 3 | Build a comparable, usable catalog | Not started | Normalize units and nutrient basis, resolve missing data and choose eligible families. |
 | 4 | Create the substitution dataset | Not started | Annotation guidelines, candidate generation, pilot review and labels; establish product groups before creating pairs. |
@@ -48,6 +49,14 @@ Record any other dependency-driven change of order here before proceeding.
 - These counts are coverage, not validated compatibility or nutritional eligibility.
   Units, mass/volume basis, prepared values and environmental score context still
   need normalization. Prices and stock are absent.
+- Raw `product_quantity_unit` is only ever `g` (3,653) or `ml` (658); 7,977 products
+  record none. The input flow therefore accepts `g`, `kg`, `ml`, `l` only, rejects a
+  unit that conflicts with a recorded basis and marks items `unverified` when the
+  source records no unit. Counts, pieces and ounces in the free-text `quantity`
+  field are not parsed.
+- A `Basket` records inputs only: it carries no nutrient values, no eligibility
+  judgement and no recommendation. Availability flags on `ProductRef` report
+  whether a raw value exists, not whether it is comparable.
 - No substitution pairs have been labeled and no new model has been trained.
 - Local data checks and remote CI passed for acquisition commit `2ecf444`.
 - Historical experiments remain available under `archive/claim-audit-v1` and
@@ -55,13 +64,42 @@ Record any other dependency-driven change of order here before proceeding.
 
 ## Next action
 
-Implement step 1 in a focused change: specify basket items and supported constraint
-fields, validate quantities and limits, and provide a minimal input flow. Use
-sample-backed product selection and clearly represent unavailable data. Full
-recommendations belong to later steps. Start with a short plan and update this
-file with implementation evidence before committing.
+Implement step 3 in a focused change: standardize nutrient names and units
+(including `salt` recorded in `mg`), resolve the mass/volume basis per product,
+keep missing values explicitly missing, group duplicates and near-duplicate
+variants, and select candidate product families with enough complete products.
+Record exclusion reasons and output `catalog.parquet` plus a coverage report. The
+step-1 `Basket` schema (`schema_version: 1`) is the input contract later steps
+should consume; extend it rather than replacing it.
 
 ## Change log
+
+### 2026-10-28 — Basket input flow and validation (step 1)
+
+- Added `basket/models.py` (Pydantic v2): `Unit` (`g`, `kg`, `ml`, `l` with exact
+  canonical conversion), `ProductRef` with raw availability flags, `BasketItem`
+  (positive finite quantity, lock flag, unit-basis check against the recorded
+  catalog unit, `unit_basis` verified/unverified), `Preferences` and
+  `NutritionalConstraints` as declared-only fields, `Basket` (≥1 item, unique
+  products, `max_substitutions ≥ 0`, catalog revision and checksum) and
+  `build_basket`, which reports every unknown barcode and invalid value at once.
+- Added `basket/catalog.py`: verified snapshot loading, exact barcode lookup and
+  case-insensitive name/brand search; no cleaning or inference of source values.
+- Added `app/streamlit_app.py`: search or barcode selection, product evidence
+  display, quantity/unit/lock entry, change limit, preference and constraint fields,
+  basket table with lock toggles and removal, JSON output and download. The UI
+  states that recommendations and constraint checks are not implemented.
+- Added `requirements-app.txt` (pydantic 2.14.1, streamlit 1.66.1); CI now installs
+  it before the unit tests. Updated README and pipeline status text.
+- Validation (local, Python 3.13 venv): 20 unit tests pass (4 existing data checks,
+  13 model/catalog checks, 3 headless `AppTest` runs of the Streamlit screen);
+  `scripts/audit_data.py` and `--catalog` unchanged against the committed report;
+  manual browser run of the app: search “yogurt”, add 100 g, build basket, observed
+  the unverified-unit warning, success message and JSON. Remote CI for this commit
+  is not known at commit time.
+- Limitations: no nutrient values, eligibility or recommendations in the basket;
+  preferences and constraints are stored, not checked; search is substring-only;
+  names keep raw source text (HTML entities are unescaped only for display).
 
 ### 2026-10-28 — Work 2 walking skeleton worksheet
 
