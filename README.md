@@ -9,6 +9,13 @@ The recommender, training pipeline, optimizer and interface are not implemented 
 Intended use: “Improve my basket's environmental indicator, maintain a minimum
 protein level and change at most three products.”
 
+## Contributing
+
+Read [AGENTS.md](AGENTS.md) and [PROJECT_STATUS.md](PROJECT_STATUS.md) before starting.
+Every commit must update the shared project status in the same commit, including
+changes, validation and the next action. Keep all project content and commits in
+English. Follow the numbered pipeline steps in order; record dependency exceptions.
+
 ## Design
 
 [Technical pipeline, training and evaluation](docs/PIPELINE.md).

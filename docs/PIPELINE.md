@@ -340,12 +340,16 @@ training setup, evaluation design, basket optimization formulation and user work
 
 ## Implementation order
 
-1. Audit and expand the catalog; select families with sufficient coverage.
-2. Define annotation guidelines and product groups; fix partitions and annotate pairs.
-3. Build rules, TF-IDF and frozen-encoder baselines.
-4. Fine-tune the encoder and compare on the held-out evaluation design.
-5. Implement the optimizer and verify against greedy selection and small exhaustive cases.
-6. Build the demo and evaluate baskets with users.
+Use steps 1–13 above as the canonical numbering and work through them in order,
+skipping completed steps. Consult [PROJECT_STATUS.md](../PROJECT_STATUS.md) for the
+current handoff and update it in every commit as required by
+[AGENTS.md](../AGENTS.md).
+
+Raw catalog acquisition (step 2) was completed first. Step 1 is next, followed by
+step 3. Establish product groups before building annotation pairs in step 4, then
+freeze and verify the partitions in step 5. Reproducibility checks run throughout;
+step 13 also covers final delivery. Explain and record other dependency-driven
+exceptions in the status tracker rather than renumbering steps.
 
 ## Technical references
 
