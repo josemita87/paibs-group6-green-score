@@ -1,125 +1,129 @@
-# Pipeline técnico propuesto
+# Proposed technical pipeline
 
-## Producto y alcance
+## Product and scope
 
-Entrada: productos de una cesta, cantidades comparables, preferencias y máximo K
-cambios. Salida: sustituciones concretas, diferencias verificables y opción de
-conservar cada producto original. Usuario: persona que organiza su compra.
+Input: basket products, comparable quantities, preferences and a maximum of K
+changes. Output: concrete substitutions, verifiable differences and the option
+to keep each original product. Target user: a person planning their grocery shopping.
 
-MVP: tres familias con uso comparable, elegidas tras auditar cobertura; por
-ejemplo bebidas de desayuno, yogures y cereales. No asumir que pertenecer a una
-categoría basta para ser sustituto. País declarado no significa stock en tienda.
-No incluir presupuesto hasta disponer de precios con unidad, fecha y fuente.
+MVP: three product families with comparable uses, selected after auditing coverage;
+for example, breakfast drinks, yogurts and cereals. Sharing a category does not
+necessarily make two products substitutes. A declared country does not establish
+in-store availability. Exclude budget constraints until prices include units,
+dates and sources.
 
-## 1. Catálogo y datos
+## 1. Catalog and data
 
-Conservar el snapshot histórico sin modificarlo. Preparar un nuevo dataset
-versionado que añada nutrientes por 100 g/100 ml, unidades, cantidades y evidencia
-de preferencias. Mantener procedencia, valores ausentes y contexto de cada score.
-No convertir desconocidos en cero. Comparar sólidos y líquidos en unidades
-compatibles. La muestra actual carece de nutriments: es un bloqueo para el MVP
-nutricional, no una restricción ya implementada.
+Keep the historical snapshot unchanged. Prepare a new versioned dataset that adds
+nutrients per 100 g/100 ml, units, quantities and evidence for preference filters.
+Preserve provenance, missing values and the context of each score. Do not replace
+unknown values with zero. Compare solids and liquids using compatible units.
+The current sample lacks `nutriments`: this blocks the nutritional MVP; nutritional
+constraints are not implemented yet.
 
-Usar el score ambiental publicado en un mismo contexto, con mayor valor como
-mejor indicador. No entrenar otro predictor de ese score. Un score ausente impide
-recomendar ese cambio por mejora ambiental. No interpretar diferencias de score
-como porcentajes de reducción de emisiones ni como kg de CO2.
+Use published environmental scores in a consistent context, with higher values
+representing a better indicator. Do not train another predictor of that score.
+A missing score prevents recommending a change on environmental improvement
+grounds. Do not interpret score differences as percentage emission reductions
+or kilograms of CO2.
 
-## 2. Dataset de sustituciones: la supervisión propia
+## 2. Substitution dataset: project-specific supervision
 
-Crear pares producto A/producto B anotados como sustituto aceptable, no aceptable
-o ambiguo, con motivo y contexto de uso. Propuesta inicial: 600–1.000 pares,
-repartidos entre las familias; dos personas anotan un subconjunto compartido para
-medir acuerdo y resolver discrepancias. Es un objetivo de trabajo, no datos ya
-recogidos. Categorías estrechas pueden proponer pares, pero no son ground truth.
+Annotate product A/product B pairs as acceptable substitutes, unacceptable
+substitutes or ambiguous, recording the reason and usage context. Initial target:
+600–1,000 pairs across the selected families. Two annotators label a shared subset
+to measure agreement and resolve disagreements. This is a proposed workload,
+not data already collected. Narrow categories can suggest pairs but are not ground truth.
 
-Incluir negativos difíciles: productos con ingredientes o nombres parecidos que
-cumplen funciones distintas. Evitar negativos accidentales que sí sean sustitutos.
-Separar train/validación/test por grupos de productos y variantes casi duplicadas
-ANTES de construir los pares; ningún producto ni variante cruza particiones.
-Usar solo train para minería de negativos; reservar test humano sin etiquetas débiles.
+Include hard negatives: products with similar names or ingredients that serve
+different purposes. Avoid accidentally treating valid substitutes as negatives.
+Split training, validation and test data by product groups and near-duplicate
+variants BEFORE constructing pairs; no product or variant may cross partitions.
+Mine negatives only within training data. Reserve a human-labeled test set without
+weak labels.
 
-## 3. Fine-tuning del modelo de sustitución
+## 3. Fine-tune the substitution model
 
-Punto de partida candidato: paraphrase-multilingual-MiniLM-L12-v2 mediante
-Sentence Transformers/PyTorch. Entrada: nombre, ingredientes y contexto de uso;
-las categorías pueden filtrar candidatos, pero no deben revelar la etiqueta
-artificial del entrenamiento. Encoder compartido para ambos productos.
+Candidate starting point: `paraphrase-multilingual-MiniLM-L12-v2` through Sentence
+Transformers/PyTorch. Input: name, ingredients and usage context. Categories may
+filter candidates but must not reveal artificial training labels. Both products
+use the same encoder.
 
-Ajustar sus pesos con tripletas (producto, sustituto aceptable, negativo difícil)
-y pérdida contrastiva o TripletLoss. El objetivo acerca sustitutos y aleja falsos
-amigos. Comparar con embeddings congelados para medir qué aporta el ajuste.
-Elegir margen, épocas y umbral de aceptación en validación, nunca en test.
-Guardar revisión del modelo base, pesos, semilla, particiones y configuración.
-No afirmar que similitud equivale a preferencia de sabor sin datos de usuarios.
+Update its weights using triplets (product, acceptable substitute, hard negative)
+with a contrastive objective or TripletLoss. The objective brings substitutes
+closer and separates misleading matches. Compare against frozen embeddings to
+measure the benefit of fine-tuning. Select the margin, epochs and acceptance
+threshold on validation data, never on the test set. Save the base model revision,
+weights, random seed, partitions and configuration. Do not equate similarity with
+taste preference without user data.
 
-## 4. Recuperación y restricciones
+## 4. Candidate retrieval and constraints
 
-Precalcular embeddings del catálogo. Para cada producto, recuperar candidatos
-por coseno y aplicar filtros de unidad, uso, cobertura y preferencias. Para un
-catálogo pequeño basta búsqueda exacta; un índice vectorial es opcional.
+Precompute catalog embeddings. For each product, retrieve candidates by cosine
+similarity and apply unit, usage, data coverage and preference filters. Exact
+search is sufficient for a small catalog; a vector index is optional.
 
-Ajustar el umbral de similitud en validación para priorizar precisión. Abstenerse
-si falta evidencia. Una preferencia dietética solo se satisface con evidencia
-explícita suficiente; ausencia de un alérgeno en el texto no demuestra seguridad.
-El MVP no certifica aptitud médica ni alergénica.
+Select the similarity threshold on validation data to prioritize precision.
+Abstain when evidence is insufficient. A dietary preference requires sufficient
+explicit evidence; an allergen's absence from the text does not establish safety.
+The MVP does not certify medical or allergy suitability.
 
-## 5. Optimización de la cesta
+## 5. Basket optimization
 
-Variables binarias x[i,j]: elegir el candidato j para el producto i. Incluir el
-original como candidato. Exigir una elección por posición y como máximo K cambios.
-Bloquear sustitutos no aceptables antes de optimizar.
+Binary variables x[i,j] select candidate j for product i. Include the original
+product as a candidate. Require one selection per basket position and at most K
+changes. Exclude unacceptable substitutes before optimization.
 
-Objetivo inicial: maximizar mejora del score ambiental ponderada por cantidades
-comparables, con penalización explícita por cambios. Su agregado se presenta como
-índice experimental de la cesta, no como huella ambiental oficial.
+Initial objective: maximize environmental score improvement weighted by comparable
+quantities, with an explicit penalty for changes. Present the aggregate as an
+experimental basket index, not an official environmental footprint.
 
-Restricciones opcionales con datos completos: proteína total >= mínimo y azúcar o
-sal <= límites elegidos. Convertir valores por 100 g/ml a cantidades de la cesta
-antes de sumar; no mezclar unidades incompatibles. Usar programación entera (p.ej.
-OR-Tools CP-SAT con coeficientes enteros escalados). Si las restricciones son
-inviables, informar de ello y permitir al usuario cambiarlas; no relajarlas en silencio.
+Optional constraints when data is complete: total protein >= a minimum and sugar
+or salt <= selected limits. Convert per-100-g/ml values to basket quantities before
+summing; do not mix incompatible units. Use integer programming, for example
+OR-Tools CP-SAT with scaled integer coefficients. If constraints are infeasible,
+report this and let the user revise them; do not silently relax them.
 
-## 6. Resultado y explicación
+## 6. Results and explanations
 
-Mostrar original, sustituto, datos comparables, procedencia, cambios totales y
-motivo de aceptación. Texto generado por plantillas con valores calculados.
-No se necesita un LLM para entrenar, recomendar, optimizar ni explicar.
+Show the original product, substitute, comparable data, provenance, total changes
+and reason for acceptance. Generate text from templates using calculated values.
+An LLM is not required for training, recommendation, optimization or explanation.
 
-## 7. Evaluación y ablaciones
+## 7. Evaluation and ablations
 
-Congelar test y reglas antes de medir. Tres comparaciones sobre los mismos casos:
+Freeze the test set and evaluation rules before measurement. Compare three
+systems on the same cases:
 
-| Sistema | Qué comprueba |
+| System | What it measures |
 |---|---|
-| Misma categoría + reglas + mejor score | Baseline sencillo |
-| Encoder congelado + optimizador | Aporte de representación preentrenada |
-| Encoder ajustado + optimizador | Aporte del fine-tuning propio |
+| Same category + rules + best score | Simple baseline |
+| Frozen encoder + optimizer | Contribution of pretrained representations |
+| Fine-tuned encoder + optimizer | Contribution of project-specific fine-tuning |
 
-Añadir comparación greedy frente al optimizador con idénticos candidatos para
-separar mejora del modelo y mejora del algoritmo.
+Also compare greedy selection against the optimizer using identical candidates
+to separate model improvements from algorithm improvements.
 
-Métricas: precision@3 de sustitución con juicio humano, recall@k cuando el pool
-esté suficientemente anotado, cobertura/abstenciones, cumplimiento de restricciones,
-latencia y mejora del índice condicionada a sustituciones aceptadas. Evaluar
-cestas reservadas, con cantidades explícitas y casos inviables. Informar resultados
-por familia, tamaño del test e incertidumbre. No contar negativos no anotados como
-verdad automáticamente. Completar con una prueba de aceptación con usuarios.
+Metrics: human-judged substitution precision@3, recall@k when the candidate pool
+has sufficient annotations, coverage/abstentions, constraint compliance, latency
+and index improvement conditional on accepted substitutions. Evaluate held-out
+baskets with explicit quantities and infeasible cases. Report results by family,
+test size and uncertainty. Do not automatically treat unannotated candidates as
+true negatives. Add a user acceptance study.
 
-El entrenamiento solo aporta valor si mejora el baseline: conservar resultados
-negativos. No hay resultados medidos todavía para esta nueva dirección.
+Training adds value only if it improves on the baseline; retain negative results.
+There are no measured results for this new project direction yet.
 
-## Orden de implementación
+## Implementation order
 
-1. Auditar y ampliar catálogo; seleccionar familias con cobertura suficiente.
-2. Anotar pares, fijar particiones y construir baseline.
-3. Medir encoder congelado; ajustar el encoder y comparar.
-4. Implementar optimizador y contrastarlo con greedy/enumeración en casos pequeños.
-5. Construir demo y evaluar cestas con usuarios.
+1. Audit and expand the catalog; select families with sufficient coverage.
+2. Annotate pairs, fix partitions and build the baseline.
+3. Evaluate the frozen encoder; fine-tune the encoder and compare.
+4. Implement the optimizer and compare against greedy selection and exhaustive
+   enumeration on small cases.
+5. Build the demo and evaluate baskets with users.
 
-## Referencias técnicas
+## Technical references
 
-- Sentence Transformers, pérdidas y entrenamiento con tripletas:
-  https://www.sbert.net/docs/package_reference/sentence_transformer/losses.html
-- OR-Tools, optimización CP-SAT:
-  https://developers.google.com/optimization/cp/cp_solver
+- [Sentence Transformers: losses and triplet training](https://www.sbert.net/docs/package_reference/sentence_transformer/losses.html).
+- [OR-Tools: CP-SAT optimization](https://developers.google.com/optimization/cp/cp_solver).

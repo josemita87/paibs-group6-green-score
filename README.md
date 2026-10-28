@@ -1,38 +1,38 @@
 # Basket Optimizer
 
-Prototipo de investigación: mejorar una cesta de compra mediante sustituciones
-aceptables, respetando preferencias y un máximo de cambios.
+A research prototype for improving a shopping basket through acceptable product
+substitutions while respecting preferences and a maximum number of changes.
 
-**Estado:** diseño definido y muestra de datos conservada. El recomendador, su
-entrenamiento, el optimizador y la interfaz todavía no están implementados.
+**Status:** the design is documented and the original data sample is retained.
+The recommender, training pipeline, optimizer and interface are not implemented yet.
 
-Ejemplo de uso previsto: «Mejora el indicador ambiental de mi cesta, mantén un
-mínimo de proteína y cambia como máximo tres productos».
+Intended use: “Improve my basket's environmental indicator, maintain a minimum
+protein level and change at most three products.”
 
-## Diseño
+## Design
 
-[Pipeline técnico, entrenamiento y evaluación](docs/PIPELINE.md).
-El núcleo previsto es un encoder multilingüe ajustado con ejemplos de sustitución
-más optimización discreta. Las explicaciones se construirán con los datos de cada
-comparación; no hace falta una API de chat.
+[Technical pipeline, training and evaluation](docs/PIPELINE.md).
+The planned core combines a multilingual encoder fine-tuned on substitution
+examples with discrete optimization. Explanations will use the data behind each
+comparison; a chat API is not required.
 
-## Contenido
+## Repository contents
 
-- `data/`: muestra OFF de 12.288 productos y manifiesto con procedencia y checksum.
-- `scripts/audit_data.py`: verifica integridad y muestra cobertura y carencias.
-- `scripts/fetch_data.py`: reproduce la muestra histórica fijada.
-- `requirements-data.txt`: dependencias opcionales para descargarla de nuevo.
-- `DATA_LICENSE.md`: atribución y condiciones de los datos.
+- `data/`: an OFF sample of 12,288 products and a provenance/checksum manifest.
+- `scripts/audit_data.py`: verifies integrity and reports coverage and missing data.
+- `scripts/fetch_data.py`: reproduces the pinned historical sample.
+- `requirements-data.txt`: optional dependencies for downloading the sample again.
+- `DATA_LICENSE.md`: data attribution and licensing terms.
 
-## Comprobar los datos
+## Verify the data
 
-Python 3.12; esta comprobación solo usa la biblioteca estándar:
+Python 3.12; this check uses only the standard library:
 
 ```sh
 python3 scripts/audit_data.py
 ```
 
-Para volver a descargar el snapshot histórico:
+To download the historical snapshot again:
 
 ```sh
 python3 -m venv .venv
@@ -41,14 +41,15 @@ python -m pip install -r requirements-data.txt
 python scripts/fetch_data.py
 ```
 
-La muestra actual no incluye nutrientes, precios ni stock. No permite todavía
-implementar el ejemplo completo. No es representativa del catálogo OFF.
+The current sample has no nutrient, price or stock data. It does not yet support
+the complete example above and is not representative of the OFF catalog.
+Original product records retain their source languages for multilingual research.
 
-## Trabajo anterior
+## Previous work
 
-La predicción de Green-Score y el auditor de etiquetas pertenecen a una dirección
-anterior. Su código, resultados y documentos se recuperan desde la etiqueta Git
-`archive/claim-audit-v1` (commit `62ff9bf`). No son resultados de Basket Optimizer.
+Green-Score prediction and label auditing belong to an earlier project direction.
+Their code, results and documents can be recovered from the Git tag
+`archive/claim-audit-v1` (commit `62ff9bf`). They are not Basket Optimizer results.
 
-El experimento de embeddings añadido posteriormente en el remoto se conserva en
-`archive/embeddings-v1` (commit `e508342`).
+The embedding experiment subsequently added to the remote repository is preserved
+under `archive/embeddings-v1` (commit `e508342`).
