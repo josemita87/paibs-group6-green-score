@@ -63,6 +63,17 @@ file with implementation evidence before committing.
 
 ## Change log
 
+### 2026-10-28 — Editable Work 2a Word document
+
+- Added `output/word/group_6_work_2a_stack_editable.docx`, preserving the English
+  Group 6 stack table, provisional levels and unconfirmed experience fields.
+- Reused the matching local Word content in a separate editable copy; preserved
+  the existing untracked Word file. No pipeline step advanced.
+- Validation: confirmed the editable 11-row table, rendered and visually reviewed
+  the single-page document. Runtime tests were not needed for this format change.
+- Next implementation task remains step 1.
+
+
 ### 2026-10-28 — Work 2a stack PDF
 
 - Added `output/pdf/group_6_work_2a_your_stack.pdf`: a one-page English stack table
