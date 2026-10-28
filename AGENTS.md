@@ -46,3 +46,11 @@ Preserve the pinned historical snapshot and provenance. Raw field coverage is no
 validated product eligibility. Do not present proposed models or experiments as
 implemented or evaluated. Group products and near-duplicate variants before
 constructing annotation pairs so that train/test leakage cannot be introduced.
+
+## Project documents
+
+Write concrete observations, decisions, numbers and next actions. Avoid generic
+filler, slogans, decorative callouts and repetitive summary tables. Prefer plain
+paragraphs and restrained headings. Use a table only when readers need to compare
+actual values or repeated records. Keep classroom documents in `output/Session2/`
+unless the user specifies another location. Distinguish plans from measured results.

@@ -74,6 +74,22 @@ should consume; extend it rather than replacing it.
 
 ## Change log
 
+### 2026-10-28 — Work 3 benchmark plan
+
+- Added `output/Session2/group_6_work_3_benchmark.docx`: a one-page English plan
+  with a 30-request primary metric, held-out product groups, reviewer criteria and
+  a category/score baseline. Step 12 remains unimplemented; no cases are scored.
+- Raw-data screen found 93 yogurt, 29 breakfast-cereal and 20 plant-based milk
+  alternative records with ingredients, g/ml product units, all three target
+  nutrients and numeric `environmental_score_data.scores.fr`; these are not
+  normalized eligibility counts. Family viability must be checked in step 3.
+- Added the user's concrete-writing and restrained-formatting preference to AGENTS.md.
+- Validation: checked raw counts; rendered and visually reviewed the single-page
+  Word document; verified editable text and no tables. Runtime tests not needed.
+- Preserved the user's existing document moves/edits and Word lock files without
+  staging them. Next implementation task remains step 3.
+
+
 ### 2026-10-28 — Basket input flow and validation (step 1)
 
 - Added `basket/models.py` (Pydantic v2): `Unit` (`g`, `kg`, `ml`, `l` with exact
