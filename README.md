@@ -63,6 +63,59 @@ These are review requests, not confirmed errors: the ingredient text itself can 
 wrong, truncated or OCR-damaged, and nothing here has been checked against a
 product photo or confirmed by an Open Food Facts contributor.
 
+## Does an embedding model save us from writing the dictionary?
+
+The claim audit above works because somebody hand-wrote term lists in five
+languages. That does not scale. This experiment asks whether multilingual
+sentence embeddings reach the same decisions from an **English-only** seed.
+
+```sh
+python -m pip install -r requirements-embed.txt
+python embed_match.py
+```
+
+Three systems label the same 1,500 products for the same concepts: the full
+multilingual term list (**oracle**, supplying the labels), the English seed terms
+matched as words (**en_terms**), and those same English seeds embedded and
+matched by cosine similarity (**embedding**, `paraphrase-multilingual-MiniLM-L12-v2`).
+The threshold is chosen on a calibration split and reported on a held-out split.
+
+| Concept | Oracle positives | en_terms recall | embedding recall | en_terms precision | embedding precision |
+|---|---|---|---|---|---|
+| dairy | 269 | 0.550 | **0.959** | 0.993 | 0.824 |
+| egg | 78 | 0.321 | **0.923** | 1.000 | 0.889 |
+| meat | 117 | 0.453 | **0.744** | 1.000 | 0.879 |
+| fish | 22 | 0.500 | **0.682** | 1.000 | 0.714 |
+| honey | 26 | 0.692 | **0.885** | 1.000 | 0.920 |
+| gluten | 216 | 0.583 | **0.741** | 1.000 | 0.565 |
+| palm | 78 | 0.423 | **0.936** | 1.000 | 0.579 |
+
+Precision and recall are agreement with a hand-written lexicon, not truth.
+
+**The embedding run debugged the lexicon.** Reviewing 28 of the matches that fell
+outside the oracle, 17 were real mentions the term lists missed: plural and
+ligature holes in our own regexes (`eggs`, `huevos`, `oeuf` without the ligature)
+and languages outside the stated scope — Dutch `melk`, German `Vollmilch`,
+Swedish `mjölk`, Norwegian `hvetemel`, Czech `mléko`, Bulgarian
+`Пшенично брашно`. Fixing only the in-scope regex holes moved egg positives from
+41 to 78: the hand-written list had been missing nearly half of all egg mentions,
+while scoring a precision of 1.000 against itself.
+
+**One seed word carried most of the error.** The remaining 11 of the 28 were real
+embedding mistakes, and 8 were the same confusion: `sel` (French for salt) sits
+at 0.901 from the seed **spelt**, as do `leek` 0.924, `choux` 0.923 and `cuajo`
+0.904 — "spelt" is also the past tense of "spell". Dropping that single seed:
+
+| gluten | precision | recall | F1 | false positives |
+|---|---|---|---|---|
+| with `spelt` | 0.565 | 0.741 | 0.641 | 123 |
+| without `spelt` | **0.925** | 0.681 | **0.784** | **12** |
+
+So the honest summary is: embeddings generalise across languages far better than
+an English word list, at a precision cost that is not evenly distributed — it
+concentrates in a few bad seeds, and is measurable and fixable. The 28-item
+review is text-only desk work by the team, not contributor validation.
+
 ## Run the included demo
 
 Python 3.12 was used. No API key or GPU is needed.

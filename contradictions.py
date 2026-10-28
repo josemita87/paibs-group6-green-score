@@ -28,8 +28,9 @@ CONCEPTS = {
     'dairy': [r'lait', r'milk', r'leche', r'latte', r'milch', r'cream', r'cr[eè]me', r'nata', r'panna',
               r'butter', r'beurre', r'mantequilla', r'burro', r'cheese', r'fromage', r'queso', r'formaggio',
               r'whey', r'lactos[eé]rum', r'petit-lait', r'suero', r'casein[ae]?', r'cas[eé]inate',
-              r'caseinato', r'lactose', r'lactosa', r'yogh?urt', r'yaourt', r'yogur', r'ghee', r'kefir'],
-    'egg': [r'egg', r'[oœ]uf', r'huevo', r'uovo', r'uova', r'albumin[ae]?', r'ovoproduit', r'ovoprodotto'],
+              r'caseinato', r'lactose', r'lactosa', r'yogh?urts?', r'yaourts?', r'yogur', r'ghee', r'kefir'],
+    'egg': [r'eggs?', r'(oe|œ)ufs?', r'huevos?', r'uovo', r'uova', r'albumin[ae]?', r'ovoproduit',
+            r'ovoprodotto'],
     'meat': [r'meat', r'viande', r'carne', r'fleisch', r'beef', r'b[oœ]uf', r'manzo', r'pork', r'porc',
              r'cerdo', r'maiale', r'chicken', r'poulet', r'pollo', r'turkey', r'dinde', r'pavo',
              r'ham', r'jambon', r'jam[oó]n', r'prosciutto', r'bacon', r'lard', r'saindoux', r'strutto',
@@ -215,6 +216,9 @@ def selfcheck():
         ('gluten', 'Fara gluten.', None),
         ('gluten', 'Harina de TRIGO integral 85%, aceite de girasol', 'trigo'),
         ('gluten', 'Semola de maiz (75%), aceite de girasol', None),
+        ('egg', 'Flour, sugar, eggs, butter', 'eggs'),
+        ('egg', 'Sucre, amandes, blanc d oeuf', 'oeuf'),
+        ('egg', 'Harina de trigo, azucar, huevos', 'huevos'),
     ]
     failures = 0
     for concept, text, expected in cases:
