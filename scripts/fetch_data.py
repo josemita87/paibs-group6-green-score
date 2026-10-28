@@ -4,7 +4,7 @@ from datetime import datetime,timezone
 from pathlib import Path
 import fsspec
 import pyarrow.parquet as pq
-ROOT=Path(__file__).resolve().parent
+ROOT=Path(__file__).resolve().parents[1]
 REVISION='89cfb571db20b1f1b246f27cab71837fc96225b1'
 URL=f'https://huggingface.co/datasets/openfoodfacts/product-database/resolve/{REVISION}/food.parquet'
 FIELDS=['code','product_name','brands','categories_tags','ingredients_text','lang','countries_tags','origins_tags','labels_tags','packaging_tags','environmental_score_score','environmental_score_grade','environmental_score_data']

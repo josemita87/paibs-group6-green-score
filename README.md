@@ -1,193 +1,54 @@
-# PAIBS Group 6 category completion and review
+# Basket Optimizer
 
-[![checks](https://github.com/josemita87/paibs-group6-green-score/actions/workflows/checks.yml/badge.svg)](https://github.com/josemita87/paibs-group6-green-score/actions/workflows/checks.yml)
+Prototipo de investigación: mejorar una cesta de compra mediante sustituciones
+aceptables, respetando preferencias y un máximo de cambios.
 
-A working research prototype that suggests product categories from ingredient text for Open Food Facts contributors to review. The original Green-Score regression experiment is retained as a negative result.
+**Estado:** diseño definido y muestra de datos conservada. El recomendador, su
+entrenamiento, el optimizador y la interfaz todavía no están implementados.
 
-## Main findings
+Ejemplo de uso previsto: «Mejora el indicador ambiental de mi cesta, mantén un
+mínimo de proteína y cambia como máximo tres productos».
 
-- Official pinned OFF sample: 12,288 records; 4,039 usable numeric score labels, 1,629 eligible for the regression scope.
-- Score regression MAE: 15.87; category median baseline: 12.69 points. The model loses to the baseline. Categories removed: 21.31.
-- Category classifier: 20 supported recorded classes; 428 training records. Top-1 accuracy 77.9% on 154 supported test records, covering 32.6% of the 473 broader test records.
-- Across all test labels, top-1 accuracy is 25.4%; top-3 accuracy 30.7%. Unsupported classes are counted as wrong.
-- A fixed class-score threshold of 0.50 yields 123 accepted test predictions; 65.9% match the recorded label across all test classes. This is **not** accuracy on genuine missing categories.
-- An assisted text-only desk review of 20 pre-filter suggestions found four plausible new categories, eight already present, five too broad, two ambiguous and one implausible. It is not contributor-validated precision.
-- The final queue exposes 131 suggestions after suppressing a category already present and the generic groceries category. Remaining rows abstain. Post-filter precision has not been measured.
+## Diseño
 
-## Results at a glance
+[Pipeline técnico, entrenamiento y evaluación](docs/PIPELINE.md).
+El núcleo previsto es un encoder multilingüe ajustado con ejemplos de sustitución
+más optimización discreta. Las explicaciones se construirán con los datos de cada
+comparación; no hace falta una API de chat.
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="results/figures/regression_mae_dark.svg">
-  <img alt="Score regression mean absolute error: global median 23.6, category median baseline 12.7, ingredients only 19.2, ingredients plus categories 15.9, combined with categories masked 21.3." src="results/figures/regression_mae_light.svg">
-</picture>
+## Contenido
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="results/figures/category_accuracy_dark.svg">
-  <img alt="Category top-1 accuracy. Supported labels: majority class 18.8%, three-rule diagnostic 22.7%, trained classifier 77.9%. All test labels: three-rule diagnostic 7.8%, trained classifier 25.4%." src="results/figures/category_accuracy_light.svg">
-</picture>
+- `data/`: muestra OFF de 12.288 productos y manifiesto con procedencia y checksum.
+- `scripts/audit_data.py`: verifica integridad y muestra cobertura y carencias.
+- `scripts/fetch_data.py`: reproduce la muestra histórica fijada.
+- `requirements-data.txt`: dependencias opcionales para descargarla de nuevo.
+- `DATA_LICENSE.md`: atribución y condiciones de los datos.
 
-Both figures are drawn from `results/metrics.json` by `python make_figures.py`; no number in them is typed by hand. CI regenerates them and fails if they drift from the committed metrics.
+## Comprobar los datos
 
-## Claim audit: does the label agree with the ingredient list?
-
-Second experiment, deterministic baseline. It checks products whose label makes a
-claim the ingredient list can contradict — vegan, vegetarian, gluten-free,
-lactose-free, palm-oil-free — using multilingual term lists with explicit
-exceptions. No learning yet; an embedding matcher will be measured against these
-numbers.
+Python 3.12; esta comprobación solo usa la biblioteca estándar:
 
 ```sh
-python contradictions.py test    # 24 self-checks on tricky strings
-python contradictions.py scan    # writes results/contradictions.csv
+python3 scripts/audit_data.py
 ```
 
-1,145 claims in the sample carry usable ingredient text. The first version raised
-66 flags. Reading them showed almost all were **cross-contamination warnings**
-("may contain traces of milk" is normal on a vegan product) and **negations**
-("ohne Fleisch", "fără gluten"). Filtering those clauses leaves 39 flags.
-
-An assisted desk review of the 12 non-lactose flags (`results/contradictions_desk_review.csv`)
-found 5 candidate label errors, 4 domain ambiguities and 3 false positives. The
-candidates include a gluten-free soy sauce declaring wheat, a gluten-free cracker
-whose first ingredient is wholemeal wheat flour, and a gluten-free beer whose text
-reads CONTAINS BARLEY.
-
-All 27 lactose flags are dairy products carrying a lactose-free claim, and most
-are aged hard cheeses — Gruyère, Grana Padano, Appenzeller, Pecorino — which are
-naturally almost lactose-free. The claim and the ingredient are both correct. A
-term list cannot resolve this; it needs domain knowledge. That case, the
-wheatgrass records and the gluten-removed beer are the motivation for the next
-layer rather than evidence against the approach.
-
-These are review requests, not confirmed errors: the ingredient text itself can be
-wrong, truncated or OCR-damaged, and nothing here has been checked against a
-product photo or confirmed by an Open Food Facts contributor.
-
-## Does an embedding model save us from writing the dictionary?
-
-The claim audit above works because somebody hand-wrote term lists in five
-languages. That does not scale. This experiment asks whether multilingual
-sentence embeddings reach the same decisions from an **English-only** seed.
-
-```sh
-python -m pip install -r requirements-embed.txt
-python embed_match.py
-```
-
-Three systems label the same 1,500 products for the same concepts: the full
-multilingual term list (**oracle**, supplying the labels), the English seed terms
-matched as words (**en_terms**), and those same English seeds embedded and
-matched by cosine similarity (**embedding**, `paraphrase-multilingual-MiniLM-L12-v2`).
-The threshold is chosen on a calibration split and reported on a held-out split.
-
-| Concept | Oracle positives | en_terms recall | embedding recall | en_terms precision | embedding precision |
-|---|---|---|---|---|---|
-| dairy | 269 | 0.550 | **0.959** | 0.993 | 0.824 |
-| egg | 78 | 0.321 | **0.923** | 1.000 | 0.889 |
-| meat | 117 | 0.453 | **0.744** | 1.000 | 0.879 |
-| fish | 22 | 0.500 | **0.682** | 1.000 | 0.714 |
-| honey | 26 | 0.692 | **0.885** | 1.000 | 0.920 |
-| gluten | 216 | 0.583 | **0.741** | 1.000 | 0.565 |
-| palm | 78 | 0.423 | **0.936** | 1.000 | 0.579 |
-
-Precision and recall are agreement with a hand-written lexicon, not truth.
-
-**The embedding run debugged the lexicon.** Reviewing 28 of the matches that fell
-outside the oracle, 17 were real mentions the term lists missed: plural and
-ligature holes in our own regexes (`eggs`, `huevos`, `oeuf` without the ligature)
-and languages outside the stated scope — Dutch `melk`, German `Vollmilch`,
-Swedish `mjölk`, Norwegian `hvetemel`, Czech `mléko`, Bulgarian
-`Пшенично брашно`. Fixing only the in-scope regex holes moved egg positives from
-41 to 78: the hand-written list had been missing nearly half of all egg mentions,
-while scoring a precision of 1.000 against itself.
-
-**One seed word carried most of the error.** The remaining 11 of the 28 were real
-embedding mistakes, and 8 were the same confusion: `sel` (French for salt) sits
-at 0.901 from the seed **spelt**, as do `leek` 0.924, `choux` 0.923 and `cuajo`
-0.904 — "spelt" is also the past tense of "spell". Dropping that single seed:
-
-| gluten | precision | recall | F1 | false positives |
-|---|---|---|---|---|
-| with `spelt` | 0.565 | 0.741 | 0.641 | 123 |
-| without `spelt` | **0.925** | 0.681 | **0.784** | **12** |
-
-So the honest summary is: embeddings generalise across languages far better than
-an English word list, at a precision cost that is not evenly distributed — it
-concentrates in a few bad seeds, and is measurable and fixable. The 28-item
-review is text-only desk work by the team, not contributor validation.
-
-## Run the included demo
-
-Python 3.12 was used. No API key or GPU is needed.
+Para volver a descargar el snapshot histórico:
 
 ```sh
 python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install -r requirements.txt
-python prototype.py test
-python prototype.py serve
+python -m pip install -r requirements-data.txt
+python scripts/fetch_data.py
 ```
 
-Open http://127.0.0.1:8765. On Windows activate with `.venv\Scripts\activate`.
-The compressed data sample, trained model and results are included; you do not need to fetch data again to run the demo.
+La muestra actual no incluye nutrientes, precios ni stock. No permite todavía
+implementar el ejemplo completo. No es representativa del catálogo OFF.
 
-```sh
-python prototype.py train
-python prototype.py predict --code 0084114112514
-```
+## Trabajo anterior
 
-`model.pkl` is a locally generated pickle. Load only the trusted artifact shipped with this repository; regenerate it with `train` if library versions differ.
+La predicción de Green-Score y el auditor de etiquetas pertenecen a una dirección
+anterior. Su código, resultados y documentos se recuperan desde la etiqueta Git
+`archive/claim-audit-v1` (commit `62ff9bf`). No son resultados de Basket Optimizer.
 
-## Reproduce the sample
-
-```sh
-python -m pip install -r requirements-fetch.txt
-python fetch_data.py
-python prototype.py train
-```
-
-Dataset: https://huggingface.co/datasets/openfoodfacts/product-database
-Pinned revision: `89cfb571db20b1f1b246f27cab71837fc96225b1`. Twelve pseudorandom Parquet row groups use seed 20261027. The sample is clustered in barcode order and is **not representative of all OFF products**. The manifest records source row groups and SHA256 of the uncompressed JSONL. `fetch_data.py` caches downloaded row groups in an ignored directory.
-
-## Architecture
-
-Pinned OFF sample -> multilingual parsing and grouped splits -> trained category classifier -> candidates plus abstention -> contributor evidence check.
-
-Regression uses ingredient text plus categories. Category classification uses ingredient text only. Both use character TF-IDF. Ridge alpha is 10; logistic regression C is 4 with at most 1000 iterations. Settings are fixed, not tuned against reported test results.
-
-The category label is the last recorded tag, not necessarily the most specific or correct category. Classes require eight training examples and occur on a scored product somewhere in this sample. Broad labels and inconsistent case exist in the source. The next label-quality experiment should define canonical specific taxonomy nodes.
-
-Training, calibration and test partitions have no shared exact-match groups. Groups unite identical normalized ingredient text or identical normalized name plus brand. This does not guarantee all near duplicates are removed.
-
-The score target uses explicit France-context `scores.fr` in all 1629 eligible records. Original scores range from -20 to 123; zero is valid. Do not replace unknown or not-applicable with zero, or clip genuine labels silently.
-
-A diagnostic three-condition keyword baseline reaches 22.7% accuracy on supported labels and 7.8% across all test labels. It checks potato ingredients, an initial milk token and cocoa, otherwise returning the training majority. This was added after the initial analysis; it is a diagnostic, not a preregistered result.
-
-## Review semantics
-
-Suggestions are provisional. Class scores are uncalibrated and can be confidently wrong on unsupported categories. No category is written into OFF and no numerical Green-Score is recommended for filling. Evidence from the ingredient list, product label and official category taxonomy is required before a contributor changes data. A predicted category might still not unlock an Agribalyse mapping.
-
-See `results/desk_review_20.csv` for the assisted desk review and `review_log_template.csv` for further participant or contributor review.
-
-## Evidence and project records
-
-- `data/manifest.json` and `data/off_sample.jsonl.gz`: immutable sample and provenance.
-- `results/metrics.json`: both experiments, coverage and limitations.
-- `results/splits.csv`, `results/category_splits.csv`: partition audit.
-- `results/test_predictions.csv`, `results/category_test_predictions.csv`: held-out predictions.
-- `results/subgroups.csv`: score-regression errors by language, category and sale country when sample counts permit.
-- `results/review_queue.csv`: current suggested action or abstention.
-- `TASK_BOARD.md`, `DECISION_LOG.md`: owners, state and decisions.
-- `docs/`: prepared English submission documents.
-
-This initial implementation and its first commit are assisted preparation. They do not represent independent commits by every group member or a record of earlier class decisions. eCampus identifies Group 6; the Miro team area has a different visual team number. See the documents for the verified roster.
-
-## Sources and attribution
-
-Contains information from Open Food Facts, made available under the Open Database License (ODbL). Individual contents use the Database Contents License. No product image binaries are included. Preserve source, snapshot and licence when redistributing this sample.
-
-Official computation: https://github.com/openfoodfacts/openfoodfacts-server/blob/main/lib/ProductOpener/EnvironmentalScore.pm
-Contribution workflow: https://openfoodfacts.github.io/openfoodfacts-server/api/tutorials/get-the-green-score/
-Existing Robotoff system: https://openfoodfacts.github.io/openfoodfacts-server/api/intro-robotoff/
-Schema change log: https://openfoodfacts.github.io/openfoodfacts-server/api/ref-api-and-product-schema-change-log/
-Licence guidance: https://openfoodfacts.github.io/openfoodfacts-server/api/tutorials/license-be-on-the-legal-side/
+El experimento de embeddings añadido posteriormente en el remoto se conserva en
+`archive/embeddings-v1` (commit `e508342`).
