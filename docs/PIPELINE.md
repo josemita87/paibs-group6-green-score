@@ -1,129 +1,351 @@
-# Proposed technical pipeline
+# Basket Optimizer: end-to-end pipeline
 
-## Product and scope
+The proposed system combines two technical components: a model fine-tuned to
+recognize acceptable product substitutes and a mathematical optimizer that selects
+changes for the complete basket. Both can run locally without a chat API.
 
-Input: basket products, comparable quantities, preferences and a maximum of K
-changes. Output: concrete substitutions, verifiable differences and the option
-to keep each original product. Target user: a person planning their grocery shopping.
+**Current status:** the repository contains the retained product sample, data
+verification/download scripts and design documentation. The training pipeline,
+recommender, optimizer and interface below are proposed work, not implemented
+features or measured results.
 
-MVP: three product families with comparable uses, selected after auditing coverage;
-for example, breakfast drinks, yogurts and cereals. Sharing a category does not
-necessarily make two products substitutes. A declared country does not establish
-in-store availability. Exclude budget constraints until prices include units,
-dates and sources.
+## 1. User input
 
-## 1. Catalog and data
+The user builds a basket by searching for products or entering barcodes, adds
+quantities and selects constraints:
 
-Keep the historical snapshot unchanged. Prepare a new versioned dataset that adds
-nutrients per 100 g/100 ml, units, quantities and evidence for preference filters.
-Preserve provenance, missing values and the context of each score. Do not replace
-unknown values with zero. Compare solids and liquids using compatible units.
-The current sample lacks `nutriments`: this blocks the nutritional MVP; nutritional
-constraints are not implemented yet.
+- Change at most three products.
+- Maintain a minimum total protein level.
+- Stay below selected sugar or salt limits.
+- Respect supported dietary preferences.
+- Keep particular products unchanged.
+
+The system returns a revised basket, proposed substitutions and measured
+differences. For the MVP, select three product families with comparable uses after
+checking data coverage, for example breakfast drinks, yogurts and cereals.
+
+**Tools:** Streamlit for the interface; Pydantic for input validation.
+
+## 2. Acquire and version the product catalog
+
+Use Open Food Facts product data:
+
+| Data | Purpose |
+|---|---|
+| Barcode, name and brand | Product identification |
+| Ingredients and language | Model input |
+| Categories | Candidate filtering |
+| Nutrients per 100 g or 100 ml | Nutritional constraints |
+| Environmental score and its context | Environmental comparison |
+| Dietary labels and supporting fields | Preference filters |
+| Units and product quantities | Comparable calculations |
+| Source revision and retrieval date | Reproducibility |
+
+**Tools:** Python, fsspec, PyArrow and pandas. Store prepared tables as Parquet and
+provenance as JSON.
+
+The existing sample contains 12,288 products but no nutrient or quantity fields.
+Acquire an expanded dataset before implementing nutritional constraints. Keep the
+historical snapshot unchanged. The sample is not representative of the OFF catalog.
+
+Prices and store stock require another source and are outside the first version.
+A declared country does not establish in-store availability.
+
+**Output:** a versioned raw dataset and its manifest.
+
+## 3. Build a comparable, usable catalog
+
+- Clean HTML and formatting while preserving source text and languages.
+- Standardize nutrient names and measurement units.
+- Identify duplicate products and near-duplicate variants.
+- Keep missing values explicitly missing; do not replace unknown values with zero.
+- Select families with enough complete products.
+- Separate incompatible comparison units.
+- Record why a product is excluded.
+
+For the first version, substitutions retain the same quantity within compatible
+units. Do not automatically replace 500 ml of a drink with 500 g of a solid.
 
 Use published environmental scores in a consistent context, with higher values
 representing a better indicator. Do not train another predictor of that score.
 A missing score prevents recommending a change on environmental improvement
-grounds. Do not interpret score differences as percentage emission reductions
-or kilograms of CO2.
+grounds. Score differences do not represent percentage emission reductions or
+kilograms of CO2.
 
-## 2. Substitution dataset: project-specific supervision
+**Tools:** pandas, NumPy, Pydantic and custom Python normalization functions.
 
-Annotate product A/product B pairs as acceptable substitutes, unacceptable
-substitutes or ambiguous, recording the reason and usage context. Initial target:
-600–1,000 pairs across the selected families. Two annotators label a shared subset
-to measure agreement and resolve disagreements. This is a proposed workload,
-not data already collected. Narrow categories can suggest pairs but are not ground truth.
+**Output:** `catalog.parquet` and a coverage report.
+
+## 4. Create the substitution dataset
+
+This is the main source of project-specific supervision. Annotators assess
+product pairs in a defined usage context:
+
+| Original | Candidate | Context | Label |
+|---|---|---|---|
+| Plain yogurt A | Plain yogurt B | Breakfast bowl | Acceptable |
+| Plain yogurt A | Yogurt drink | Breakfast bowl | Requires judgment |
+| Plain yogurt A | Cooking cream | Breakfast bowl | Unacceptable |
+
+These are illustrative annotations, not collected findings. Labels are acceptable
+substitute, unacceptable substitute, or ambiguous/insufficient information.
+Record the reason, context and annotator. A shared category can suggest a pair
+for annotation; it cannot establish its label.
+
+Initial target: 600–1,000 annotated pairs across the selected families. Two people
+independently annotate a shared subset, then resolve disagreements. This is a
+proposed workload, not data already collected.
 
 Include hard negatives: products with similar names or ingredients that serve
 different purposes. Avoid accidentally treating valid substitutes as negatives.
-Split training, validation and test data by product groups and near-duplicate
-variants BEFORE constructing pairs; no product or variant may cross partitions.
+One thousand pair labels do not automatically produce one thousand valid triplets:
+each triplet needs an acceptable and an unacceptable candidate for the same
+original product and context.
+
+**Tools:** a small Streamlit annotation screen, CSV or Parquet storage, and
+scikit-learn for agreement statistics.
+
+**Output:** annotated pairs and annotation guidelines.
+
+## 5. Split the data before training
+
+Group duplicates and close variants, then split product groups into training,
+validation and test partitions BEFORE constructing pairs and triplets. No product
+or near-duplicate may cross partitions.
+
+- Training data updates model weights.
+- Validation data selects hyperparameters and acceptance thresholds.
+- Test data measures final performance after decisions are fixed.
+
 Mine negatives only within training data. Reserve a human-labeled test set without
-weak labels.
+weak labels. A random split of pair rows would allow the same product to leak into
+training and test data.
 
-## 3. Fine-tune the substitution model
+**Tools:** scikit-learn group splitting and explicit overlap checks.
 
-Candidate starting point: `paraphrase-multilingual-MiniLM-L12-v2` through Sentence
-Transformers/PyTorch. Input: name, ingredients and usage context. Categories may
-filter candidates but must not reveal artificial training labels. Both products
-use the same encoder.
+**Output:** saved product partitions, training triplets and a held-out human-labeled
+evaluation set.
 
-Update its weights using triplets (product, acceptable substitute, hard negative)
-with a contrastive objective or TripletLoss. The objective brings substitutes
-closer and separates misleading matches. Compare against frozen embeddings to
-measure the benefit of fine-tuning. Select the margin, epochs and acceptance
-threshold on validation data, never on the test set. Save the base model revision,
-weights, random seed, partitions and configuration. Do not equate similarity with
-taste preference without user data.
+## 6. Establish the baselines
 
-## 4. Candidate retrieval and constraints
-
-Precompute catalog embeddings. For each product, retrieve candidates by cosine
-similarity and apply unit, usage, data coverage and preference filters. Exact
-search is sufficient for a small catalog; a vector index is optional.
-
-Select the similarity threshold on validation data to prioritize precision.
-Abstain when evidence is insufficient. A dietary preference requires sufficient
-explicit evidence; an allergen's absence from the text does not establish safety.
-The MVP does not certify medical or allergy suitability.
-
-## 5. Basket optimization
-
-Binary variables x[i,j] select candidate j for product i. Include the original
-product as a candidate. Require one selection per basket position and at most K
-changes. Exclude unacceptable substitutes before optimization.
-
-Initial objective: maximize environmental score improvement weighted by comparable
-quantities, with an explicit penalty for changes. Present the aggregate as an
-experimental basket index, not an official environmental footprint.
-
-Optional constraints when data is complete: total protein >= a minimum and sugar
-or salt <= selected limits. Convert per-100-g/ml values to basket quantities before
-summing; do not mix incompatible units. Use integer programming, for example
-OR-Tools CP-SAT with scaled integer coefficients. If constraints are infeasible,
-report this and let the user revise them; do not silently relax them.
-
-## 6. Results and explanations
-
-Show the original product, substitute, comparable data, provenance, total changes
-and reason for acceptance. Generate text from templates using calculated values.
-An LLM is not required for training, recommendation, optimization or explanation.
-
-## 7. Evaluation and ablations
-
-Freeze the test set and evaluation rules before measurement. Compare three
-systems on the same cases:
-
-| System | What it measures |
+| Baseline | Method |
 |---|---|
-| Same category + rules + best score | Simple baseline |
-| Frozen encoder + optimizer | Contribution of pretrained representations |
-| Fine-tuned encoder + optimizer | Contribution of project-specific fine-tuning |
+| Category and rules | Retrieve products in a narrow category and apply compatibility filters |
+| TF-IDF | Rank product text using character n-gram similarity |
+| Frozen encoder | Rank with a pretrained encoder without updating its weights |
 
-Also compare greedy selection against the optimizer using identical candidates
-to separate model improvements from algorithm improvements.
+Apply the same eligibility filters and evaluation cases to each. This establishes
+whether fine-tuning actually helps.
 
-Metrics: human-judged substitution precision@3, recall@k when the candidate pool
-has sufficient annotations, coverage/abstentions, constraint compliance, latency
-and index improvement conditional on accepted substitutions. Evaluate held-out
-baskets with explicit quantities and infeasible cases. Report results by family,
-test size and uncertainty. Do not automatically treat unannotated candidates as
-true negatives. Add a user acceptance study.
+**Tools:** scikit-learn, NumPy and Sentence Transformers.
 
-Training adds value only if it improves on the baseline; retain negative results.
-There are no measured results for this new project direction yet.
+**Output:** baseline rankings and evaluation metrics.
+
+## 7. Fine-tune the substitution encoder
+
+Candidate starting model:
+`sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`.
+
+Represent each product using its name, ingredients and defined usage context.
+Both products pass through the same encoder. Categories may filter candidates but
+must not reveal artificial training labels. Train with triplets:
+
+```text
+Anchor:   the original product
+Positive: an acceptable substitute
+Negative: an unacceptable substitute
+```
+
+The objective brings the anchor closer to the positive and farther from the
+negative. Hard negatives look similar in text but serve a different purpose.
+This updates the encoder's weights. Compare against frozen embeddings to measure
+the contribution of training.
+
+**Tools:**
+
+- PyTorch for model training.
+- Sentence Transformers for the encoder and training loop.
+- Hugging Face Datasets for training examples.
+- SentenceTransformerTrainer.
+- TripletLoss, with a deliberately selected distance metric and validation-tuned margin.
+- TensorBoard for loss curves and validation metrics.
+
+Select epochs, margin and acceptance thresholds on validation data, never on the
+test set. Save trained weights, configuration, base-model revision, random seed,
+partitions and training logs. Do not equate similarity with taste preference
+without user data. Limited labels may limit the benefit; measure rather than
+assume that fine-tuning wins.
+
+**Output:** trained encoder and reproducible training artifacts.
+
+## 8. Encode and index the catalog
+
+Run the trained encoder over eligible products and cache normalized vectors.
+At recommendation time:
+
+1. Encode the original product in its usage context.
+2. Compute cosine similarity against eligible candidates.
+3. Retrieve the highest-ranking alternatives.
+
+**Tools:** Sentence Transformers and NumPy. Exact vector search is sufficient for
+the initial catalog. Add FAISS only if catalog size or latency measurements justify it.
+
+**Output:** cached embeddings, product-to-vector mapping and model version.
+Similarity is a ranking signal, not an acceptance probability.
+
+## 9. Filter and accept candidates
+
+Apply explicit checks for compatible usage and units, required nutritional and
+environmental data, supported dietary preferences, user exclusions and a
+validation-selected similarity threshold.
+
+Always include the original product as an option. If no acceptable alternative
+exists, keep it and explain the abstention. The model handles substitution
+similarity; deterministic checks enforce requirements. Dietary preferences require
+sufficient explicit evidence. Missing allergen information does not demonstrate
+safety; the MVP does not certify medical or allergy suitability.
+
+**Tools:** Python rules, Pydantic and pandas/NumPy.
+
+**Output:** a small eligible candidate set for each basket position.
+
+## 10. Optimize the complete basket
+
+Define binary decision variables `x[i,j]`: one when candidate j is selected for
+basket position i, zero otherwise. Require:
+
+- Exactly one selected product per basket position.
+- At most K substitutions.
+- Locked products remain unchanged.
+- Selected nutritional limits hold.
+- Only eligible substitutes can be selected.
+
+Maximize improvement in the basket environmental indicator with an explicit
+penalty for changes. Use comparable quantities for the experimental aggregate.
+Nutrient totals use actual basket quantities:
+
+```text
+protein contribution = (quantity consumed / 100) * protein per 100 units
+```
+
+Quantity and nutrient measurement units must match. Do not mix incompatible units.
+
+**Tool:** OR-Tools CP-SAT. Scale decimal coefficients appropriately for its integer
+formulation. Report these outcomes distinctly:
+
+- Optimal solution found.
+- Feasible solution found within the time limit.
+- Constraints proven infeasible.
+- No solution established within the time limit.
+
+Only report optimality when the solver proves it. If constraints are infeasible,
+let the user revise them; do not silently relax them.
+
+**Output:** selected basket, objective value, constraint totals and solver status.
+The environmental aggregate is an experimental basket index, not an official
+footprint. Its changes are not kilograms of CO2 or percentages of emission reduction.
+
+## 11. Present the recommendation
+
+| Original product | Proposed substitute | Reason | Measured differences |
+|---|---|---|---|
+| Product A | Product B | Accepted substitute for the selected use | Environmental score and nutrient differences |
+
+Also show the number of substitutions, before-and-after basket totals, constraint
+compliance, missing information, abstentions and data provenance. Users can reject
+a substitution or lock a product and run the optimizer again.
+
+**Tools:** Streamlit, pandas and Plotly. Explanations use templates populated with
+calculated values. An LLM is unnecessary for this step.
+
+## 12. Evaluate the model and optimizer separately
+
+Freeze the test set and evaluation rules before measurement.
+
+Substitution metrics:
+
+- Human-judged precision@3.
+- Coverage: how often acceptable alternatives can be offered.
+- Abstention rate.
+- Results by product family and language.
+- Triplet ranking accuracy as a training diagnostic.
+
+Recall@k requires a sufficiently annotated candidate pool. Unreviewed candidates
+cannot automatically count as incorrect or true negatives.
+
+Optimization metrics:
+
+- Constraint compliance.
+- Index improvement among accepted substitutions.
+- Number of changes.
+- Runtime.
+- Solver status and optimality gap where available.
+- User acceptance of the revised basket.
+
+| Experiment | Question |
+|---|---|
+| Rules vs frozen encoder | Does pretrained representation help? |
+| TF-IDF vs frozen/fine-tuned encoder | Does semantic representation outperform text overlap? |
+| Frozen vs fine-tuned encoder | Does our training improve substitution quality? |
+| Greedy vs optimizer, same candidates | Does whole-basket optimization help? |
+
+Evaluate held-out baskets with explicit quantities and infeasible cases. Report
+test size and uncertainty as well as results by family. Compare the optimizer
+against exhaustive enumeration for tiny baskets. Add a user acceptance study.
+Retain negative results; there are no measured results for this direction yet.
+
+**Tools:** scikit-learn, NumPy, pandas, pytest and Plotly.
+
+**Output:** reproducible metrics, plots and error analysis.
+
+## 13. Reproducibility and delivery
+
+Save dataset versions/checksums, annotation guidelines and labels, product-group
+partitions, model configuration/weights, evaluation configuration, results and
+software dependency versions.
+
+**Tools:** Git, GitHub, GitHub Actions, pytest and pinned Python dependencies.
+GitHub Actions runs small integrity and correctness checks. Full training is a
+separate reproducible command, not a requirement on every commit. Store large
+trained artifacts as release assets or in a model repository instead of repeatedly
+committing them to ordinary Git history.
+
+## Complete proposed tool stack
+
+| Responsibility | Tool |
+|---|---|
+| Main implementation | Python |
+| Data retrieval | fsspec, PyArrow |
+| Data preparation and storage | pandas, NumPy, Parquet |
+| Validation | Pydantic |
+| Annotation interface | Streamlit |
+| Baselines and grouped splitting | scikit-learn |
+| Deep learning | PyTorch |
+| Encoder and fine-tuning | Sentence Transformers |
+| Training dataset handling | Hugging Face Datasets |
+| Training monitoring | TensorBoard |
+| Candidate search | NumPy cosine similarity; FAISS only if needed |
+| Basket optimization | OR-Tools CP-SAT |
+| User interface | Streamlit |
+| Charts | Plotly |
+| Tests | pytest |
+| Version control and automated checks | Git, GitHub, GitHub Actions |
+
+Project-specific work comprises the substitution dataset, compatibility rules,
+training setup, evaluation design, basket optimization formulation and user workflow.
 
 ## Implementation order
 
 1. Audit and expand the catalog; select families with sufficient coverage.
-2. Annotate pairs, fix partitions and build the baseline.
-3. Evaluate the frozen encoder; fine-tune the encoder and compare.
-4. Implement the optimizer and compare against greedy selection and exhaustive
-   enumeration on small cases.
-5. Build the demo and evaluate baskets with users.
+2. Define annotation guidelines and product groups; fix partitions and annotate pairs.
+3. Build rules, TF-IDF and frozen-encoder baselines.
+4. Fine-tune the encoder and compare on the held-out evaluation design.
+5. Implement the optimizer and verify against greedy selection and small exhaustive cases.
+6. Build the demo and evaluate baskets with users.
 
 ## Technical references
 
-- [Sentence Transformers: losses and triplet training](https://www.sbert.net/docs/package_reference/sentence_transformer/losses.html).
-- [OR-Tools: CP-SAT optimization](https://developers.google.com/optimization/cp/cp_solver).
+- [Sentence Transformers: triplet loss](https://sbert.net/docs/package_reference/sentence_transformer/losses.html).
+- [Sentence Transformers: training workflow](https://sbert.net/docs/sentence_transformer/training_overview.html).
+- [Sentence Transformers: evaluation tools](https://sbert.net/docs/package_reference/sentence_transformer/evaluation.html).
+- [OR-Tools: CP-SAT optimization](https://developers.google.com/optimization/cp/cp_solver/).
