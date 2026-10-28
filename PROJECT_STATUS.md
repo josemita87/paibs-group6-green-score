@@ -63,6 +63,17 @@ file with implementation evidence before committing.
 
 ## Change log
 
+### 2026-10-28 — Work 2 walking skeleton worksheet
+
+- Added `output/word/group_6_work_2_walking_skeleton.docx`: an English Group 6
+  sprint plan with proposed workstreams, a real/stub log, risks and acceptance criteria.
+- Records Level 1 (data in hand) as the current position and Level 2 as the sprint
+  target. Planned stubs and ownership are not presented as completed or agreed work.
+- Validation: rendered and visually reviewed both pages; verified two editable tables.
+  Runtime tests were not needed for this document-only change.
+- No implementation step advanced. Next implementation task remains step 1.
+
+
 ### 2026-10-28 — Editable Work 2a Word document
 
 - Added `output/word/group_6_work_2a_stack_editable.docx`, preserving the English
