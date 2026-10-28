@@ -2,7 +2,9 @@
 
 Source: Open Food Facts — https://world.openfoodfacts.org/
 Dataset: https://huggingface.co/datasets/openfoodfacts/product-database
-The included compressed JSONL is a selected snapshot, not the full database. See data/manifest.json for revision and checksum.
+The compressed JSONL files are selected snapshots, not the full database.
+See `data/manifest.json` for the historical sample and `data/catalog_manifest.json`
+for the expanded raw catalog, including revision and checksums.
 
 The Open Food Facts database is provided under the Open Database License (ODbL): https://opendatacommons.org/licenses/odbl/1-0/
 Individual contents are under the Database Contents License: https://opendatacommons.org/licenses/dbcl/1-0/

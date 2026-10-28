@@ -1,0 +1,36 @@
+{
+  "snapshot": "catalog",
+  "snapshot_integrity": "ok",
+  "rows": 12288,
+  "nonempty_field_counts": {
+    "product_name": 11977,
+    "ingredients_text": 5427,
+    "categories_tags": 7750,
+    "environmental_score_score": 4039,
+    "nutriments": 10751,
+    "quantity": 4609,
+    "product_quantity": 4486,
+    "product_quantity_unit": 4311,
+    "nutrition_data_per": 4397
+  },
+  "nonnegative_numeric_100g_counts": {
+    "proteins": 10158,
+    "sugars": 10000,
+    "salt": 9557
+  },
+  "all_three_nutrients_100g": 9349,
+  "all_three_nutrients_and_numeric_export_score": 3291,
+  "product_quantity_units": {
+    "(missing)": 7977,
+    "g": 3653,
+    "ml": 658
+  },
+  "nutrition_data_per": {
+    "(missing)": 7891,
+    "100g": 4072,
+    "100ml": 1,
+    "serving": 324
+  },
+  "duplicate_nonempty_codes": 0,
+  "note": "Raw coverage only, not validated eligibility. The source key \"100g\" is preserved; mass/volume basis, units, prepared values and score context still need normalization. Prices and stock are not included. The clustered sample is not representative of OFF."
+}

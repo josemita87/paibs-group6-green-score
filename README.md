@@ -3,7 +3,7 @@
 A research prototype for improving a shopping basket through acceptable product
 substitutions while respecting preferences and a maximum number of changes.
 
-**Status:** the design is documented and the original data sample is retained.
+**Status:** raw catalog acquisition is implemented and the design is documented.
 The recommender, training pipeline, optimizer and interface are not implemented yet.
 
 Intended use: “Improve my basket's environmental indicator, maintain a minimum
@@ -18,32 +18,43 @@ comparison; a chat API is not required.
 
 ## Repository contents
 
-- `data/`: an OFF sample of 12,288 products and a provenance/checksum manifest.
+- `data/`: the original 12,288-product OFF sample and an expanded raw catalog,
+  each with a provenance/checksum manifest; `catalog_audit.json` records coverage.
 - `scripts/audit_data.py`: verifies integrity and reports coverage and missing data.
-- `scripts/fetch_data.py`: reproduces the pinned historical sample.
+- `scripts/fetch_data.py`: reproduces the historical sample or fetches expanded fields.
 - `requirements-data.txt`: optional dependencies for downloading the sample again.
 - `DATA_LICENSE.md`: data attribution and licensing terms.
 
 ## Verify the data
 
-Python 3.12; this check uses only the standard library:
+Python 3.12+; this check uses only the standard library:
 
 ```sh
 python3 scripts/audit_data.py
+python3 scripts/audit_data.py --catalog
+python3 -m unittest discover -s tests -v
 ```
 
-To download the historical snapshot again:
+To download the expanded catalog from the pinned source revision:
 
 ```sh
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install -r requirements-data.txt
-python scripts/fetch_data.py
+python scripts/fetch_data.py --catalog
 ```
 
-The current sample has no nutrient, price or stock data. It does not yet support
-the complete example above and is not representative of the OFF catalog.
-Original product records retain their source languages for multilingual research.
+Omit `--catalog` to reproduce the historical sample. The expanded catalog uses the
+same source revision and row groups, adding raw nutrients, quantity/unit fields,
+allergen/trace tags, dietary analysis, quality flags and modification timestamps.
+The downloader checks that all original fields still match the historical checksum.
+Caches are separated by revision and selected fields; downloads can be resumed.
+
+`catalog.jsonl.gz` preserves raw source values and languages. Nutrients are a list
+of records with `name`, `100g`, `unit`, serving and prepared-value fields. Coverage
+is not eligibility: units, mass/volume basis, missing data and score context still
+need normalization. Prices and stock are absent. This clustered sample is not
+representative of the OFF catalog and is not yet a comparable-product dataset.
 
 ## Previous work
 

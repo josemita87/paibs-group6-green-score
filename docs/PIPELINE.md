@@ -4,8 +4,9 @@ The proposed system combines two technical components: a model fine-tuned to
 recognize acceptable product substitutes and a mathematical optimizer that selects
 changes for the complete basket. Both can run locally without a chat API.
 
-**Current status:** the repository contains the retained product sample, data
-verification/download scripts and design documentation. The training pipeline,
+**Current status:** raw catalog acquisition is implemented. The repository contains
+the original sample, an expanded catalog, coverage report, data verification/download
+scripts and design documentation. The training pipeline,
 recommender, optimizer and interface below are proposed work, not implemented
 features or measured results.
 
@@ -44,9 +45,12 @@ Use Open Food Facts product data:
 **Tools:** Python, fsspec, PyArrow and pandas. Store prepared tables as Parquet and
 provenance as JSON.
 
-The existing sample contains 12,288 products but no nutrient or quantity fields.
-Acquire an expanded dataset before implementing nutritional constraints. Keep the
-historical snapshot unchanged. The sample is not representative of the OFF catalog.
+The original sample contains 12,288 products without nutrient or quantity fields.
+The expanded raw catalog now adds these fields for the same products and pinned
+source revision. Reproduce it with `python scripts/fetch_data.py --catalog` and
+inspect `data/catalog_audit.json` for measured field coverage. Missing source values
+remain missing. The historical snapshot is unchanged; neither sample is
+representative of the OFF catalog. Normalization and eligibility are the next step.
 
 Prices and store stock require another source and are outside the first version.
 A declared country does not establish in-store availability.
