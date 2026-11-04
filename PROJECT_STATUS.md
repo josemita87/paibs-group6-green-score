@@ -89,6 +89,33 @@ and the step-3 `catalog.parquet` columns are the contracts later steps consume.
 
 ## Change log
 
+### 2026-11-04 — Family-targeted expansion of the raw catalog (return to step 2)
+
+- Added `scripts/expand_catalog.py`. Probed the pinned `food.parquet` footer first:
+  4.3 GB, 2,068 row groups of 963–1,024 rows ordered by barcode, so no category
+  layout can be exploited. Phase 1 scans only `categories_tags`,
+  `product_quantity_unit` and `environmental_score_score` for every row group
+  (28.6 MB compressed) to locate candidates of the three families with a recorded
+  g/ml unit and a numeric score. Phase 2 reads the full selected fields for the
+  row groups richest in candidates of families still below 100 distinct eligible
+  groups, in deterministic waves of 8, within a budget of 200 row groups
+  (about 1.3 MB each). Both phases cache per row group under `data/cache/`.
+- Outcome: 16 row groups read (26.2 MB), 1,678 candidate rows saved to
+  `data/catalog_expansion.jsonl.gz` (2.8 MB) with
+  `data/catalog_expansion_manifest.json` (revision, fields, criteria, wave log,
+  byte estimates, sha256). Stop reason `target_reached` after two waves. The
+  database-wide scan counted 14,406 yogurt, 10,923 breakfast-cereal and 3,348
+  plant-based-milk candidates in 1,940 row groups. No code overlapped the base
+  snapshot; the 12 historical row groups were skipped.
+- Validation: 8 new tests (candidate rule, deterministic wave choice, eligibility
+  reuse, committed expansion provenance/overlap/field checks, historical checksums)
+  pass with the existing 32; `audit_data.py` with and without `--catalog`
+  unchanged; base snapshot files not modified. Remote CI not known at commit time.
+- Limitation: density-first selection concentrates on a few GS1 prefixes and
+  manufacturers (French yogurt ranges, Kellogg's UK, Alpro Belgium); the expansion
+  is mostly French-language. The next commit consumes the expansion in the
+  comparable catalog and reports coverage per family and distinct groups.
+
 ### 2026-11-04 — Comparable catalog (step 3)
 
 - Added `basket/comparable.py`: HTML/entity/allergen-marker cleaning that keeps

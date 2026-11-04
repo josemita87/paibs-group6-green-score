@@ -1,0 +1,164 @@
+{
+  "dataset": "openfoodfacts/product-database",
+  "source_url": "https://huggingface.co/datasets/openfoodfacts/product-database",
+  "download_url": "https://huggingface.co/datasets/openfoodfacts/product-database/resolve/89cfb571db20b1f1b246f27cab71837fc96225b1/food.parquet",
+  "revision": "89cfb571db20b1f1b246f27cab71837fc96225b1",
+  "retrieved_utc": "2026-11-04T14:41:19.327942+00:00",
+  "population_rows": 2117571,
+  "selected_fields": [
+    "code",
+    "product_name",
+    "brands",
+    "categories_tags",
+    "ingredients_text",
+    "lang",
+    "countries_tags",
+    "origins_tags",
+    "labels_tags",
+    "packaging_tags",
+    "environmental_score_score",
+    "environmental_score_grade",
+    "environmental_score_data",
+    "nutriments",
+    "nutrition_data_per",
+    "no_nutrition_data",
+    "quantity",
+    "product_quantity",
+    "product_quantity_unit",
+    "serving_size",
+    "serving_quantity",
+    "allergens_tags",
+    "traces_tags",
+    "ingredients_analysis_tags",
+    "data_quality_errors_tags",
+    "data_quality_warnings_tags",
+    "obsolete",
+    "last_modified_t"
+  ],
+  "selection": {
+    "families": {
+      "plant_based_milk_alternatives": [
+        "en:plant-based-milk-alternatives",
+        "en:milk-substitutes"
+      ],
+      "yogurts": [
+        "en:yogurts"
+      ],
+      "breakfast_cereals": [
+        "en:breakfast-cereals"
+      ]
+    },
+    "product_quantity_unit": [
+      "g",
+      "ml"
+    ],
+    "environmental_score_score": "finite number",
+    "excluded_row_groups": [
+      105,
+      113,
+      204,
+      414,
+      530,
+      626,
+      768,
+      780,
+      931,
+      1672,
+      1726,
+      2017
+    ],
+    "codes_already_in_catalog_skipped": 0
+  },
+  "scan": {
+    "fields": [
+      "categories_tags",
+      "product_quantity_unit",
+      "environmental_score_score"
+    ],
+    "row_groups_scanned": 2068,
+    "row_groups_with_candidates": 1940,
+    "candidates_by_family": {
+      "plant_based_milk_alternatives": 3348,
+      "yogurts": 14406,
+      "breakfast_cereals": 10923
+    },
+    "approximate_compressed_bytes": 28636982
+  },
+  "read": {
+    "target_distinct_eligible_groups_per_family": 100,
+    "max_row_groups": 200,
+    "wave_size": 8,
+    "stop_reason": "target_reached",
+    "row_groups_read": [
+      314,
+      230,
+      298,
+      459,
+      336,
+      458,
+      229,
+      302,
+      475,
+      551,
+      572,
+      260,
+      534,
+      573,
+      549,
+      476
+    ],
+    "waves": [
+      {
+        "row_groups": [
+          314,
+          230,
+          298,
+          459,
+          336,
+          458,
+          229,
+          302
+        ],
+        "rows_added": 1254,
+        "distinct_eligible_groups": {
+          "plant_based_milk_alternatives": 39,
+          "yogurts": 761,
+          "breakfast_cereals": 375
+        }
+      },
+      {
+        "row_groups": [
+          475,
+          551,
+          572,
+          260,
+          534,
+          573,
+          549,
+          476
+        ],
+        "rows_added": 424,
+        "distinct_eligible_groups": {
+          "plant_based_milk_alternatives": 344,
+          "yogurts": 782,
+          "breakfast_cereals": 430
+        }
+      }
+    ],
+    "distinct_eligible_groups_before": {
+      "plant_based_milk_alternatives": 20,
+      "yogurts": 92,
+      "breakfast_cereals": 29
+    },
+    "distinct_eligible_groups_after": {
+      "plant_based_milk_alternatives": 344,
+      "yogurts": 782,
+      "breakfast_cereals": 430
+    },
+    "approximate_compressed_bytes": 26199858
+  },
+  "sample_rows": 1678,
+  "sha256": "824f573af54c504251c80887658f38589de44bf521eff5ab812d7c2d3086e0ec",
+  "license": "Open Database License (ODbL); individual contents Database Contents License",
+  "note": "Candidate rows only; raw source values without cleaning or eligibility filtering. Candidate conditions are necessary, not sufficient, for eligibility, which basket/comparable.py decides."
+}
