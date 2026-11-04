@@ -3,8 +3,10 @@
 A research prototype for improving a shopping basket through acceptable product
 substitutions while respecting preferences and a maximum number of changes.
 
-**Status:** raw catalog acquisition and the basket input flow (selection, quantities,
-locks, change limit and validation) are implemented. The recommender, training
+**Status:** raw catalog acquisition, the basket input flow (selection, quantities,
+locks, change limit and validation) and the comparable catalog (cleaned text,
+per-100 nutrients, fixed score context, product groups, eligibility with recorded
+exclusion reasons) are implemented. The substitution dataset, recommender, training
 pipeline, optimizer and recommendation interface are not implemented yet; declared
 preferences and nutritional constraints are recorded but not checked.
 
@@ -29,9 +31,13 @@ comparison; a chat API is not required.
 
 - `data/`: the original 12,288-product OFF sample and an expanded raw catalog,
   each with a provenance/checksum manifest; `catalog_audit.json` records coverage.
+  `catalog.parquet`, `catalog_report.json` and `catalog_parquet_manifest.json` are
+  the comparable catalog built from the raw snapshot (step 3).
 - `scripts/audit_data.py`: verifies integrity and reports coverage and missing data.
 - `scripts/fetch_data.py`: reproduces the historical sample or fetches expanded fields.
-- `basket/`: Pydantic basket models, validation and read-only catalog lookup (step 1).
+- `scripts/build_catalog.py`: builds or verifies the comparable catalog.
+- `basket/`: Pydantic basket models, validation and read-only catalog lookup (step 1);
+  `basket/comparable.py` holds the step-3 normalization and eligibility rules.
 - `app/streamlit_app.py`: minimal Streamlit screen that builds and validates a basket.
 - `requirements-app.txt`: pinned dependencies for the basket models, app and tests.
 - `requirements-data.txt`: optional dependencies for downloading the sample again.
@@ -64,6 +70,25 @@ recorded basis and marked `unverified` when the source records none. Dietary
 preferences and nutritional constraints are stored as declared fields with
 `enforcement: declared_not_checked`; nothing filters or checks them yet, and no
 recommendations are produced.
+
+## Comparable catalog (step 3)
+
+```sh
+python scripts/build_catalog.py            # rebuild data/catalog.parquet and the report
+python scripts/build_catalog.py --verify   # check the committed outputs against a rebuild
+```
+
+Every raw product becomes one row with cleaned name and ingredients (all source
+languages kept in `names_json`/`ingredients_json`), nutrients per 100 g or 100 ml
+taken from the source `100g` key (already in grams; implausible values are set to
+missing and listed in `implausible_nutrients`), the environmental score in the
+fixed `fr` context (the `world` score is kept for reference), a `comparison_unit`
+of `g` or `ml` taken only from the recorded product unit, and a `group_id` shared
+by products with the same normalized name and brand. `exclusion_reasons` says why a
+row is not `eligible`. The selected families are yogurts, breakfast cereals and
+plant-based milk alternatives; `catalog_report.json` records their counts and the
+coverage of families that were not selected. Score differences are an experimental
+index, not emissions.
 
 To download the expanded catalog from the pinned source revision:
 

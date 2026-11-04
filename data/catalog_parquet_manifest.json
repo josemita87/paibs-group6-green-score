@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "source_snapshot": "data/catalog.jsonl.gz",
+  "source_sha256": "bed73b68cbbc3a003300d1cc98d7a1c7df5fd559e1e83a52c6e8dd50adc566da",
+  "source_revision": "89cfb571db20b1f1b246f27cab71837fc96225b1",
+  "rows": 12288,
+  "eligible": 142,
+  "content_sha256": "98fe33c6b3e206405cce3c1235aa7c457e685861ce7fb014403eed23188cf432",
+  "columns": [
+    "code",
+    "source_row",
+    "name",
+    "name_lang",
+    "names_json",
+    "brands",
+    "lang",
+    "categories_tags",
+    "family",
+    "ingredients_text",
+    "ingredients_lang",
+    "ingredients_json",
+    "labels_tags",
+    "ingredients_analysis_tags",
+    "allergens_tags",
+    "traces_tags",
+    "product_quantity",
+    "comparison_unit",
+    "nutrition_data_per",
+    "energy_kcal_per_100",
+    "fat_g_per_100",
+    "saturated_fat_g_per_100",
+    "carbohydrates_g_per_100",
+    "sugars_g_per_100",
+    "fiber_g_per_100",
+    "proteins_g_per_100",
+    "salt_g_per_100",
+    "implausible_nutrients",
+    "environmental_score",
+    "environmental_score_world",
+    "environmental_grade",
+    "agribalyse_version",
+    "environmental_missing_key_data",
+    "environmental_score_context",
+    "group_key",
+    "exclusion_reasons",
+    "last_modified_t",
+    "group_id",
+    "group_size",
+    "eligible"
+  ],
+  "selected_families": {
+    "plant_based_milk_alternatives": [
+      "en:plant-based-milk-alternatives",
+      "en:milk-substitutes"
+    ],
+    "yogurts": [
+      "en:yogurts"
+    ],
+    "breakfast_cereals": [
+      "en:breakfast-cereals"
+    ]
+  },
+  "min_eligible_per_family": 20,
+  "environmental_score_context": "fr",
+  "note": "content_sha256 covers the canonical JSON of every record, not the Parquet bytes."
+}

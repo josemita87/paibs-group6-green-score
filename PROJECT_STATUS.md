@@ -1,6 +1,6 @@
 # Project status
 
-Last updated: 2026-10-28
+Last updated: 2026-11-04
 
 This is the shared handoff for contributors and AI assistants. Read
 [AGENTS.md](AGENTS.md) before editing and update this file in every commit.
@@ -9,10 +9,11 @@ version history; this file explains what is ready and what to do next.
 
 ## Current focus
 
-Raw catalog acquisition (step 2) and the basket input flow (step 1) are implemented.
-The comparable catalog, recommender, training pipeline, optimizer and recommendation
-interface are not implemented. The next task is **step 3: build a comparable,
-usable catalog**.
+Raw catalog acquisition (step 2), the basket input flow (step 1) and the comparable
+catalog (step 3) are implemented. The substitution dataset, recommender, training
+pipeline, optimizer and recommendation interface are not implemented. The next task
+is **step 4: create the substitution dataset** (guidelines, candidate pairs within
+the eligible families and product groups, pilot annotation).
 
 Earlier conversation called raw acquisition “step 1.” In the canonical pipeline
 it is **step 2**. Use the document's 1–13 numbering from now on; do not rename steps.
@@ -23,7 +24,7 @@ it is **step 2**. Use the document's 1–13 numbering from now on; do not rename
 |---|---|---|---|
 | 1 | User input | Done — minimal flow | `basket/` Pydantic models and catalog lookup, `app/streamlit_app.py`, `tests/test_basket.py`. Preferences and nutritional constraints are declared fields only (`declared_not_checked`); enforcement belongs to steps 9–10. |
 | 2 | Acquire and version the product catalog | Done — raw sample | `scripts/fetch_data.py --catalog`, catalog snapshot, manifest and coverage audit. Broader catalog acquisition can follow if coverage requires it. |
-| 3 | Build a comparable, usable catalog | Not started | Normalize units and nutrient basis, resolve missing data and choose eligible families. |
+| 3 | Build a comparable, usable catalog | Done — first version | `basket/comparable.py`, `scripts/build_catalog.py`, `data/catalog.parquet` + report + manifest, `tests/test_comparable.py`. 142 eligible products in three families; CI verifies the committed outputs against a rebuild. Coverage is thin for two families. |
 | 4 | Create the substitution dataset | Not started | Annotation guidelines, candidate generation, pilot review and labels; establish product groups before creating pairs. |
 | 5 | Split the data before training | Not started | Freeze and verify group partitions; construct within-partition pairs/triplets. |
 | 6 | Establish the baselines | Not started | Category/rules, TF-IDF and frozen-encoder rankings on shared cases. |
@@ -56,7 +57,21 @@ Record any other dependency-driven change of order here before proceeding.
   field are not parsed.
 - A `Basket` records inputs only: it carries no nutrient values, no eligibility
   judgement and no recommendation. Availability flags on `ProductRef` report
-  whether a raw value exists, not whether it is comparable.
+  whether a raw value exists, not whether it is comparable. The step-1 app and
+  `basket/catalog.py` still read the raw snapshot, not `catalog.parquet`.
+- Comparable catalog (`data/catalog.parquet`, 12,288 rows): 142 eligible products —
+  yogurts 93 (91 `g`, 2 `ml`), breakfast cereals 29 (`g`), plant-based milk
+  alternatives 20 (`ml`) — in 141 product groups. Main exclusions: no recorded
+  g/ml unit 7,977; no known environmental score 8,249; no ingredients 6,861;
+  7 implausible values among the three target nutrients were set to missing.
+  Score context is `fr` (equals the exported score; `world` differs for 772
+  products). Among eligible products, 137 use Agribalyse 3.2 and 5 use 3.1.1, and
+  the source flags `missing_key_data` for most known scores. These are index
+  comparisons, not emissions.
+- Families not selected but with more complete products (dairy desserts 122,
+  cheeses 111, plant-based beverages 87, biscuits 74) are listed in
+  `catalog_report.json`; 20–29 products per family is thin for the 600–1,000
+  annotated pairs planned in step 4. Broader acquisition (step 2) may be needed.
 - No substitution pairs have been labeled and no new model has been trained.
 - Local data checks and remote CI passed for acquisition commit `2ecf444`.
 - Historical experiments remain available under `archive/claim-audit-v1` and
@@ -64,15 +79,43 @@ Record any other dependency-driven change of order here before proceeding.
 
 ## Next action
 
-Implement step 3 in a focused change: standardize nutrient names and units
-(including `salt` recorded in `mg`), resolve the mass/volume basis per product,
-keep missing values explicitly missing, group duplicates and near-duplicate
-variants, and select candidate product families with enough complete products.
-Record exclusion reasons and output `catalog.parquet` plus a coverage report. The
-step-1 `Basket` schema (`schema_version: 1`) is the input contract later steps
-should consume; extend it rather than replacing it.
+Start step 4 with a focused change: write the annotation guidelines (labels,
+usage contexts per family, reasons), generate candidate pairs only among eligible
+products of the same family and comparison unit, never pairing products from the
+same `group_id`, and prepare a pilot set for two independent annotators. Decide
+with the team whether to widen the families or acquire more products first, given
+20–29 eligible products in two of the three families. The step-1 `Basket` schema
+and the step-3 `catalog.parquet` columns are the contracts later steps consume.
 
 ## Change log
+
+### 2026-11-04 — Comparable catalog (step 3)
+
+- Added `basket/comparable.py`: HTML/entity/allergen-marker cleaning that keeps
+  every source language, per-100 nutrient extraction from the source `100g` key
+  (verified to be grams even when the display unit is `mg`), plausibility bounds
+  (0–100 g, 0–900 kcal) that set values to missing and record them, comparison
+  unit from the recorded product unit only, environmental score in the fixed `fr`
+  context with `world`, grade, Agribalyse version and `missing_key_data` kept,
+  family assignment by category tags, Unicode-aware name+brand grouping, ordered
+  exclusion reasons and a per-family minimum of 20 eligible products.
+- Added `scripts/build_catalog.py`: writes `data/catalog.parquet` (3.3 MB, 12,288
+  rows, 40 columns), `data/catalog_report.json` and `data/catalog_parquet_manifest.json`
+  with a content hash over canonical record JSON; `--verify` rebuilds and compares.
+  CI runs the verification. Pinned pandas 3.1.0 and pyarrow 26.0.0 in
+  `requirements-app.txt`.
+- Selected families after measuring coverage: yogurts, breakfast cereals and
+  plant-based milk alternatives (matches the Session 2 benchmark plan). The report
+  also lists seven candidate families that were not selected.
+- Validation (local, Python 3.13 venv): 12 new unit tests pass with the existing 20;
+  `build_catalog.py` then `--verify` passed; both `audit_data.py` checks unchanged.
+  Found and fixed a grouping bug during review: non-Latin names (Cyrillic, Greek,
+  Arabic) had collapsed into one 34-product group. Remote CI for this commit is
+  not known at commit time; CI passed for the step-1 commit `1ee166a`.
+- Limitations: the step-1 app still reads the raw snapshot; `sugars > carbohydrates`
+  in 35 raw products is not flagged; mixed Agribalyse versions and `missing_key_data`
+  are recorded, not resolved; near-duplicate detection uses exact normalized
+  name+brand, so renamed variants are separate groups.
 
 ### 2026-10-28 — Work 3 benchmark plan
 

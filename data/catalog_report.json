@@ -1,0 +1,269 @@
+{
+  "schema_version": 1,
+  "rows": 12288,
+  "eligible": 142,
+  "eligible_by_family": {
+    "breakfast_cereals": 29,
+    "plant_based_milk_alternatives": 20,
+    "yogurts": 93
+  },
+  "eligible_by_comparison_unit": {
+    "g": 120,
+    "ml": 22
+  },
+  "eligible_groups": 141,
+  "exclusion_reason_counts": {
+    "implausible_nutrient:proteins": 2,
+    "implausible_nutrient:salt": 4,
+    "implausible_nutrient:sugars": 1,
+    "missing_environmental_score": 8249,
+    "missing_ingredients": 6861,
+    "missing_name": 311,
+    "missing_nutrient:proteins": 2130,
+    "missing_nutrient:salt": 2731,
+    "missing_nutrient:sugars": 2288,
+    "not_in_selected_family": 11981,
+    "unknown_comparison_unit": 7977
+  },
+  "products_with_comparison_unit": {
+    "(unknown)": 7977,
+    "g": 3653,
+    "ml": 658
+  },
+  "implausible_nutrient_counts": {
+    "carbohydrates": 5,
+    "energy-kcal": 14,
+    "fat": 1,
+    "fiber": 2,
+    "proteins": 2,
+    "salt": 4,
+    "saturated-fat": 1,
+    "sugars": 1
+  },
+  "environmental_score": {
+    "context": "fr",
+    "known": 4039,
+    "world_differs_from_context": 772,
+    "missing_key_data_among_known": 2785,
+    "agribalyse_versions_among_eligible": {
+      "3.1.1": 5,
+      "3.2": 137
+    }
+  },
+  "duplicate_groups": {
+    "groups_with_multiple_products": 284,
+    "products_in_such_groups": 693,
+    "largest_group_size": 10
+  },
+  "selected_families": {
+    "plant_based_milk_alternatives": {
+      "category_tags": [
+        "en:plant-based-milk-alternatives",
+        "en:milk-substitutes"
+      ],
+      "raw_members": 67,
+      "complete_members": 20,
+      "eligible_members": 20,
+      "complete_by_comparison_unit": {
+        "ml": 20
+      },
+      "complete_groups": 20,
+      "top_exclusion_reasons": {
+        "unknown_comparison_unit": 39,
+        "missing_environmental_score": 28,
+        "missing_ingredients": 9,
+        "missing_nutrient:salt": 7,
+        "missing_nutrient:proteins": 2,
+        "missing_nutrient:sugars": 2
+      }
+    },
+    "yogurts": {
+      "category_tags": [
+        "en:yogurts"
+      ],
+      "raw_members": 176,
+      "complete_members": 93,
+      "eligible_members": 93,
+      "complete_by_comparison_unit": {
+        "g": 91,
+        "ml": 2
+      },
+      "complete_groups": 92,
+      "top_exclusion_reasons": {
+        "unknown_comparison_unit": 65,
+        "missing_ingredients": 34,
+        "missing_nutrient:salt": 15,
+        "missing_nutrient:sugars": 14,
+        "missing_nutrient:proteins": 12
+      }
+    },
+    "breakfast_cereals": {
+      "category_tags": [
+        "en:breakfast-cereals"
+      ],
+      "raw_members": 64,
+      "complete_members": 29,
+      "eligible_members": 29,
+      "complete_by_comparison_unit": {
+        "g": 29
+      },
+      "complete_groups": 29,
+      "top_exclusion_reasons": {
+        "unknown_comparison_unit": 21,
+        "missing_ingredients": 21,
+        "missing_nutrient:salt": 7,
+        "missing_nutrient:proteins": 4,
+        "missing_nutrient:sugars": 4,
+        "missing_environmental_score": 4
+      }
+    }
+  },
+  "min_eligible_per_family": 20,
+  "candidate_families_not_selected": {
+    "dairy_desserts": {
+      "category_tags": [
+        "en:dairy-desserts"
+      ],
+      "raw_members": 244,
+      "complete_members": 122,
+      "eligible_members": 93,
+      "complete_by_comparison_unit": {
+        "g": 120,
+        "ml": 2
+      },
+      "complete_groups": 121,
+      "top_exclusion_reasons": {
+        "unknown_comparison_unit": 83,
+        "missing_ingredients": 56,
+        "missing_nutrient:salt": 26,
+        "missing_nutrient:sugars": 25,
+        "missing_environmental_score": 22,
+        "missing_nutrient:proteins": 22
+      }
+    },
+    "cheeses": {
+      "category_tags": [
+        "en:cheeses"
+      ],
+      "raw_members": 429,
+      "complete_members": 111,
+      "eligible_members": 1,
+      "complete_by_comparison_unit": {
+        "g": 111
+      },
+      "complete_groups": 109,
+      "top_exclusion_reasons": {
+        "unknown_comparison_unit": 234,
+        "missing_ingredients": 203,
+        "missing_nutrient:sugars": 62,
+        "missing_environmental_score": 61,
+        "missing_nutrient:salt": 58,
+        "missing_nutrient:proteins": 45
+      }
+    },
+    "biscuits": {
+      "category_tags": [
+        "en:biscuits"
+      ],
+      "raw_members": 214,
+      "complete_members": 74,
+      "eligible_members": 0,
+      "complete_by_comparison_unit": {
+        "g": 74
+      },
+      "complete_groups": 72,
+      "top_exclusion_reasons": {
+        "unknown_comparison_unit": 114,
+        "missing_ingredients": 66,
+        "missing_environmental_score": 54,
+        "missing_nutrient:salt": 11,
+        "missing_nutrient:sugars": 10,
+        "missing_nutrient:proteins": 8
+      }
+    },
+    "sweet_spreads": {
+      "category_tags": [
+        "en:sweet-spreads"
+      ],
+      "raw_members": 272,
+      "complete_members": 64,
+      "eligible_members": 0,
+      "complete_by_comparison_unit": {
+        "g": 63,
+        "ml": 1
+      },
+      "complete_groups": 62,
+      "top_exclusion_reasons": {
+        "missing_ingredients": 133,
+        "unknown_comparison_unit": 133,
+        "missing_nutrient:salt": 89,
+        "missing_nutrient:proteins": 75,
+        "missing_nutrient:sugars": 73,
+        "missing_environmental_score": 61
+      }
+    },
+    "breads": {
+      "category_tags": [
+        "en:breads"
+      ],
+      "raw_members": 247,
+      "complete_members": 57,
+      "eligible_members": 1,
+      "complete_by_comparison_unit": {
+        "g": 57
+      },
+      "complete_groups": 54,
+      "top_exclusion_reasons": {
+        "unknown_comparison_unit": 133,
+        "missing_environmental_score": 125,
+        "missing_ingredients": 71,
+        "missing_nutrient:salt": 19,
+        "missing_nutrient:sugars": 17,
+        "missing_nutrient:proteins": 14
+      }
+    },
+    "plant_based_beverages": {
+      "category_tags": [
+        "en:plant-based-beverages"
+      ],
+      "raw_members": 328,
+      "complete_members": 87,
+      "eligible_members": 20,
+      "complete_by_comparison_unit": {
+        "g": 16,
+        "ml": 71
+      },
+      "complete_groups": 85,
+      "top_exclusion_reasons": {
+        "unknown_comparison_unit": 185,
+        "missing_ingredients": 106,
+        "missing_environmental_score": 88,
+        "missing_nutrient:salt": 63,
+        "missing_nutrient:sugars": 52,
+        "missing_nutrient:proteins": 47
+      }
+    },
+    "fruit_juices": {
+      "category_tags": [
+        "en:fruit-juices"
+      ],
+      "raw_members": 70,
+      "complete_members": 24,
+      "eligible_members": 0,
+      "complete_by_comparison_unit": {
+        "g": 3,
+        "ml": 21
+      },
+      "complete_groups": 24,
+      "top_exclusion_reasons": {
+        "unknown_comparison_unit": 38,
+        "missing_ingredients": 29,
+        "missing_nutrient:salt": 12,
+        "missing_nutrient:sugars": 10,
+        "missing_nutrient:proteins": 9,
+        "missing_environmental_score": 7
+      }
+    }
+  },
+  "note": "Eligibility requires a cleaned name and ingredients, a recorded g/ml unit, plausible per-100 proteins/sugars/salt, a known environmental score in the \"fr\" context and membership of a selected family with at least 20 eligible products. Missing values remain missing. Score differences are an experimental index, not emissions. Products with the same normalized name and brand share a group regardless of quantity."
+}

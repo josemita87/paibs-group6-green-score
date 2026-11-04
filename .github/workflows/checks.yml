@@ -24,3 +24,5 @@ jobs:
         run: |
           python scripts/audit_data.py --catalog > /tmp/catalog_audit.json
           diff -u data/catalog_audit.json /tmp/catalog_audit.json
+      - name: Verify committed comparable catalog against a rebuild
+        run: python scripts/build_catalog.py --verify

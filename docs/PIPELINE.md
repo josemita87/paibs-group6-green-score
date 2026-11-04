@@ -4,14 +4,13 @@ The proposed system combines two technical components: a model fine-tuned to
 recognize acceptable product substitutes and a mathematical optimizer that selects
 changes for the complete basket. Both can run locally without a chat API.
 
-**Current status:** raw catalog acquisition (step 2) and the basket input flow
+**Current status:** raw catalog acquisition (step 2), the basket input flow
 (step 1: product selection, quantities, units, locks, change limit, declared
-preference and constraint fields, validation) are implemented. The repository
-contains the original sample, an expanded catalog, coverage report, data
-verification/download scripts, the `basket` package, a Streamlit input screen and
-design documentation. The comparable catalog, training pipeline, recommender,
-optimizer and recommendation interface below are proposed work, not implemented
-features or measured results.
+preference and constraint fields, validation) and the comparable catalog (step 3:
+`data/catalog.parquet` with cleaned text, per-100 nutrients, fixed score context,
+product groups and recorded exclusion reasons) are implemented. The substitution
+dataset, training pipeline, recommender, optimizer and recommendation interface
+below are proposed work, not implemented features or measured results.
 
 ## 1. User input
 
@@ -82,6 +81,16 @@ kilograms of CO2.
 **Tools:** pandas, NumPy, Pydantic and custom Python normalization functions.
 
 **Output:** `catalog.parquet` and a coverage report.
+
+Implemented in `basket/comparable.py` and `scripts/build_catalog.py`. The source
+`100g` nutrient values are already per 100 g/ml in grams, so no unit conversion is
+applied; values outside 0–100 g (0–900 kcal) become missing and are listed. The
+comparison unit is the recorded product unit only. The environmental score is read
+from `environmental_score_data.scores.fr` (identical to the exported score);
+`world` is stored for reference. Families selected after measuring coverage:
+yogurts (93 eligible), breakfast cereals (29) and plant-based milk alternatives (20),
+with a minimum of 20 eligible products per family. `data/catalog_report.json`
+lists the counts for families that were not selected.
 
 ## 4. Create the substitution dataset
 
