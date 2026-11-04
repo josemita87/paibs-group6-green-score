@@ -199,6 +199,7 @@ def build_record(row: dict) -> dict:
     record = {
         'code': row['code'],
         'source_row': row.get('_source_row'),
+        'source_snapshot': row.get('_source_snapshot', 'catalog'),
         'name': name['text'] if name else None,
         'name_lang': name['lang'] if name else None,
         'names_json': json.dumps(names, ensure_ascii=False),

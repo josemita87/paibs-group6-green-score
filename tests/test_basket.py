@@ -130,8 +130,12 @@ class CatalogChecks(unittest.TestCase):
     def setUpClass(cls):
         cls.catalog = Catalog.load()
 
-    def test_loads_verified_snapshot(self):
-        self.assertEqual(len(self.catalog), 12288)
+    def test_loads_verified_snapshots(self):
+        expected = 12288
+        expansion_manifest = APP_PATH.parents[1] / 'data/catalog_expansion_manifest.json'
+        if expansion_manifest.exists():
+            expected += json.loads(expansion_manifest.read_text())['sample_rows']
+        self.assertEqual(len(self.catalog), expected)
         self.assertEqual(self.catalog.revision, '89cfb571db20b1f1b246f27cab71837fc96225b1')
 
     def test_barcode_lookup_reports_raw_evidence_without_inference(self):

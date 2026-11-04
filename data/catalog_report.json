@@ -1,34 +1,47 @@
 {
   "schema_version": 1,
-  "rows": 12288,
-  "eligible": 142,
+  "rows": 13966,
+  "rows_by_source_snapshot": {
+    "catalog": 12288,
+    "expansion": 1678
+  },
+  "eligible": 1684,
+  "eligible_by_source_snapshot": {
+    "catalog": 142,
+    "expansion": 1542
+  },
   "eligible_by_family": {
-    "breakfast_cereals": 29,
-    "plant_based_milk_alternatives": 20,
-    "yogurts": 93
+    "breakfast_cereals": 479,
+    "plant_based_milk_alternatives": 352,
+    "yogurts": 853
+  },
+  "eligible_groups_by_family": {
+    "breakfast_cereals": 430,
+    "plant_based_milk_alternatives": 344,
+    "yogurts": 782
   },
   "eligible_by_comparison_unit": {
-    "g": 120,
-    "ml": 22
+    "g": 1336,
+    "ml": 348
   },
-  "eligible_groups": 141,
+  "eligible_groups": 1556,
   "exclusion_reason_counts": {
     "implausible_nutrient:proteins": 2,
     "implausible_nutrient:salt": 4,
     "implausible_nutrient:sugars": 1,
     "missing_environmental_score": 8249,
-    "missing_ingredients": 6861,
-    "missing_name": 311,
-    "missing_nutrient:proteins": 2130,
-    "missing_nutrient:salt": 2731,
-    "missing_nutrient:sugars": 2288,
+    "missing_ingredients": 6980,
+    "missing_name": 313,
+    "missing_nutrient:proteins": 2160,
+    "missing_nutrient:salt": 2767,
+    "missing_nutrient:sugars": 2323,
     "not_in_selected_family": 11981,
     "unknown_comparison_unit": 7977
   },
   "products_with_comparison_unit": {
     "(unknown)": 7977,
-    "g": 3653,
-    "ml": 658
+    "g": 4983,
+    "ml": 1006
   },
   "implausible_nutrient_counts": {
     "carbohydrates": 5,
@@ -42,18 +55,18 @@
   },
   "environmental_score": {
     "context": "fr",
-    "known": 4039,
-    "world_differs_from_context": 772,
-    "missing_key_data_among_known": 2785,
+    "known": 5717,
+    "world_differs_from_context": 1203,
+    "missing_key_data_among_known": 3130,
     "agribalyse_versions_among_eligible": {
-      "3.1.1": 5,
-      "3.2": 137
+      "3.1.1": 12,
+      "3.2": 1672
     }
   },
   "duplicate_groups": {
-    "groups_with_multiple_products": 284,
-    "products_in_such_groups": 693,
-    "largest_group_size": 10
+    "groups_with_multiple_products": 369,
+    "products_in_such_groups": 928,
+    "largest_group_size": 17
   },
   "selected_families": {
     "plant_based_milk_alternatives": {
@@ -61,59 +74,88 @@
         "en:plant-based-milk-alternatives",
         "en:milk-substitutes"
       ],
-      "raw_members": 67,
-      "complete_members": 20,
-      "eligible_members": 20,
-      "complete_by_comparison_unit": {
-        "ml": 20
+      "raw_members": 422,
+      "complete_members": 352,
+      "eligible_members": 352,
+      "eligible_groups": 344,
+      "eligible_by_source_snapshot": {
+        "catalog": 20,
+        "expansion": 332
       },
-      "complete_groups": 20,
+      "complete_by_comparison_unit": {
+        "g": 10,
+        "ml": 342
+      },
+      "complete_groups": 344,
+      "agribalyse_versions_among_eligible": {
+        "3.1.1": 9,
+        "3.2": 343
+      },
       "top_exclusion_reasons": {
         "unknown_comparison_unit": 39,
+        "missing_ingredients": 29,
         "missing_environmental_score": 28,
-        "missing_ingredients": 9,
-        "missing_nutrient:salt": 7,
-        "missing_nutrient:proteins": 2,
-        "missing_nutrient:sugars": 2
+        "missing_nutrient:salt": 11,
+        "missing_nutrient:proteins": 4,
+        "missing_nutrient:sugars": 4
       }
     },
     "yogurts": {
       "category_tags": [
         "en:yogurts"
       ],
-      "raw_members": 176,
-      "complete_members": 93,
-      "eligible_members": 93,
-      "complete_by_comparison_unit": {
-        "g": 91,
-        "ml": 2
+      "raw_members": 999,
+      "complete_members": 853,
+      "eligible_members": 853,
+      "eligible_groups": 782,
+      "eligible_by_source_snapshot": {
+        "catalog": 93,
+        "expansion": 760
       },
-      "complete_groups": 92,
+      "complete_by_comparison_unit": {
+        "g": 847,
+        "ml": 6
+      },
+      "complete_groups": 782,
+      "agribalyse_versions_among_eligible": {
+        "3.1.1": 1,
+        "3.2": 852
+      },
       "top_exclusion_reasons": {
+        "missing_ingredients": 87,
         "unknown_comparison_unit": 65,
-        "missing_ingredients": 34,
-        "missing_nutrient:salt": 15,
-        "missing_nutrient:sugars": 14,
-        "missing_nutrient:proteins": 12
+        "missing_nutrient:sugars": 37,
+        "missing_nutrient:salt": 37,
+        "missing_nutrient:proteins": 31,
+        "missing_name": 2
       }
     },
     "breakfast_cereals": {
       "category_tags": [
         "en:breakfast-cereals"
       ],
-      "raw_members": 64,
-      "complete_members": 29,
-      "eligible_members": 29,
-      "complete_by_comparison_unit": {
-        "g": 29
+      "raw_members": 564,
+      "complete_members": 479,
+      "eligible_members": 479,
+      "eligible_groups": 430,
+      "eligible_by_source_snapshot": {
+        "catalog": 29,
+        "expansion": 450
       },
-      "complete_groups": 29,
+      "complete_by_comparison_unit": {
+        "g": 479
+      },
+      "complete_groups": 430,
+      "agribalyse_versions_among_eligible": {
+        "3.1.1": 2,
+        "3.2": 477
+      },
       "top_exclusion_reasons": {
+        "missing_ingredients": 67,
         "unknown_comparison_unit": 21,
-        "missing_ingredients": 21,
-        "missing_nutrient:salt": 7,
-        "missing_nutrient:proteins": 4,
-        "missing_nutrient:sugars": 4,
+        "missing_nutrient:salt": 17,
+        "missing_nutrient:sugars": 14,
+        "missing_nutrient:proteins": 13,
         "missing_environmental_score": 4
       }
     }
@@ -124,34 +166,51 @@
       "category_tags": [
         "en:dairy-desserts"
       ],
-      "raw_members": 244,
-      "complete_members": 122,
-      "eligible_members": 93,
-      "complete_by_comparison_unit": {
-        "g": 120,
-        "ml": 2
+      "raw_members": 1067,
+      "complete_members": 882,
+      "eligible_members": 853,
+      "eligible_groups": 782,
+      "eligible_by_source_snapshot": {
+        "catalog": 93,
+        "expansion": 760
       },
-      "complete_groups": 121,
+      "complete_by_comparison_unit": {
+        "g": 876,
+        "ml": 6
+      },
+      "complete_groups": 811,
+      "agribalyse_versions_among_eligible": {
+        "3.1.1": 1,
+        "3.2": 852
+      },
       "top_exclusion_reasons": {
+        "missing_ingredients": 109,
         "unknown_comparison_unit": 83,
-        "missing_ingredients": 56,
-        "missing_nutrient:salt": 26,
-        "missing_nutrient:sugars": 25,
-        "missing_environmental_score": 22,
-        "missing_nutrient:proteins": 22
+        "missing_nutrient:sugars": 48,
+        "missing_nutrient:salt": 48,
+        "missing_nutrient:proteins": 41,
+        "missing_environmental_score": 22
       }
     },
     "cheeses": {
       "category_tags": [
         "en:cheeses"
       ],
-      "raw_members": 429,
-      "complete_members": 111,
-      "eligible_members": 1,
-      "complete_by_comparison_unit": {
-        "g": 111
+      "raw_members": 438,
+      "complete_members": 120,
+      "eligible_members": 10,
+      "eligible_groups": 10,
+      "eligible_by_source_snapshot": {
+        "catalog": 1,
+        "expansion": 9
       },
-      "complete_groups": 109,
+      "complete_by_comparison_unit": {
+        "g": 120
+      },
+      "complete_groups": 118,
+      "agribalyse_versions_among_eligible": {
+        "3.2": 10
+      },
       "top_exclusion_reasons": {
         "unknown_comparison_unit": 234,
         "missing_ingredients": 203,
@@ -165,16 +224,19 @@
       "category_tags": [
         "en:biscuits"
       ],
-      "raw_members": 214,
+      "raw_members": 215,
       "complete_members": 74,
       "eligible_members": 0,
+      "eligible_groups": 0,
+      "eligible_by_source_snapshot": {},
       "complete_by_comparison_unit": {
         "g": 74
       },
       "complete_groups": 72,
+      "agribalyse_versions_among_eligible": {},
       "top_exclusion_reasons": {
         "unknown_comparison_unit": 114,
-        "missing_ingredients": 66,
+        "missing_ingredients": 67,
         "missing_environmental_score": 54,
         "missing_nutrient:salt": 11,
         "missing_nutrient:sugars": 10,
@@ -188,11 +250,14 @@
       "raw_members": 272,
       "complete_members": 64,
       "eligible_members": 0,
+      "eligible_groups": 0,
+      "eligible_by_source_snapshot": {},
       "complete_by_comparison_unit": {
         "g": 63,
         "ml": 1
       },
       "complete_groups": 62,
+      "agribalyse_versions_among_eligible": {},
       "top_exclusion_reasons": {
         "missing_ingredients": 133,
         "unknown_comparison_unit": 133,
@@ -206,17 +271,24 @@
       "category_tags": [
         "en:breads"
       ],
-      "raw_members": 247,
+      "raw_members": 248,
       "complete_members": 57,
       "eligible_members": 1,
+      "eligible_groups": 1,
+      "eligible_by_source_snapshot": {
+        "catalog": 1
+      },
       "complete_by_comparison_unit": {
         "g": 57
       },
       "complete_groups": 54,
+      "agribalyse_versions_among_eligible": {
+        "3.2": 1
+      },
       "top_exclusion_reasons": {
         "unknown_comparison_unit": 133,
         "missing_environmental_score": 125,
-        "missing_ingredients": 71,
+        "missing_ingredients": 72,
         "missing_nutrient:salt": 19,
         "missing_nutrient:sugars": 17,
         "missing_nutrient:proteins": 14
@@ -226,35 +298,51 @@
       "category_tags": [
         "en:plant-based-beverages"
       ],
-      "raw_members": 328,
-      "complete_members": 87,
-      "eligible_members": 20,
-      "complete_by_comparison_unit": {
-        "g": 16,
-        "ml": 71
+      "raw_members": 683,
+      "complete_members": 419,
+      "eligible_members": 352,
+      "eligible_groups": 344,
+      "eligible_by_source_snapshot": {
+        "catalog": 20,
+        "expansion": 332
       },
-      "complete_groups": 85,
+      "complete_by_comparison_unit": {
+        "g": 26,
+        "ml": 393
+      },
+      "complete_groups": 409,
+      "agribalyse_versions_among_eligible": {
+        "3.1.1": 9,
+        "3.2": 343
+      },
       "top_exclusion_reasons": {
         "unknown_comparison_unit": 185,
-        "missing_ingredients": 106,
+        "missing_ingredients": 126,
         "missing_environmental_score": 88,
-        "missing_nutrient:salt": 63,
-        "missing_nutrient:sugars": 52,
-        "missing_nutrient:proteins": 47
+        "missing_nutrient:salt": 67,
+        "missing_nutrient:sugars": 54,
+        "missing_nutrient:proteins": 49
       }
     },
     "fruit_juices": {
       "category_tags": [
         "en:fruit-juices"
       ],
-      "raw_members": 70,
-      "complete_members": 24,
-      "eligible_members": 0,
+      "raw_members": 71,
+      "complete_members": 25,
+      "eligible_members": 1,
+      "eligible_groups": 1,
+      "eligible_by_source_snapshot": {
+        "expansion": 1
+      },
       "complete_by_comparison_unit": {
         "g": 3,
-        "ml": 21
+        "ml": 22
       },
-      "complete_groups": 24,
+      "complete_groups": 25,
+      "agribalyse_versions_among_eligible": {
+        "3.2": 1
+      },
       "top_exclusion_reasons": {
         "unknown_comparison_unit": 38,
         "missing_ingredients": 29,

@@ -3,12 +3,29 @@
   "source_snapshot": "data/catalog.jsonl.gz",
   "source_sha256": "bed73b68cbbc3a003300d1cc98d7a1c7df5fd559e1e83a52c6e8dd50adc566da",
   "source_revision": "89cfb571db20b1f1b246f27cab71837fc96225b1",
-  "rows": 12288,
-  "eligible": 142,
-  "content_sha256": "98fe33c6b3e206405cce3c1235aa7c457e685861ce7fb014403eed23188cf432",
+  "source_snapshots": {
+    "catalog": {
+      "path": "data/catalog.jsonl.gz",
+      "revision": "89cfb571db20b1f1b246f27cab71837fc96225b1",
+      "sha256": "bed73b68cbbc3a003300d1cc98d7a1c7df5fd559e1e83a52c6e8dd50adc566da",
+      "rows": 12288,
+      "duplicate_codes_dropped": 0
+    },
+    "expansion": {
+      "path": "data/catalog_expansion.jsonl.gz",
+      "revision": "89cfb571db20b1f1b246f27cab71837fc96225b1",
+      "sha256": "824f573af54c504251c80887658f38589de44bf521eff5ab812d7c2d3086e0ec",
+      "rows": 1678,
+      "duplicate_codes_dropped": 0
+    }
+  },
+  "rows": 13966,
+  "eligible": 1684,
+  "content_sha256": "d3b6d569a5dfc9c7923c5bdda28880e6877a53a223c78314933ef7dca5561143",
   "columns": [
     "code",
     "source_row",
+    "source_snapshot",
     "name",
     "name_lang",
     "names_json",

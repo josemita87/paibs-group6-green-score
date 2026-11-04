@@ -59,6 +59,13 @@ A declared country does not establish in-store availability.
 
 **Output:** a versioned raw dataset and its manifest.
 
+Family-targeted expansion (`scripts/expand_catalog.py`): the same pinned revision is
+scanned column-selectively for candidates of the three selected families and the
+full fields are read only for the densest row groups within a documented budget.
+The result is a separate snapshot, `data/catalog_expansion.jsonl.gz`, consumed
+alongside the base catalog. Candidate conditions (family tag, recorded g/ml unit,
+numeric score) are necessary, not sufficient, for eligibility, which step 3 decides.
+
 ## 3. Build a comparable, usable catalog
 
 - Clean HTML and formatting while preserving source text and languages.

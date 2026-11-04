@@ -35,7 +35,10 @@ comparison; a chat API is not required.
   the comparable catalog built from the raw snapshot (step 3).
 - `scripts/audit_data.py`: verifies integrity and reports coverage and missing data.
 - `scripts/fetch_data.py`: reproduces the historical sample or fetches expanded fields.
-- `scripts/build_catalog.py`: builds or verifies the comparable catalog.
+- `scripts/expand_catalog.py`: adds family-targeted candidate rows from the same
+  pinned revision into `data/catalog_expansion.jsonl.gz` with its own manifest.
+- `scripts/build_catalog.py`: builds or verifies the comparable catalog from the
+  base snapshot plus the expansion.
 - `basket/`: Pydantic basket models, validation and read-only catalog lookup (step 1);
   `basket/comparable.py` holds the step-3 normalization and eligibility rules.
 - `app/streamlit_app.py`: minimal Streamlit screen that builds and validates a basket.
@@ -89,6 +92,27 @@ row is not `eligible`. The selected families are yogurts, breakfast cereals and
 plant-based milk alternatives; `catalog_report.json` records their counts and the
 coverage of families that were not selected. Score differences are an experimental
 index, not emissions.
+
+## Family-targeted expansion (step 2, in support of step 4)
+
+```sh
+python scripts/expand_catalog.py            # resumable; caches under data/cache/
+python scripts/build_catalog.py             # rebuild the comparable catalog with the expansion
+```
+
+The pinned `food.parquet` (4.3 GB, 2,068 row groups ordered by barcode) is not
+organized by category, so the script first scans three light columns of every row
+group (about 29 MB) to locate candidates: rows in a selected family with a recorded
+`g`/`ml` unit and a numeric exported score. It then reads the full field set only for
+the row groups richest in candidates of families still below 100 distinct eligible
+groups, in deterministic waves of 8, within a budget of 200 row groups (about
+1.3 MB each). Only candidate rows are kept; the 12 historical row groups and codes
+already in the base snapshot are excluded. `data/catalog_expansion_manifest.json`
+records the revision, fields, criteria, row groups read, wave log, byte estimates
+and checksum. The base snapshots and their manifests are unchanged. Both
+`build_catalog.py` and the Streamlit app load the base snapshot and the expansion
+together, deduplicated by barcode, and the comparable catalog records each row's
+`source_snapshot`.
 
 To download the expanded catalog from the pinned source revision:
 

@@ -58,9 +58,17 @@ class Catalog:
 
     @classmethod
     def load(cls, root: Path = ROOT) -> 'Catalog':
+        """Base snapshot plus the family expansion when present; first code wins."""
         manifest = json.loads((root / 'data/catalog_manifest.json').read_text())
-        raw = gzip.decompress((root / 'data/catalog.jsonl.gz').read_bytes())
-        rows = verify(raw, manifest)
+        rows = verify(gzip.decompress((root / 'data/catalog.jsonl.gz').read_bytes()), manifest)
+        expansion = root / 'data/catalog_expansion.jsonl.gz'
+        if expansion.exists():
+            extra_manifest = json.loads((root / 'data/catalog_expansion_manifest.json').read_text())
+            if extra_manifest['revision'] != manifest['revision']:
+                raise ValueError('Expansion snapshot revision differs from the base catalog')
+            known = {row['code'] for row in rows}
+            rows += [row for row in verify(gzip.decompress(expansion.read_bytes()), extra_manifest)
+                     if row['code'] not in known]
         return cls(rows, revision=manifest['revision'], sha256=manifest['sha256'])
 
     def __len__(self) -> int:

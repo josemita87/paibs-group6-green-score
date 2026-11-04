@@ -9,11 +9,12 @@ version history; this file explains what is ready and what to do next.
 
 ## Current focus
 
-Raw catalog acquisition (step 2), the basket input flow (step 1) and the comparable
-catalog (step 3) are implemented. The substitution dataset, recommender, training
-pipeline, optimizer and recommendation interface are not implemented. The next task
-is **step 4: create the substitution dataset** (guidelines, candidate pairs within
-the eligible families and product groups, pilot annotation).
+Raw catalog acquisition (step 2, including a family-targeted expansion), the basket
+input flow (step 1) and the comparable catalog (step 3) are implemented. The
+substitution dataset, recommender, training pipeline, optimizer and recommendation
+interface are not implemented. The next task is **step 4: create the substitution
+dataset** (guidelines, candidate pairs within the eligible families and product
+groups, pilot annotation).
 
 Earlier conversation called raw acquisition “step 1.” In the canonical pipeline
 it is **step 2**. Use the document's 1–13 numbering from now on; do not rename steps.
@@ -23,8 +24,8 @@ it is **step 2**. Use the document's 1–13 numbering from now on; do not rename
 | Step | Deliverable | Status | Evidence or remaining work |
 |---|---|---|---|
 | 1 | User input | Done — minimal flow | `basket/` Pydantic models and catalog lookup, `app/streamlit_app.py`, `tests/test_basket.py`. Preferences and nutritional constraints are declared fields only (`declared_not_checked`); enforcement belongs to steps 9–10. |
-| 2 | Acquire and version the product catalog | Done — raw sample | `scripts/fetch_data.py --catalog`, catalog snapshot, manifest and coverage audit. Broader catalog acquisition can follow if coverage requires it. |
-| 3 | Build a comparable, usable catalog | Done — first version | `basket/comparable.py`, `scripts/build_catalog.py`, `data/catalog.parquet` + report + manifest, `tests/test_comparable.py`. 142 eligible products in three families; CI verifies the committed outputs against a rebuild. Coverage is thin for two families. |
+| 2 | Acquire and version the product catalog | Done — raw sample + family expansion | `scripts/fetch_data.py --catalog` (base snapshot) and `scripts/expand_catalog.py` (1,678 candidate rows of the three families from the same revision), each with a manifest and audit/tests. |
+| 3 | Build a comparable, usable catalog | Done — rebuilt with expansion | `basket/comparable.py`, `scripts/build_catalog.py`, `data/catalog.parquet` + report + manifest, `tests/test_comparable.py`. 1,684 eligible products in 1,556 groups across three families; CI verifies the committed outputs against a rebuild. |
 | 4 | Create the substitution dataset | Not started | Annotation guidelines, candidate generation, pilot review and labels; establish product groups before creating pairs. |
 | 5 | Split the data before training | Not started | Freeze and verify group partitions; construct within-partition pairs/triplets. |
 | 6 | Establish the baselines | Not started | Category/rules, TF-IDF and frozen-encoder rankings on shared cases. |
@@ -59,19 +60,26 @@ Record any other dependency-driven change of order here before proceeding.
   judgement and no recommendation. Availability flags on `ProductRef` report
   whether a raw value exists, not whether it is comparable. The step-1 app and
   `basket/catalog.py` still read the raw snapshot, not `catalog.parquet`.
-- Comparable catalog (`data/catalog.parquet`, 12,288 rows): 142 eligible products —
-  yogurts 93 (91 `g`, 2 `ml`), breakfast cereals 29 (`g`), plant-based milk
-  alternatives 20 (`ml`) — in 141 product groups. Main exclusions: no recorded
-  g/ml unit 7,977; no known environmental score 8,249; no ingredients 6,861;
-  7 implausible values among the three target nutrients were set to missing.
-  Score context is `fr` (equals the exported score; `world` differs for 772
-  products). Among eligible products, 137 use Agribalyse 3.2 and 5 use 3.1.1, and
-  the source flags `missing_key_data` for most known scores. These are index
+- Comparable catalog (`data/catalog.parquet`, 13,966 rows = 12,288 base + 1,678
+  expansion, same revision): 1,684 eligible products in 1,556 distinct groups.
+  Per family (products / distinct groups): yogurts 853 / 782 (847 `g`, 6 `ml`),
+  breakfast cereals 479 / 430 (all `g`), plant-based milk alternatives 352 / 344
+  (342 `ml`, 10 `g`). Before the expansion: 93 / 92, 29 / 29, 20 / 20. Agribalyse
+  versions among eligible: 3.2 for 1,672, 3.1.1 for 12. Score context is `fr`
+  (equals the exported score; `world` differs for 1,203 of 5,717 known scores);
+  the source flags `missing_key_data` for 3,130 known scores. These are index
   comparisons, not emissions.
-- Families not selected but with more complete products (dairy desserts 122,
-  cheeses 111, plant-based beverages 87, biscuits 74) are listed in
-  `catalog_report.json`; 20–29 products per family is thin for the 600–1,000
-  annotated pairs planned in step 4. Broader acquisition (step 2) may be needed.
+- Exclusions among the 1,678 expansion rows: missing ingredients 119, missing salt
+  36, sugars 35, proteins 30, missing name 2. Remaining exclusions in the base
+  snapshot are unchanged (no recorded g/ml unit 7,977; no known score 8,249).
+- Diversity limits: eligible products are 1,304 French-language, 139 English,
+  77 Spanish, 74 German, 54 Italian. Yogurts are dominated by Yoplait/Danone/
+  Nestlé ranges, cereals by Kellogg's, plant-based milks by Alpro/Bjorg/Lima.
+  Eligibility does not establish substitution compatibility; that is what step 4
+  annotates.
+- Families not selected (dairy desserts, cheeses, biscuits, breads, sweet
+  spreads, plant-based beverages, fruit juices) are still reported with base-sample
+  counts only; they were not expanded.
 - No substitution pairs have been labeled and no new model has been trained.
 - Local data checks and remote CI passed for acquisition commit `2ecf444`.
 - Historical experiments remain available under `archive/claim-audit-v1` and
@@ -82,12 +90,36 @@ Record any other dependency-driven change of order here before proceeding.
 Start step 4 with a focused change: write the annotation guidelines (labels,
 usage contexts per family, reasons), generate candidate pairs only among eligible
 products of the same family and comparison unit, never pairing products from the
-same `group_id`, and prepare a pilot set for two independent annotators. Decide
-with the team whether to widen the families or acquire more products first, given
-20–29 eligible products in two of the three families. The step-1 `Basket` schema
-and the step-3 `catalog.parquet` columns are the contracts later steps consume.
+same `group_id`, and prepare a pilot set for two independent annotators. With
+344–782 distinct eligible groups per family the catalog is a practical basis for a
+first pilot; sample pairs across brands and languages rather than at random so the
+French/major-brand concentration does not dominate the pilot. The step-1 `Basket`
+schema and the step-3 `catalog.parquet` columns (now including `source_snapshot`)
+are the contracts later steps consume.
 
 ## Change log
+
+### 2026-11-04 — Comparable catalog rebuilt with the expansion (steps 2–3)
+
+- `scripts/build_catalog.py` and `basket/catalog.py` now load the base snapshot and
+  `data/catalog_expansion.jsonl.gz` together, verify each against its manifest,
+  require the same revision and keep the first occurrence of a barcode (0 duplicate
+  codes dropped). Records carry `source_snapshot`; the Parquet manifest lists both
+  sources; the report adds rows/eligible per source, distinct eligible groups per
+  family and per-family Agribalyse versions.
+- Rebuilt `data/catalog.parquet` (13,966 rows, 4.0 MB), report and manifest.
+  Coverage went from 142 eligible / 141 groups to 1,684 eligible / 1,556 groups;
+  per family see “Available evidence”. Family definitions and eligibility rules
+  are unchanged.
+- Validation: 40 tests pass (step-1 loader test now derives the expected row count
+  from the expansion manifest); `build_catalog.py` then `--verify` passed;
+  `audit_data.py` with and without `--catalog` unchanged; base snapshot checksums
+  unchanged. Remote CI for this commit is not known at commit time.
+- Assessment: the expanded catalog is a practical basis for a first annotation
+  pilot in all three families. Eligibility proves data completeness, not that any
+  two products are substitutes. Unresolved: language and brand concentration
+  described above; the step-1 app displays expansion products but still reads raw
+  rows rather than `catalog.parquet`.
 
 ### 2026-11-04 — Family-targeted expansion of the raw catalog (return to step 2)
 
