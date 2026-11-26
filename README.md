@@ -6,7 +6,8 @@ substitutions while respecting preferences and a maximum number of changes.
 **Status:** raw catalog acquisition, the basket input flow (selection, quantities,
 locks, change limit and validation) and the comparable catalog (cleaned text,
 per-100 nutrients, fixed score context, product groups, eligibility with recorded
-exclusion reasons) are implemented. The substitution dataset, recommender, training
+exclusion reasons) are implemented. A 36-pair calibration set is ready for independent
+review. Human labels are pending. The recommender, training
 pipeline, optimizer and recommendation interface are not implemented yet; declared
 preferences and nutritional constraints are recorded but not checked.
 
@@ -92,6 +93,17 @@ row is not `eligible`. The selected families are yogurts, breakfast cereals and
 plant-based milk alternatives; `catalog_report.json` records their counts and the
 coverage of families that were not selected. Score differences are an experimental
 index, not emissions.
+
+## Review substitution pairs (step 4)
+
+The [annotation guide](docs/ANNOTATION.md) includes the Label Studio form, task
+file, label definitions and instructions for two independent reviewers.
+Reproduce or verify the unlabeled pilot with the application dependencies installed.
+
+```sh
+python scripts/build_annotation_pilot.py
+python scripts/build_annotation_pilot.py --verify
+```
 
 ## Family-targeted expansion (step 2, in support of step 4)
 

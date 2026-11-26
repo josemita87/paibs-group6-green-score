@@ -1,0 +1,18 @@
+<View>
+  <Header value="Usage context"/>
+  <Text name="context" value="$context"/>
+  <Header value="Original product"/>
+  <Text name="original" value="$original_name"/>
+  <Text name="original_ingredients" value="$original_ingredients_text"/>
+  <Header value="Candidate replacement"/>
+  <Text name="candidate" value="$candidate_name"/>
+  <Text name="candidate_ingredients" value="$candidate_ingredients_text"/>
+  <Header value="Can the candidate replace the original for this use?"/>
+  <Choices name="decision" toName="candidate" choice="single" required="true">
+    <Choice value="acceptable"/>
+    <Choice value="unacceptable"/>
+    <Choice value="ambiguous"/>
+  </Choices>
+  <Header value="Give one concrete reason using the product evidence."/>
+  <TextArea name="reason" toName="candidate" rows="2" editable="true" maxSubmissions="1" required="true"/>
+</View>

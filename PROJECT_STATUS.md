@@ -1,6 +1,6 @@
 # Project status
 
-Last updated: 2026-11-04
+Last updated: 2026-11-26
 
 This is the shared handoff for contributors and AI assistants. Read
 [AGENTS.md](AGENTS.md) before editing and update this file in every commit.
@@ -9,12 +9,10 @@ version history; this file explains what is ready and what to do next.
 
 ## Current focus
 
-Raw catalog acquisition (step 2, including a family-targeted expansion), the basket
-input flow (step 1) and the comparable catalog (step 3) are implemented. The
-substitution dataset, recommender, training pipeline, optimizer and recommendation
-interface are not implemented. The next task is **step 4: create the substitution
-dataset** (guidelines, candidate pairs within the eligible families and product
-groups, pilot annotation).
+Steps 1–3 are implemented. Step 4 has a reproducible calibration pilot with 36
+unlabeled pairs and a blind review form. Two independent human reviews are the
+next dependency. No substitution model, optimizer or recommendation interface
+has been implemented.
 
 Earlier conversation called raw acquisition “step 1.” In the canonical pipeline
 it is **step 2**. Use the document's 1–13 numbering from now on; do not rename steps.
@@ -26,7 +24,7 @@ it is **step 2**. Use the document's 1–13 numbering from now on; do not rename
 | 1 | User input | Done — minimal flow | `basket/` Pydantic models and catalog lookup, `app/streamlit_app.py`, `tests/test_basket.py`. Preferences and nutritional constraints are declared fields only (`declared_not_checked`); enforcement belongs to steps 9–10. |
 | 2 | Acquire and version the product catalog | Done — raw sample + family expansion | `scripts/fetch_data.py --catalog` (base snapshot) and `scripts/expand_catalog.py` (1,678 candidate rows of the three families from the same revision), each with a manifest and audit/tests. |
 | 3 | Build a comparable, usable catalog | Done — rebuilt with expansion | `basket/comparable.py`, `scripts/build_catalog.py`, `data/catalog.parquet` + report + manifest, `tests/test_comparable.py`. 1,684 eligible products in 1,556 groups across three families; CI verifies the committed outputs against a rebuild. |
-| 4 | Create the substitution dataset | Not started | Annotation guidelines, candidate generation, pilot review and labels; establish product groups before creating pairs. |
+| 4 | Create the substitution dataset | In progress — pilot ready | 36 calibration pairs, guidelines and Label Studio form. Independent reviews and adjudication pending. |
 | 5 | Split the data before training | Not started | Freeze and verify group partitions; construct within-partition pairs/triplets. |
 | 6 | Establish the baselines | Not started | Category/rules, TF-IDF and frozen-encoder rankings on shared cases. |
 | 7 | Fine-tune the substitution encoder | Not started | Training and comparison with frozen embeddings. |
@@ -87,17 +85,47 @@ Record any other dependency-driven change of order here before proceeding.
 
 ## Next action
 
-Start step 4 with a focused change: write the annotation guidelines (labels,
-usage contexts per family, reasons), generate candidate pairs only among eligible
-products of the same family and comparison unit, never pairing products from the
-same `group_id`, and prepare a pilot set for two independent annotators. With
-344–782 distinct eligible groups per family the catalog is a practical basis for a
-first pilot; sample pairs across brands and languages rather than at random so the
-French/major-brand concentration does not dominate the pilot. The step-1 `Basket`
-schema and the step-3 `catalog.parquet` columns (now including `source_snapshot`)
-are the contracts later steps consume.
+Two people independently review the same 36 tasks using [the pilot guide](docs/ANNOTATION.md).
+Retain both exports, record agreement before discussion, and adjudicate disagreements.
+Before generating model-development pairs, inspect near-duplicate aliases and freeze
+the remaining product groups into disjoint partitions.
 
 ## Change log
+
+### 2026-11-26 — Pilot committed after revalidation (step 4)
+
+- Committed the 2026-11-24 pilot files unchanged. Step 4 status is unchanged:
+  human reviews are still pending.
+- Local validation repeated before committing: 44 tests passed, the pilot and
+  comparable catalog verified against a rebuild, both raw audits were unchanged.
+  Remote CI for this commit is not known at commit time.
+- The 2026-11-10 risks document and the earlier document moves under `output/`
+  remain uncommitted in the working tree; only the status entry is versioned.
+
+### 2026-11-24 — Substitution annotation pilot (step 4)
+
+- Prepared 12 directed pairs per family for the three benchmark uses. The 72
+  eligible product groups cover 11 source languages. The blind review form
+  requires a decision and a reason. Human labels and agreement are pending.
+- Reserved calibration groups before pairing. Exclude those groups and their
+  aliases from future model partitions and the separate 30-request benchmark.
+  Step 5 remains open. Broader near-duplicate review is pending.
+- Local validation: 44 tests passed, both raw audits passed, the committed
+  coverage report matched and the comparable catalog and pilot rebuilds verified.
+  The review form's structure and field bindings were checked locally. Live Label
+  Studio import and remote CI have not been run for this change.
+
+### 2026-11-10 — System risks and component status document
+
+- Added the Session 2 risk and component handoff: four testable questions and the
+  real, planned stub or pending status of all 13 steps. The two proposed stubs are
+  not integrated. No implementation step advanced.
+- Validation: checked the contents against the repository and classroom worksheets;
+  verified all 13 entries and visually reviewed the one-page Word render.
+  Runtime tests were not needed for this document-only addition.
+- Next implementation task remains step 4: define annotation rules and prepare
+  the first independently reviewed pilot pairs.
+
 
 ### 2026-11-04 — Comparable catalog rebuilt with the expansion (steps 2–3)
 

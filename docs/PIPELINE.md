@@ -8,8 +8,8 @@ changes for the complete basket. Both can run locally without a chat API.
 (step 1: product selection, quantities, units, locks, change limit, declared
 preference and constraint fields, validation) and the comparable catalog (step 3:
 `data/catalog.parquet` with cleaned text, per-100 nutrients, fixed score context,
-product groups and recorded exclusion reasons) are implemented. The substitution
-dataset, training pipeline, recommender, optimizer and recommendation interface
+product groups and recorded exclusion reasons) are implemented. The step-4 calibration tasks and review form are ready. Human labels are pending.
+The training pipeline, recommender, optimizer and recommendation interface
 below are proposed work, not implemented features or measured results.
 
 ## 1. User input
@@ -52,7 +52,7 @@ The expanded raw catalog now adds these fields for the same products and pinned
 source revision. Reproduce it with `python scripts/fetch_data.py --catalog` and
 inspect `data/catalog_audit.json` for measured field coverage. Missing source values
 remain missing. The historical snapshot is unchanged; neither sample is
-representative of the OFF catalog. Normalization and eligibility are the next step.
+representative of the OFF catalog. Step 3 applies normalization and eligibility to these raw inputs.
 
 Prices and store stock require another source and are outside the first version.
 A declared country does not establish in-store availability.
@@ -95,7 +95,7 @@ applied; values outside 0–100 g (0–900 kcal) become missing and are listed. 
 comparison unit is the recorded product unit only. The environmental score is read
 from `environmental_score_data.scores.fr` (identical to the exported score);
 `world` is stored for reference. Families selected after measuring coverage:
-yogurts (93 eligible), breakfast cereals (29) and plant-based milk alternatives (20),
+yogurts (853 eligible after expansion), breakfast cereals (479) and plant-based milk alternatives (352),
 with a minimum of 20 eligible products per family. `data/catalog_report.json`
 lists the counts for families that were not selected.
 
@@ -125,8 +125,10 @@ One thousand pair labels do not automatically produce one thousand valid triplet
 each triplet needs an acceptable and an unacceptable candidate for the same
 original product and context.
 
-**Tools:** a small Streamlit annotation screen, CSV or Parquet storage, and
-scikit-learn for agreement statistics.
+The [pilot guide](ANNOTATION.md) defines the three usage contexts and links the
+36 unlabeled tasks and Label Studio form. Two independent reviews are pending.
+The pilot reserves its own product groups for calibration. Step 5 will partition
+the remaining groups before any model-development pairs are constructed.
 
 **Output:** annotated pairs and annotation guidelines.
 
@@ -341,7 +343,7 @@ committing them to ordinary Git history.
 | Data retrieval | fsspec, PyArrow |
 | Data preparation and storage | pandas, NumPy, Parquet |
 | Validation | Pydantic |
-| Annotation interface | Streamlit |
+| Annotation interface | Label Studio |
 | Baselines and grouped splitting | scikit-learn |
 | Deep learning | PyTorch |
 | Encoder and fine-tuning | Sentence Transformers |
@@ -364,9 +366,9 @@ skipping completed steps. Consult [PROJECT_STATUS.md](../PROJECT_STATUS.md) for 
 current handoff and update it in every commit as required by
 [AGENTS.md](../AGENTS.md).
 
-Raw catalog acquisition (step 2) was completed first. Step 1 is next, followed by
-step 3. Establish product groups before building annotation pairs in step 4, then
-freeze and verify the partitions in step 5. Reproducibility checks run throughout;
+Raw catalog acquisition (step 2) was completed first, followed by steps 1 and 3.
+Step 4 is awaiting independent pilot review. Freeze and verify the remaining
+group partitions in step 5 before generating training or evaluation pairs. Reproducibility checks run throughout;
 step 13 also covers final delivery. Explain and record other dependency-driven
 exceptions in the status tracker rather than renumbering steps.
 

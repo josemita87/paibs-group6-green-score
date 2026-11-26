@@ -26,3 +26,5 @@ jobs:
           diff -u data/catalog_audit.json /tmp/catalog_audit.json
       - name: Verify committed comparable catalog against a rebuild
         run: python scripts/build_catalog.py --verify
+      - name: Verify substitution pilot against the comparable catalog
+        run: python scripts/build_annotation_pilot.py --verify
