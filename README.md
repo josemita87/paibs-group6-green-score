@@ -40,6 +40,10 @@ comparison; a chat API is not required.
   pinned revision into `data/catalog_expansion.jsonl.gz` with its own manifest.
 - `scripts/build_catalog.py`: builds or verifies the comparable catalog from the
   base snapshot plus the expansion.
+- `scripts/build_annotation_pilot.py`, `scripts/review_agreement.py`: build the
+  unlabeled step-4 pilot tasks and check two reviewers' exports.
+- `scripts/inspect_aliases.py`: reports candidate near-duplicate groups in
+  `data/alias_report.json` for review before step 5.
 - `basket/`: Pydantic basket models, validation and read-only catalog lookup (step 1);
   `basket/comparable.py` holds the step-3 normalization and eligibility rules.
 - `app/streamlit_app.py`: minimal Streamlit screen that builds and validates a basket.
@@ -109,6 +113,23 @@ python scripts/review_agreement.py ana.json ben.json   # two reviewers' full JSO
 `review_agreement.py` validates both exports against the task file and reports
 agreement before discussion. It has been tested with synthetic exports only; no
 human review exists yet.
+
+## Inspect near-duplicate groups (before step 5)
+
+```sh
+python scripts/inspect_aliases.py            # rebuild data/alias_report.json
+python scripts/inspect_aliases.py --verify   # check the committed report against a rebuild
+```
+
+`group_id` joins only products with the same normalized name and brand string, so
+one product listed under `Danone` and under `Danone, Danonino` forms two groups.
+The report links eligible groups of one family that share a brand entry and have
+the same name, the same ingredient text of at least 40 normalized characters, or
+a name-token Jaccard of at least 0.8. On the current catalog it proposes 81
+clusters covering 219 of the 1,556 groups, which leaves 1,418 split units. Twelve
+identical-ingredient links between different brands are listed for a human
+decision and merge nothing. The report is a proposal: it changes no `group_id`
+and freezes no partition.
 
 ## Family-targeted expansion (step 2, in support of step 4)
 

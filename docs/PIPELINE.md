@@ -138,6 +138,10 @@ Group duplicates and close variants, then split product groups into training,
 validation and test partitions BEFORE constructing pairs and triplets. No product
 or near-duplicate may cross partitions.
 
+`scripts/inspect_aliases.py` writes a proposal for that grouping to
+`data/alias_report.json`. The clusters have not been reviewed and no partition
+has been frozen.
+
 - Training data updates model weights.
 - Validation data selects hyperparameters and acceptance thresholds.
 - Test data measures final performance after decisions are fixed.

@@ -25,7 +25,7 @@ it is **step 2**. Use the document's 1–13 numbering from now on; do not rename
 | 2 | Acquire and version the product catalog | Done — raw sample + family expansion | `scripts/fetch_data.py --catalog` (base snapshot) and `scripts/expand_catalog.py` (1,678 candidate rows of the three families from the same revision), each with a manifest and audit/tests. |
 | 3 | Build a comparable, usable catalog | Done — rebuilt with expansion | `basket/comparable.py`, `scripts/build_catalog.py`, `data/catalog.parquet` + report + manifest, `tests/test_comparable.py`. 1,684 eligible products in 1,556 groups across three families; CI verifies the committed outputs against a rebuild. |
 | 4 | Create the substitution dataset | In progress — pilot ready | 36 calibration pairs, guidelines, Label Studio form and `scripts/review_agreement.py` to validate two exports and report agreement. Independent reviews and adjudication pending. |
-| 5 | Split the data before training | Not started | Freeze and verify group partitions; construct within-partition pairs/triplets. |
+| 5 | Split the data before training | Not started | Freeze and verify group partitions; construct within-partition pairs/triplets. Input available: unreviewed alias proposal in `data/alias_report.json`. |
 | 6 | Establish the baselines | Not started | Category/rules, TF-IDF and frozen-encoder rankings on shared cases. |
 | 7 | Fine-tune the substitution encoder | Not started | Training and comparison with frozen embeddings. |
 | 8 | Encode and index the catalog | Not started | Versioned embeddings and retrieval. |
@@ -75,6 +75,12 @@ Record any other dependency-driven change of order here before proceeding.
   Nestlé ranges, cereals by Kellogg's, plant-based milks by Alpro/Bjorg/Lima.
   Eligibility does not establish substitution compatibility; that is what step 4
   annotates.
+- Alias proposal (`data/alias_report.json`, not reviewed): 81 clusters join 219 of
+  the 1,556 eligible groups, leaving 1,418 split units (yogurts 673, breakfast
+  cereals 411, plant-based milk alternatives 334). Sixty clusters hold two groups;
+  the largest hold 14 (Nestlé Greek and vanilla yogurts) and 13 (Yoplait Yop
+  drinks). Five of the 72 calibration groups have one alias each outside the
+  reservation (alias group IDs 11965, 12838, 12849, 13250, 13320).
 - Families not selected (dairy desserts, cheeses, biscuits, breads, sweet
   spreads, plant-based beverages, fruit juices) are still reported with base-sample
   counts only; they were not expanded.
@@ -88,10 +94,40 @@ Record any other dependency-driven change of order here before proceeding.
 Two people independently review the same 36 tasks using [the pilot guide](docs/ANNOTATION.md).
 Retain both exports, run `python scripts/review_agreement.py <first>.json <second>.json`
 before discussion to record agreement, and adjudicate disagreements.
-Before generating model-development pairs, inspect near-duplicate aliases and freeze
-the remaining product groups into disjoint partitions.
+Before generating model-development pairs, review the alias proposal in
+`data/alias_report.json` together with the reviewers' “possible duplicate” flags:
+accept or split the proposed clusters, decide the 12 cross-brand links, and choose
+whether flavor variants of one product line may sit in different partitions. Then
+freeze the remaining split units into disjoint partitions (step 5).
 
 ## Change log
+
+### 2026-11-26 — Near-duplicate alias proposal (preparation for step 5)
+
+- Added `scripts/inspect_aliases.py` and its output `data/alias_report.json`.
+  Among eligible groups of one family it links groups that share a brand entry
+  and have the same normalized name (48 group pairs), the same ingredient text of
+  at least 40 normalized characters (94) or a name-token Jaccard of at least 0.8
+  (51). Connected groups form 81 proposed clusters and 1,418 split units.
+- Not linked: 212 same-name pairs with no shared brand entry (15 groups are
+  named “Lait de coco”). Listed for a human decision without merging: 12
+  identical-ingredient links between different brands.
+- Calibration: five reserved groups have one alias each outside the reservation,
+  for example “Choco Krispies” under `Kellogg's` and under `Kellogg's, Choco
+  Krispies, …`. No pilot pair joins two linked groups, so the pilot is unchanged.
+- Validation: 9 new tests (linking rules on synthetic groups; committed report
+  reproducible under reversed row order, clusters disjoint and single-family,
+  counts consistent, calibration aliases derived from clusters) pass with the
+  other 52. `inspect_aliases.py --verify`, the pilot and catalog verifications and
+  both raw audits pass locally. CI gained the report verification; its remote
+  result is not known at commit time.
+- Limitations: no person has reviewed the clusters. Merging is transitive and
+  errs toward larger units: flavors of one line that declare the same ingredient
+  text (“arôme naturel”) are joined, as in the Yop cluster. Flavor variants with
+  different ingredient text mostly stay separate; 213 same-brand pairs sit at
+  Jaccard 0.7 and 355 at 0.6. Renamed products with different brand entries and
+  different ingredient text are not detected. `group_id` and the catalog are
+  unchanged and no partition is frozen. Step 5 status is unchanged.
 
 ### 2026-11-26 — Review validation and agreement report (step 4)
 

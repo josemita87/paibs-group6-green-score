@@ -75,7 +75,10 @@ Use these tasks for guideline calibration only. The union of `original_group_id`
 and `candidate_group_id` in the task file is the calibration reservation for
 this catalog fingerprint. Exclude these groups and any subsequently identified
 aliases from model splits and the separate 30-request classroom benchmark.
-Before scaling up, inspect renamed near-duplicates and freeze the remaining
+`data/alias_report.json` (from `scripts/inspect_aliases.py`) currently proposes
+five such aliases, one each for five of the 72 reserved groups; they are listed
+under `calibration`. No pilot pair joins two groups that the report links.
+Before scaling up, review those proposed near-duplicates and freeze the remaining
 groups into train, validation and test partitions. Generate all further pairs
 within those partitions. Pilot agreement measures reviewer consistency on this
 deliberately diverse sample.

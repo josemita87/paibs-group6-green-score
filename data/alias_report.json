@@ -1,0 +1,2169 @@
+{
+  "catalog_content_sha256": "d3b6d569a5dfc9c7923c5bdda28880e6877a53a223c78314933ef7dca5561143",
+  "parameters": {
+    "scope": "eligible groups, links only within one family",
+    "min_ingredient_chars": 40,
+    "name_jaccard": 0.8,
+    "merge_signals": [
+      "same_name_shared_brand",
+      "same_ingredients_shared_brand",
+      "similar_name_shared_brand"
+    ],
+    "review_signals": [
+      "same_ingredients_other_brand"
+    ]
+  },
+  "eligible_groups": 1556,
+  "signals": {
+    "same_name_shared_brand": {
+      "group_pairs": 48,
+      "groups": 70
+    },
+    "same_ingredients_shared_brand": {
+      "group_pairs": 94,
+      "groups": 107
+    },
+    "similar_name_shared_brand": {
+      "group_pairs": 51,
+      "groups": 70
+    },
+    "same_ingredients_other_brand": {
+      "group_pairs": 12,
+      "groups": 22
+    }
+  },
+  "same_name_other_brand": {
+    "group_pairs": 212,
+    "treatment": "not linked; generic names such as \"Lait de coco\" recur across brands"
+  },
+  "same_brand_pairs_by_name_jaccard": {
+    "0.0": 44937,
+    "0.1": 7513,
+    "0.2": 4237,
+    "0.3": 1919,
+    "0.4": 925,
+    "0.5": 770,
+    "0.6": 355,
+    "0.7": 213,
+    "0.8": 47,
+    "0.9": 1,
+    "1.0": 51
+  },
+  "by_family": {
+    "breakfast_cereals": {
+      "eligible_groups": 430,
+      "alias_clusters": 17,
+      "groups_in_alias_clusters": 36,
+      "largest_alias_cluster": 3,
+      "proposed_split_units": 411
+    },
+    "plant_based_milk_alternatives": {
+      "eligible_groups": 344,
+      "alias_clusters": 10,
+      "groups_in_alias_clusters": 20,
+      "largest_alias_cluster": 2,
+      "proposed_split_units": 334
+    },
+    "yogurts": {
+      "eligible_groups": 782,
+      "alias_clusters": 54,
+      "groups_in_alias_clusters": 163,
+      "largest_alias_cluster": 14,
+      "proposed_split_units": 673
+    }
+  },
+  "proposed_split_units": 1418,
+  "alias_clusters": [
+    {
+      "family": "yogurts",
+      "signals": [
+        "same_ingredients_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 4323,
+          "name": "Yogurt intero - 125g x 2 - Gusto fragola",
+          "brands": "Yogurt"
+        },
+        {
+          "group_id": 4330,
+          "name": "Yogurt intero - 500g - Gusto fragola",
+          "brands": "Yogurt"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "same_ingredients_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 4324,
+          "name": "Yogurt intero - 125g x 2 - Gusto mirtillo nero",
+          "brands": "Yogurt"
+        },
+        {
+          "group_id": 4332,
+          "name": "Yogurt intero - 500g - Gusto mirtillo nero",
+          "brands": "Yogurt"
+        },
+        {
+          "group_id": 4345,
+          "name": "Yogurt intero Sapori di Vipiteno - 125g x 2 - Gusto mirtillo nero",
+          "brands": "Yogurt"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "same_ingredients_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 4325,
+          "name": "Yogurt intero - 125g x 2 - Bianco",
+          "brands": "Yogurt"
+        },
+        {
+          "group_id": 4333,
+          "name": "Yogurt intero - 500g - Bianco",
+          "brands": "Yogurt"
+        },
+        {
+          "group_id": 4349,
+          "name": "Yogurt intero - 125g x 8 - Bianco",
+          "brands": "Yogurt"
+        },
+        {
+          "group_id": 13218,
+          "name": "Yogurt intero - 125g - Bianco",
+          "brands": "Yogurt"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "same_ingredients_shared_brand",
+        "similar_name_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 4326,
+          "name": "Yogurt intero - 500g - Gusto limone",
+          "brands": "Yogurt"
+        },
+        {
+          "group_id": 4337,
+          "name": "Yogurt intero - 125g x 2 - Gusto limone",
+          "brands": "Yogurt"
+        },
+        {
+          "group_id": 4339,
+          "name": "Yogurt intero - 500g - Stracciatella",
+          "brands": "Yogurt"
+        },
+        {
+          "group_id": 4346,
+          "name": "Yogurt intero Sapori di Vipiteno - 125g x 2 - Gusto stracciatella",
+          "brands": "Yogurt"
+        },
+        {
+          "group_id": 4347,
+          "name": "Yogurt intero Sapori di Vipiteno - 125g x 2 - Gusto caffè",
+          "brands": "Yogurt"
+        },
+        {
+          "group_id": 4348,
+          "name": "Yogurt intero Sapori di Vipiteno - 125g x 2 - Gusto limone",
+          "brands": "Yogurt"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "same_ingredients_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 4327,
+          "name": "Yogurt magro - 500g - Bianco",
+          "brands": "Yogurt"
+        },
+        {
+          "group_id": 4335,
+          "name": "Yogurt magro - 125g x 2 - Bianco",
+          "brands": "Yogurt"
+        },
+        {
+          "group_id": 4340,
+          "name": "Yogurt magro - 1000g - Bianco",
+          "brands": "Yogurt"
+        },
+        {
+          "group_id": 4344,
+          "name": "Yogurt magro - 400g - Bianco",
+          "brands": "Yogurt"
+        }
+      ]
+    },
+    {
+      "family": "breakfast_cereals",
+      "signals": [
+        "same_name_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 6373,
+          "name": "Choco Krispies",
+          "brands": "Kellogg's"
+        },
+        {
+          "group_id": 12849,
+          "name": "Choco Krispies",
+          "brands": "Kellogg's, Choco Krispies, Kellogg's - KELLOG Company"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "same_name_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 7870,
+          "name": "Danonino",
+          "brands": "Danone"
+        },
+        {
+          "group_id": 11993,
+          "name": "Danonino",
+          "brands": "Danone, Danonino"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "same_ingredients_shared_brand",
+        "similar_name_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 11883,
+          "name": "Le Yaourt a la Grecque",
+          "brands": "Nestlé"
+        },
+        {
+          "group_id": 11886,
+          "name": "La Laitière yaourt bio à la vanille",
+          "brands": "Nestlé, La Laitière"
+        },
+        {
+          "group_id": 11899,
+          "name": "Yaos yaourt à la grecque nature",
+          "brands": "Nestlé"
+        },
+        {
+          "group_id": 11900,
+          "name": "Yaourt a la grecque vanille",
+          "brands": "Nestlé"
+        },
+        {
+          "group_id": 11907,
+          "name": "Yaos Yaourt à la Grecque",
+          "brands": "Nestlé"
+        },
+        {
+          "group_id": 11919,
+          "name": "Yaourt à la grecque Nature",
+          "brands": "Nestlé"
+        },
+        {
+          "group_id": 11921,
+          "name": "Le yaourt à la vanille",
+          "brands": "Nestlé, La Laitière"
+        },
+        {
+          "group_id": 11926,
+          "name": "Yaourt à la vanille",
+          "brands": "Nestlé, La Laitière"
+        },
+        {
+          "group_id": 11927,
+          "name": "La Laitière - Le yaourt à la vanille",
+          "brands": "Nestlé, La laitière"
+        },
+        {
+          "group_id": 11943,
+          "name": "Yaos Le Yaourt à la Grecque Nature",
+          "brands": "Nestlé"
+        },
+        {
+          "group_id": 11960,
+          "name": "Yaourt a la vanille la laitiere",
+          "brands": "Nestlé, La Laitière"
+        },
+        {
+          "group_id": 11967,
+          "name": "Yaourt a La Grecque",
+          "brands": "Nestlé"
+        },
+        {
+          "group_id": 11974,
+          "name": "Yaourt à La Grecque à La Vanille",
+          "brands": "Nestlé"
+        },
+        {
+          "group_id": 11976,
+          "name": "Yaos le yaourt à la Grecque",
+          "brands": "Nestlé, Yaos"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "similar_name_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 11884,
+          "name": "Yaos Le yaourt à la Grecque sur lit de Pêches",
+          "brands": "Nestlé"
+        },
+        {
+          "group_id": 11893,
+          "name": "Le Yaourt à la Grecque sur Lit de Myrtilles",
+          "brands": "Nestlé"
+        },
+        {
+          "group_id": 11898,
+          "name": "Yaos Le Yaourt à la Grecque sur lit de myrtilles",
+          "brands": "Nestlé"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "similar_name_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 11910,
+          "name": "Munch Bunch Organic Fromage Frais",
+          "brands": "Nestle,Munch Bunch"
+        },
+        {
+          "group_id": 11941,
+          "name": "Munch Bunch Fromage Frais",
+          "brands": "Nestle,Munch Bunch"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "similar_name_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 11917,
+          "name": "Yaos Le Yaourt à la Grecque Stracciatella 4 x 125 g",
+          "brands": "Nestlé"
+        },
+        {
+          "group_id": 11937,
+          "name": "Yaos Le yaourt à la Grecque à la vanille 4 x 125 g",
+          "brands": "Nestlé"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "same_ingredients_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 11929,
+          "name": "Le yaourt citron lai",
+          "brands": "Nestlé, La Laitière"
+        },
+        {
+          "group_id": 11959,
+          "name": "La Laitière",
+          "brands": "Nestlé"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "same_ingredients_shared_brand",
+        "same_name_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 11935,
+          "name": "Munch Bunch Squashums Yogurt Drinks Strawberry",
+          "brands": "Nestle,Munch Bunch,Squashums"
+        },
+        {
+          "group_id": 11983,
+          "name": "Munch Bunch Squashums Yogurt Drinks Strawberry",
+          "brands": "Munch Bunch,Squashums,Nestlé"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "similar_name_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 11936,
+          "name": "Yaos Le Yaourt à la Grecque Pulpe de citron 4 x 125 g",
+          "brands": "Nestlé"
+        },
+        {
+          "group_id": 11946,
+          "name": "Yaos Le Yaourt à la Grecque Pulpe de citron 6 x 125 g",
+          "brands": "Nestlé"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "same_ingredients_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 11965,
+          "name": "STRAWBERRY VANILLA",
+          "brands": "Nestlé"
+        },
+        {
+          "group_id": 11989,
+          "name": "Munch Bunch Double Up Strawberry & Vanilla",
+          "brands": "Nestle,Munch Bunch"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "same_ingredients_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 11996,
+          "name": "Danone le nature 125 g x 12",
+          "brands": "Danone, Danone set plain"
+        },
+        {
+          "group_id": 11997,
+          "name": "Danone le nature 125 g x 16",
+          "brands": "Danone"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "same_ingredients_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 11999,
+          "name": "Danone veloute nature 125 g x 12",
+          "brands": "Danone, Veloute, Veloute nature"
+        },
+        {
+          "group_id": 12000,
+          "name": "Danone veloute nature 125 g x 16",
+          "brands": "Danone, Veloute, Veloute nature"
+        },
+        {
+          "group_id": 12001,
+          "name": "Danone velouté nature",
+          "brands": "Danone"
+        },
+        {
+          "group_id": 12002,
+          "name": "Danone veloute nature 125 g x 8",
+          "brands": "Danone"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "same_name_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 12003,
+          "name": "Velouté nature",
+          "brands": "Danone"
+        },
+        {
+          "group_id": 12022,
+          "name": "Velouté Nature",
+          "brands": "Danone, Velouté"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "similar_name_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 12006,
+          "name": "Velouté Fruix yaourt aux bons fruits mixés",
+          "brands": "Danone"
+        },
+        {
+          "group_id": 12010,
+          "name": "Velouté - Yaourt aux bons fruits mixés",
+          "brands": "Danone"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "same_ingredients_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 12020,
+          "name": "Actimel + (0 % MG) 10 Bouteilles + 2 Gratuites",
+          "brands": "Danone, Actimel"
+        },
+        {
+          "group_id": 12078,
+          "name": "Actimel + (0 % MG) x 6 Bouteilles",
+          "brands": "Danone, Actimel"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "same_ingredients_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 12032,
+          "name": "Activia (Saveur Vanille) 12 pots + 4 Gratuits",
+          "brands": "Activia, Danone"
+        },
+        {
+          "group_id": 12050,
+          "name": "Activia (Saveur Citron, Saveur Coco) 12 pots + 4 Gratuits",
+          "brands": "Activia, Danone"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "same_ingredients_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 12036,
+          "name": "Le Yoghourt Nature",
+          "brands": "Danone"
+        },
+        {
+          "group_id": 12037,
+          "name": "Le Yoghourt (Nature) 16 Pots",
+          "brands": "Danone"
+        },
+        {
+          "group_id": 12038,
+          "name": "Le Yoghourt (Nature) 4 Pots",
+          "brands": "Danone"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "same_ingredients_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 12040,
+          "name": "Activia (Nature) 12 Pots",
+          "brands": "Activia, Danone"
+        },
+        {
+          "group_id": 12069,
+          "name": "Activa (Nature) 12 Pots",
+          "brands": "Activia, Danone"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "same_ingredients_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 12057,
+          "name": "Yaourt Nature",
+          "brands": "Danone"
+        },
+        {
+          "group_id": 12082,
+          "name": "Yaourt (Nature) 16 Pots",
+          "brands": "Danone"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "same_ingredients_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 12063,
+          "name": "Actimel",
+          "brands": "Danone, Actimel"
+        },
+        {
+          "group_id": 12075,
+          "name": "Actimel nature",
+          "brands": "Danone, Actimel"
+        },
+        {
+          "group_id": 12079,
+          "name": "Actimel + (x 10 Bouteilles)",
+          "brands": "Danone, Actimel"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "same_name_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 12076,
+          "name": "Actimel goût multifruits",
+          "brands": "Danone, Actimel"
+        },
+        {
+          "group_id": 12208,
+          "name": "Actimel goût multifruits",
+          "brands": "Danone"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "same_ingredients_shared_brand",
+        "same_name_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 12100,
+          "name": "Taillefine aux fruits",
+          "brands": "Danone"
+        },
+        {
+          "group_id": 12169,
+          "name": "Yaourts 0% Cerise Ananas Citron Fraise Myrtille Pêche (12 pots + 4 gratuits)",
+          "brands": "Danone"
+        },
+        {
+          "group_id": 12207,
+          "name": "Taillefine aux fruits",
+          "brands": "Danone, Taillefine"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "same_name_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 12137,
+          "name": "Activia",
+          "brands": "Activia, Danone"
+        },
+        {
+          "group_id": 12138,
+          "name": "Activia",
+          "brands": "Danone"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "same_ingredients_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 12149,
+          "name": "Actimel nature sucre",
+          "brands": "Danone, Actimel"
+        },
+        {
+          "group_id": 12151,
+          "name": "Actimel 100 g x 12 original",
+          "brands": "Actimel"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "same_ingredients_shared_brand",
+        "similar_name_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 12185,
+          "name": "Danone nature lait entier 125 g x 4 afh",
+          "brands": "Danone, Danone lait entier"
+        },
+        {
+          "group_id": 12195,
+          "name": "Danone lait entier arome vanille 125 g x 8",
+          "brands": "Danone, Danone lait entier"
+        },
+        {
+          "group_id": 12197,
+          "name": "Danone lait entier arome ctron 125 g x 4",
+          "brands": "Danone, Danone lait entier"
+        },
+        {
+          "group_id": 12198,
+          "name": "Danone lait entier arome vanille 125 g x 4",
+          "brands": "Danone, Danone lait entier"
+        },
+        {
+          "group_id": 12199,
+          "name": "Danone lait entier arome nature 125 g x 8",
+          "brands": "Danone, Danone lait entier"
+        }
+      ]
+    },
+    {
+      "family": "plant_based_milk_alternatives",
+      "signals": [
+        "same_ingredients_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 12212,
+          "name": "Kara lait coco",
+          "brands": "Kara"
+        },
+        {
+          "group_id": 13398,
+          "name": "Lait de coco Fluide",
+          "brands": "Kara"
+        }
+      ]
+    },
+    {
+      "family": "plant_based_milk_alternatives",
+      "signals": [
+        "same_ingredients_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 12231,
+          "name": "Avoine",
+          "brands": "Bjorg"
+        },
+        {
+          "group_id": 12254,
+          "name": "Lait d’avoine bio",
+          "brands": "Bjorg"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "similar_name_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 12371,
+          "name": "Yaourt au lait de brebis bio à la vanille",
+          "brands": "Vrai"
+        },
+        {
+          "group_id": 12372,
+          "name": "Yaourt à la grecque au lait de brebis bio",
+          "brands": "Vrai"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "similar_name_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 12397,
+          "name": "Yaourt au lait entier saveur coco",
+          "brands": "Malo"
+        },
+        {
+          "group_id": 12413,
+          "name": "Yaourt lait entier saveur coco",
+          "brands": "Malo"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "similar_name_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 12398,
+          "name": "Yaourt au Lait Entier Saveur Citron",
+          "brands": "Malo"
+        },
+        {
+          "group_id": 12423,
+          "name": "Yaourt au lait entier saveur citron BIO",
+          "brands": "Malo"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "same_ingredients_shared_brand",
+        "similar_name_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 12408,
+          "name": "Yaourt au sucre de canne",
+          "brands": "Laiterie de St Malo, Malo"
+        },
+        {
+          "group_id": 12431,
+          "name": "Yaourt Sucre de Canne",
+          "brands": "Malo"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "same_ingredients_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 12446,
+          "name": "Yaourt Saveur Vanille au Lait Entier",
+          "brands": "Les 4 Pis"
+        },
+        {
+          "group_id": 12448,
+          "name": "Yaourt saveur coco au lait entier",
+          "brands": "Les 4 Pis"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "similar_name_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 12529,
+          "name": "Calin+ Fruits Pêche, Abricot, Fraise, Framboise)",
+          "brands": "Calin+, Yoplait"
+        },
+        {
+          "group_id": 12638,
+          "name": "Calin + (Fraise, Framboise, Pêche, Abricot)",
+          "brands": "Calin, Yoplait"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "same_ingredients_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 12530,
+          "name": "Yop, Parfum Fraise-Banane",
+          "brands": "Yop, Yoplait"
+        },
+        {
+          "group_id": 12550,
+          "name": "Mini Yop, Parfum Fraise",
+          "brands": "Yoplait"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "same_name_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 12534,
+          "name": "Frulos",
+          "brands": "Frulos, Yoplait"
+        },
+        {
+          "group_id": 12597,
+          "name": "Frulos",
+          "brands": "Yoplait, frulos"
+        },
+        {
+          "group_id": 12598,
+          "name": "Frulos",
+          "brands": "Yoplait"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "same_ingredients_shared_brand",
+        "same_name_shared_brand",
+        "similar_name_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 12537,
+          "name": "Yaourt à boire sucré aromatisé",
+          "brands": "Yop p'tit yop, Yoplait"
+        },
+        {
+          "group_id": 12538,
+          "name": "Yaourt à boire sucré aromatisé",
+          "brands": "Yop, Yop p'tit yop, Yoplait"
+        },
+        {
+          "group_id": 12559,
+          "name": "Yop, Parfum Coco",
+          "brands": "Yop, Yoplait"
+        },
+        {
+          "group_id": 12562,
+          "name": "P'tit Yop goût Fraise",
+          "brands": "P'tit Yop, Yoplait"
+        },
+        {
+          "group_id": 12565,
+          "name": "Yop framboise",
+          "brands": "Yop, Yoplait"
+        },
+        {
+          "group_id": 12566,
+          "name": "Yop vanille",
+          "brands": "Yop mf, Yoplait"
+        },
+        {
+          "group_id": 12569,
+          "name": "Mini Yop, Goût Framboise",
+          "brands": "Yoplait"
+        },
+        {
+          "group_id": 12571,
+          "name": "P'tit Yop, Goût Fruits Rouges",
+          "brands": "Yoplait"
+        },
+        {
+          "group_id": 12619,
+          "name": "Yop Parfum Coco",
+          "brands": "Yoplait"
+        },
+        {
+          "group_id": 12632,
+          "name": "Yaourt à boire sucré aromatisé",
+          "brands": "Yop mf, Yoplait"
+        },
+        {
+          "group_id": 12634,
+          "name": "Yaourt a boire sucré aromatisé",
+          "brands": "Yoplait"
+        },
+        {
+          "group_id": 12669,
+          "name": "Yoplait P'tit Yop goût fruits rouges",
+          "brands": "P'tit Yop, Yoplait"
+        },
+        {
+          "group_id": 12718,
+          "name": "P'tit Yop, Goût Fraise",
+          "brands": "Yoplait"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "same_ingredients_shared_brand",
+        "same_name_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 12542,
+          "name": "Panier de Yoplait (0 % MG, 0 % Sucres ajoutés) - (Cerise, Fraise, Framboise, Mûre) 8 Pots",
+          "brands": "Panier de Yoplait, Yoplait"
+        },
+        {
+          "group_id": 12602,
+          "name": "Panier de Yoplait 0%",
+          "brands": "Yoplait"
+        },
+        {
+          "group_id": 12606,
+          "name": "Panier de Yoplait 0%",
+          "brands": "Panier de Yoplait, Yoplait"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "similar_name_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 12545,
+          "name": "Panier de Yoplait Pêche, Poire",
+          "brands": "Panier de Yoplait, Yoplait"
+        },
+        {
+          "group_id": 12645,
+          "name": "Panier de Yoplait Pêche",
+          "brands": "Panier de Yoplait, Yoplait"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "same_ingredients_shared_brand",
+        "same_name_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 12555,
+          "name": "Mini Yop Fraise",
+          "brands": "Yop, Yoplait"
+        },
+        {
+          "group_id": 12557,
+          "name": "Yop, Parfum Vanille",
+          "brands": "Yop, Yoplait"
+        },
+        {
+          "group_id": 12564,
+          "name": "Yop fraise",
+          "brands": "Yop, Yoplait"
+        },
+        {
+          "group_id": 12570,
+          "name": "P'tit yop parfum fruits rouges",
+          "brands": "P’tit Yop, Yoplait"
+        },
+        {
+          "group_id": 12622,
+          "name": "Yop parfum Vanille",
+          "brands": "Yoplait"
+        },
+        {
+          "group_id": 12704,
+          "name": "Yop fraise banane",
+          "brands": "Yoplait"
+        },
+        {
+          "group_id": 12719,
+          "name": "Hop parfum framboise",
+          "brands": "Yoplait"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "same_ingredients_shared_brand",
+        "same_name_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 12560,
+          "name": "Yop, Parfum Ananas-Pêche-Céréales",
+          "brands": "Yop, Yoplait"
+        },
+        {
+          "group_id": 12563,
+          "name": "P'tit Yop goût Framboise",
+          "brands": "P'tit Yop, Yoplait"
+        },
+        {
+          "group_id": 12621,
+          "name": "Yop Parfum Ananas, Pêche Céréales",
+          "brands": "Yoplait"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "same_name_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 12567,
+          "name": "Yop Parfum Fraise",
+          "brands": "Snacking, Yop, Yop mf snacking, Yoplait"
+        },
+        {
+          "group_id": 12620,
+          "name": "Yop Parfum Fraise",
+          "brands": "Yoplait"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "same_ingredients_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 12574,
+          "name": "Calin + à boire",
+          "brands": "Calin, Yoplait"
+        },
+        {
+          "group_id": 12584,
+          "name": "Calin + à boire, Nature sucré (Maxi Format)",
+          "brands": "Calin, Yoplait"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "similar_name_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 12578,
+          "name": "Panier de Yoplait Fraise",
+          "brands": "Panier de Yoplait, Yoplait"
+        },
+        {
+          "group_id": 12690,
+          "name": "Panier de Yoplait Sensations Fraise",
+          "brands": "Yoplait"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "similar_name_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 12580,
+          "name": "Panier de Yoplait (Cerise, Fraise, Framboise, Mûre) 8 Pots",
+          "brands": "Panier de Yoplait, Yoplait"
+        },
+        {
+          "group_id": 12641,
+          "name": "Panier de Yoplait (Framboise, Fraise, Cerise, Mûre) 8 Pots",
+          "brands": "Panier de Yoplait, Yoplait"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "same_ingredients_shared_brand",
+        "similar_name_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 12581,
+          "name": "Panier de Yoplait Abricot, Ananas, Pomme, Poire",
+          "brands": "Yoplait"
+        },
+        {
+          "group_id": 12651,
+          "name": "Panier de Yoplait Fruits Jaunes",
+          "brands": "Yoplait"
+        },
+        {
+          "group_id": 12665,
+          "name": "Panier de Yoplait Abricot - Ananas- Pêche - Poire",
+          "brands": "Yoplait"
+        },
+        {
+          "group_id": 12686,
+          "name": "Yaourts fruits jaunes - Panier de Yoplait",
+          "brands": "Panier de Yoplait, Yoplait"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "similar_name_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 12592,
+          "name": "Yaourt sucré, aux fruits aromatisé",
+          "brands": "Panier rc snacking, Snacking, Yoplait"
+        },
+        {
+          "group_id": 12646,
+          "name": "Yaourt brassé sucré, aux fruits, aromatisé",
+          "brands": "Panier fruits mixes, Yoplait"
+        },
+        {
+          "group_id": 12662,
+          "name": "Yaourt sucré, aux fruits",
+          "brands": "Tentation, Yoplait"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "same_name_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 12593,
+          "name": "Yaourt nature sucré sur lit de fruits, aromatisé.",
+          "brands": "Saveur autrefois snacking, Snacking, Yoplait"
+        },
+        {
+          "group_id": 12700,
+          "name": "Yaourt nature sucré sur lit de fruits, aromatisé",
+          "brands": "Panier de Yoplait, Panier nsf, Yoplait"
+        },
+        {
+          "group_id": 12701,
+          "name": "Yaourt nature sucré sur lit de fruits, aromatisé",
+          "brands": "Panier nsf, Yoplait"
+        },
+        {
+          "group_id": 12713,
+          "name": "Yaourt nature sucré sur lit de fruits, aromatisé",
+          "brands": "Panier a l ancienne, Yoplait"
+        },
+        {
+          "group_id": 12714,
+          "name": "Yaourt nature sucré sur lit de fruits, aromatisé",
+          "brands": "Panier a l ancienne, Panier de Yoplait, Yoplait"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "same_ingredients_shared_brand",
+        "same_name_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 12599,
+          "name": "Yaourt nature sucré",
+          "brands": "Yoplait"
+        },
+        {
+          "group_id": 12600,
+          "name": "Yaourt nature sucré",
+          "brands": "Nature sucre, Yoplait"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "similar_name_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 12615,
+          "name": "Consistant & Fondant : Recette au yaourt au caramel (0 % MG) 4 pots",
+          "brands": "Weight Watchers"
+        },
+        {
+          "group_id": 12616,
+          "name": "Consistant & Fondant : Recette au yaourt au miel (0 % MG) 4 pots",
+          "brands": "Weight Watchers"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "similar_name_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 12649,
+          "name": "Panier de Yoplait Nature sur Fruits",
+          "brands": "Yoplait"
+        },
+        {
+          "group_id": 12650,
+          "name": "Panier de Yoplait Nature sur Fruits Framboise",
+          "brands": "Yoplait"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "same_ingredients_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 12666,
+          "name": "P'tit Yop au Chocolat",
+          "brands": "Yop p'tit yop, Yoplait"
+        },
+        {
+          "group_id": 12702,
+          "name": "Dessert lacté au chocolat",
+          "brands": "Yop p'tit yop, Yoplait"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "same_name_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 12691,
+          "name": "Dessert lacté aux fruits, aromatisé",
+          "brands": "Panier de Yoplait, Panier premium, Yoplait"
+        },
+        {
+          "group_id": 12692,
+          "name": "Dessert lacté aux fruits, aromatisé",
+          "brands": "Panier premium, Yoplait"
+        }
+      ]
+    },
+    {
+      "family": "breakfast_cereals",
+      "signals": [
+        "same_name_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 12746,
+          "name": "Krounchy nature",
+          "brands": "Grillon d'Or"
+        },
+        {
+          "group_id": 12747,
+          "name": "Krounchy Nature",
+          "brands": "Grillon d'Or, Céréco"
+        }
+      ]
+    },
+    {
+      "family": "breakfast_cereals",
+      "signals": [
+        "same_ingredients_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 12823,
+          "name": "Flocons d'avoine petits",
+          "brands": "Biocoop"
+        },
+        {
+          "group_id": 12825,
+          "name": "Flocons d'avoine gros",
+          "brands": "Biocoop"
+        }
+      ]
+    },
+    {
+      "family": "breakfast_cereals",
+      "signals": [
+        "same_name_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 12838,
+          "name": "Flocons d'avoine complets",
+          "brands": "Terres & Céréales, Terres & Céréales BIO"
+        },
+        {
+          "group_id": 12839,
+          "name": "Flocons d'avoine complets",
+          "brands": "Terres & Céréales Bio"
+        }
+      ]
+    },
+    {
+      "family": "breakfast_cereals",
+      "signals": [
+        "same_ingredients_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 12847,
+          "name": "Frosties",
+          "brands": "Kellogg's"
+        },
+        {
+          "group_id": 12848,
+          "name": "Corn Flakes",
+          "brands": "Kellogg's"
+        }
+      ]
+    },
+    {
+      "family": "breakfast_cereals",
+      "signals": [
+        "same_name_shared_brand",
+        "similar_name_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 12853,
+          "name": "Special K chocolat noir",
+          "brands": "Kellogg's"
+        },
+        {
+          "group_id": 12859,
+          "name": "Special K pure chocolat noir",
+          "brands": "Kellogg's"
+        },
+        {
+          "group_id": 12981,
+          "name": "Special K Chocolat Noir",
+          "brands": "Kellogg's, Special K"
+        }
+      ]
+    },
+    {
+      "family": "breakfast_cereals",
+      "signals": [
+        "similar_name_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 12856,
+          "name": "All-Bran Fruta Y Fibra",
+          "brands": "Kellogg's"
+        },
+        {
+          "group_id": 12872,
+          "name": "All-Bran bizcochito fruta y fibra",
+          "brands": "Kellogg's"
+        }
+      ]
+    },
+    {
+      "family": "breakfast_cereals",
+      "signals": [
+        "same_name_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 12868,
+          "name": "Miel Pops",
+          "brands": "Kellogg's"
+        },
+        {
+          "group_id": 12890,
+          "name": "Miel pops",
+          "brands": "Kellogg's, Miel Pops"
+        }
+      ]
+    },
+    {
+      "family": "breakfast_cereals",
+      "signals": [
+        "same_name_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 12870,
+          "name": "COCO pops",
+          "brands": "Kellogg's, Coco Pops"
+        },
+        {
+          "group_id": 12874,
+          "name": "Coco pops",
+          "brands": "Kellogg's"
+        }
+      ]
+    },
+    {
+      "family": "breakfast_cereals",
+      "signals": [
+        "same_name_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 12878,
+          "name": "Smacks",
+          "brands": "Kellogg's, Smacks"
+        },
+        {
+          "group_id": 12884,
+          "name": "Smacks",
+          "brands": "Kellogg's"
+        }
+      ]
+    },
+    {
+      "family": "breakfast_cereals",
+      "signals": [
+        "same_name_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 12891,
+          "name": "Trésor - Chocolat Au Lait",
+          "brands": "Kellogg's"
+        },
+        {
+          "group_id": 12921,
+          "name": "trésor chocolat au lait",
+          "brands": "Kellogg's, Trésor"
+        }
+      ]
+    },
+    {
+      "family": "breakfast_cereals",
+      "signals": [
+        "similar_name_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 12896,
+          "name": "Céréales Extra Kellogg's Pépites Chocolat au lait",
+          "brands": "Kellogg's"
+        },
+        {
+          "group_id": 12998,
+          "name": "Céréales Extra Pepites Kellogg's Chocolat au lait",
+          "brands": "Kellogg's"
+        }
+      ]
+    },
+    {
+      "family": "breakfast_cereals",
+      "signals": [
+        "same_ingredients_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 12898,
+          "name": "Céréales Trésor Kellogg's Chocolat Noisettes - 1kg",
+          "brands": "Kellogg's"
+        },
+        {
+          "group_id": 12990,
+          "name": "Céréales Trésor",
+          "brands": "Kellogg's"
+        },
+        {
+          "group_id": 13030,
+          "name": "Kellogg's Tresor",
+          "brands": "Kellogg's"
+        }
+      ]
+    },
+    {
+      "family": "breakfast_cereals",
+      "signals": [
+        "same_name_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 12901,
+          "name": "Trésor goût chocolat noisettes",
+          "brands": "Kellogg's, Trésor"
+        },
+        {
+          "group_id": 12923,
+          "name": "Trésor goût Chocolat Noisettes",
+          "brands": "Kellogg's, kellogs"
+        }
+      ]
+    },
+    {
+      "family": "breakfast_cereals",
+      "signals": [
+        "same_name_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 12908,
+          "name": "All-bran Golden Crunch",
+          "brands": "Kellogg's"
+        },
+        {
+          "group_id": 12911,
+          "name": "All-Bran Golden Crunch",
+          "brands": "All-Bran, Kellogg's"
+        }
+      ]
+    },
+    {
+      "family": "breakfast_cereals",
+      "signals": [
+        "similar_name_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 12935,
+          "name": "Céréales Special K Fruits rouges",
+          "brands": "Kellogg's"
+        },
+        {
+          "group_id": 13046,
+          "name": "Spécial K fruits rouges",
+          "brands": "Kellogg's"
+        }
+      ]
+    },
+    {
+      "family": "breakfast_cereals",
+      "signals": [
+        "same_name_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 12997,
+          "name": "Trésor Choco Roulette",
+          "brands": "Kellogg's"
+        },
+        {
+          "group_id": 13031,
+          "name": "Trésor Choco Roulette",
+          "brands": "Kellogg's, Trésor"
+        }
+      ]
+    },
+    {
+      "family": "plant_based_milk_alternatives",
+      "signals": [
+        "same_ingredients_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 13054,
+          "name": "Provamel Biologischer Sojadrink, Schokoladen 1L",
+          "brands": "Provamel"
+        },
+        {
+          "group_id": 13125,
+          "name": "Provamel Biologischer Sojadrink, Schokoladen 250ml",
+          "brands": "Provamel"
+        }
+      ]
+    },
+    {
+      "family": "plant_based_milk_alternatives",
+      "signals": [
+        "similar_name_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 13071,
+          "name": "Provamel Biologischer Mandeldrink 1L",
+          "brands": "Provamel"
+        },
+        {
+          "group_id": 13129,
+          "name": "Provamel Biologischer Hafer-Mandeldrink 1L",
+          "brands": "Provamel"
+        }
+      ]
+    },
+    {
+      "family": "plant_based_milk_alternatives",
+      "signals": [
+        "same_name_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 13098,
+          "name": "Single Soya",
+          "brands": "alpro, Danone Belux NV"
+        },
+        {
+          "group_id": 13135,
+          "name": "Single Soya",
+          "brands": "alpro"
+        }
+      ]
+    },
+    {
+      "family": "plant_based_milk_alternatives",
+      "signals": [
+        "same_ingredients_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 13147,
+          "name": "Lait de riz noisettes et amandes",
+          "brands": "Lima"
+        },
+        {
+          "group_id": 13148,
+          "name": "Rice Drink Hazelnut Almond",
+          "brands": "Lima"
+        }
+      ]
+    },
+    {
+      "family": "plant_based_milk_alternatives",
+      "signals": [
+        "same_name_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 13250,
+          "name": "Bebida de soja",
+          "brands": "YoSoy,Liquats Vegetals"
+        },
+        {
+          "group_id": 13257,
+          "name": "Bebida de soja",
+          "brands": "Yosoy"
+        }
+      ]
+    },
+    {
+      "family": "plant_based_milk_alternatives",
+      "signals": [
+        "same_name_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 13308,
+          "name": "Bebida soja chocolate",
+          "brands": "Carrefour"
+        },
+        {
+          "group_id": 13320,
+          "name": "Bebida soja chocolate",
+          "brands": "Carrefour BIO, Carrefour"
+        }
+      ]
+    },
+    {
+      "family": "plant_based_milk_alternatives",
+      "signals": [
+        "same_name_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 13327,
+          "name": "Lait de coco",
+          "brands": "SUREE"
+        },
+        {
+          "group_id": 13330,
+          "name": "Lait de coco",
+          "brands": "Suree, suree interfoods co ltd thailand"
+        }
+      ]
+    },
+    {
+      "family": "plant_based_milk_alternatives",
+      "signals": [
+        "same_ingredients_shared_brand"
+      ],
+      "products": [
+        {
+          "group_id": 13384,
+          "name": "Kokosmilch",
+          "brands": "Real Thai"
+        },
+        {
+          "group_id": 13385,
+          "name": "Lait de coco",
+          "brands": "Real Thai"
+        }
+      ]
+    }
+  ],
+  "review_links": [
+    {
+      "family": "yogurts",
+      "signals": [
+        "same_ingredients_other_brand"
+      ],
+      "already_in_one_cluster": false,
+      "products": [
+        {
+          "group_id": 12316,
+          "name": "Yaourt nature au lait 1/2 écrémé",
+          "brands": "Tante Hélène"
+        },
+        {
+          "group_id": 12350,
+          "name": "Yaourt Bio Nature",
+          "brands": "Vrai"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "same_ingredients_other_brand"
+      ],
+      "already_in_one_cluster": false,
+      "products": [
+        {
+          "group_id": 12329,
+          "name": "Yaourt au lait de chèvre Nature",
+          "brands": "La Chèvrerie"
+        },
+        {
+          "group_id": 12375,
+          "name": "Yaourt bio au lait de chèvre nature",
+          "brands": "Vrai"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "same_ingredients_other_brand"
+      ],
+      "already_in_one_cluster": false,
+      "products": [
+        {
+          "group_id": 12330,
+          "name": "Yaourt De Chevre Vanille 2 x",
+          "brands": "La chevrerie"
+        },
+        {
+          "group_id": 12374,
+          "name": "Yaourt bio au lait de chèvre Vanille",
+          "brands": "Vrai"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "same_ingredients_other_brand"
+      ],
+      "already_in_one_cluster": false,
+      "products": [
+        {
+          "group_id": 12331,
+          "name": "Noyal",
+          "brands": "La Bergerie"
+        },
+        {
+          "group_id": 12389,
+          "name": "Schaf Joghurt Mild, natur",
+          "brands": "BERGERIE"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "same_ingredients_other_brand"
+      ],
+      "already_in_one_cluster": false,
+      "products": [
+        {
+          "group_id": 12368,
+          "name": "Brassé nature brebis",
+          "brands": "Vrai"
+        },
+        {
+          "group_id": 12393,
+          "name": "Bergerie Schafsjoghurt",
+          "brands": "Bergerie"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "same_ingredients_other_brand"
+      ],
+      "already_in_one_cluster": false,
+      "products": [
+        {
+          "group_id": 12411,
+          "name": "Yaourt au lait entier Nature",
+          "brands": "Malo"
+        },
+        {
+          "group_id": 12428,
+          "name": "Yaourts au lait entier nature",
+          "brands": "Leader Price"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "same_ingredients_other_brand"
+      ],
+      "already_in_one_cluster": false,
+      "products": [
+        {
+          "group_id": 12442,
+          "name": "Yaourts Saveur Vanille au Lait Entier",
+          "brands": "Haut Vallon"
+        },
+        {
+          "group_id": 12446,
+          "name": "Yaourt Saveur Vanille au Lait Entier",
+          "brands": "Les 4 Pis"
+        }
+      ]
+    },
+    {
+      "family": "yogurts",
+      "signals": [
+        "same_ingredients_other_brand"
+      ],
+      "already_in_one_cluster": false,
+      "products": [
+        {
+          "group_id": 12442,
+          "name": "Yaourts Saveur Vanille au Lait Entier",
+          "brands": "Haut Vallon"
+        },
+        {
+          "group_id": 12448,
+          "name": "Yaourt saveur coco au lait entier",
+          "brands": "Les 4 Pis"
+        }
+      ]
+    },
+    {
+      "family": "plant_based_milk_alternatives",
+      "signals": [
+        "same_ingredients_other_brand"
+      ],
+      "already_in_one_cluster": false,
+      "products": [
+        {
+          "group_id": 13157,
+          "name": "Rice drink vanille",
+          "brands": "Lima"
+        },
+        {
+          "group_id": 13179,
+          "name": "Bevanda di riso alla vaniglia",
+          "brands": "Rice&Rice"
+        }
+      ]
+    },
+    {
+      "family": "plant_based_milk_alternatives",
+      "signals": [
+        "same_ingredients_other_brand"
+      ],
+      "already_in_one_cluster": false,
+      "products": [
+        {
+          "group_id": 13254,
+          "name": "Yosoy",
+          "brands": "LIQUATS VEGETALS S.A."
+        },
+        {
+          "group_id": 13268,
+          "name": "Bebida de arroz",
+          "brands": "Alitey"
+        }
+      ]
+    },
+    {
+      "family": "plant_based_milk_alternatives",
+      "signals": [
+        "same_ingredients_other_brand"
+      ],
+      "already_in_one_cluster": false,
+      "products": [
+        {
+          "group_id": 13384,
+          "name": "Kokosmilch",
+          "brands": "Real Thai"
+        },
+        {
+          "group_id": 13395,
+          "name": "Lait de coco",
+          "brands": "Thai food king"
+        }
+      ]
+    },
+    {
+      "family": "plant_based_milk_alternatives",
+      "signals": [
+        "same_ingredients_other_brand"
+      ],
+      "already_in_one_cluster": false,
+      "products": [
+        {
+          "group_id": 13385,
+          "name": "Lait de coco",
+          "brands": "Real Thai"
+        },
+        {
+          "group_id": 13395,
+          "name": "Lait de coco",
+          "brands": "Thai food king"
+        }
+      ]
+    }
+  ],
+  "calibration": {
+    "reserved_groups": 72,
+    "alias_groups_to_exclude_with_them": [
+      11965,
+      12838,
+      12849,
+      13250,
+      13320
+    ],
+    "reserved_groups_with_aliases": [
+      {
+        "calibration_group_id": 6373,
+        "alias_group_ids": [
+          12849
+        ],
+        "products": [
+          {
+            "group_id": 6373,
+            "name": "Choco Krispies",
+            "brands": "Kellogg's"
+          },
+          {
+            "group_id": 12849,
+            "name": "Choco Krispies",
+            "brands": "Kellogg's, Choco Krispies, Kellogg's - KELLOG Company"
+          }
+        ]
+      },
+      {
+        "calibration_group_id": 11989,
+        "alias_group_ids": [
+          11965
+        ],
+        "products": [
+          {
+            "group_id": 11989,
+            "name": "Munch Bunch Double Up Strawberry & Vanilla",
+            "brands": "Nestle,Munch Bunch"
+          },
+          {
+            "group_id": 11965,
+            "name": "STRAWBERRY VANILLA",
+            "brands": "Nestlé"
+          }
+        ]
+      },
+      {
+        "calibration_group_id": 12839,
+        "alias_group_ids": [
+          12838
+        ],
+        "products": [
+          {
+            "group_id": 12839,
+            "name": "Flocons d'avoine complets",
+            "brands": "Terres & Céréales Bio"
+          },
+          {
+            "group_id": 12838,
+            "name": "Flocons d'avoine complets",
+            "brands": "Terres & Céréales, Terres & Céréales BIO"
+          }
+        ]
+      },
+      {
+        "calibration_group_id": 13257,
+        "alias_group_ids": [
+          13250
+        ],
+        "products": [
+          {
+            "group_id": 13257,
+            "name": "Bebida de soja",
+            "brands": "Yosoy"
+          },
+          {
+            "group_id": 13250,
+            "name": "Bebida de soja",
+            "brands": "YoSoy,Liquats Vegetals"
+          }
+        ]
+      },
+      {
+        "calibration_group_id": 13308,
+        "alias_group_ids": [
+          13320
+        ],
+        "products": [
+          {
+            "group_id": 13308,
+            "name": "Bebida soja chocolate",
+            "brands": "Carrefour"
+          },
+          {
+            "group_id": 13320,
+            "name": "Bebida soja chocolate",
+            "brands": "Carrefour BIO, Carrefour"
+          }
+        ]
+      }
+    ],
+    "pilot_pairs_whose_members_are_linked": []
+  },
+  "note": "Candidate aliases for review before step 5. Merge signals propose split units; review signals need a human decision. group_id is unchanged, no partition is frozen and no pair is labeled. Flavor variants of one product line fall below the name threshold and stay separate; the Jaccard histogram shows how many same-brand pairs a lower threshold would add."
+}

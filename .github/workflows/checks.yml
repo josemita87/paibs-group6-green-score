@@ -28,3 +28,5 @@ jobs:
         run: python scripts/build_catalog.py --verify
       - name: Verify substitution pilot against the comparable catalog
         run: python scripts/build_annotation_pilot.py --verify
+      - name: Verify alias inspection report against a rebuild
+        run: python scripts/inspect_aliases.py --verify
