@@ -43,6 +43,23 @@ the grouping before using those examples.
    separate record keyed by pair ID. Retain unresolved cases as ambiguous.
    Revise the guidelines where a rule produced recurring disagreement.
 
+Step 3 is one command. Name each export after its reviewer, for example
+`ana.json` and `ben.json`, and run it before the two reviewers talk:
+
+```sh
+python scripts/review_agreement.py ana.json ben.json --report pilot_agreement.json
+```
+
+It refuses to compute anything unless both exports hold all 36 pairs with exactly
+one submitted annotation, one label and a nonempty reason each, and unless the
+task data still match the task file. It then prints the identical-decision count,
+the three-by-three label table, Cohen's kappa, per-family counts, every
+disagreement with both reasons, and the pairs either reviewer marked “possible
+duplicate” with their group IDs. It does not write final labels. Label Studio
+omits unreviewed tasks from an export by default, so a missing pair means it was
+not reviewed. Full exports include each reviewer's Label Studio user ID; decide
+as a team where the exports are stored before adding them to the repository.
+
 ## Sampling and use
 
 The generator verifies the complete Parquet contents against the step-3

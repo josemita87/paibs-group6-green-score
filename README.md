@@ -103,7 +103,12 @@ Reproduce or verify the unlabeled pilot with the application dependencies instal
 ```sh
 python scripts/build_annotation_pilot.py
 python scripts/build_annotation_pilot.py --verify
+python scripts/review_agreement.py ana.json ben.json   # two reviewers' full JSON exports
 ```
+
+`review_agreement.py` validates both exports against the task file and reports
+agreement before discussion. It has been tested with synthetic exports only; no
+human review exists yet.
 
 ## Family-targeted expansion (step 2, in support of step 4)
 

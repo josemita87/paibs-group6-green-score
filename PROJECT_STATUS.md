@@ -24,7 +24,7 @@ it is **step 2**. Use the document's 1–13 numbering from now on; do not rename
 | 1 | User input | Done — minimal flow | `basket/` Pydantic models and catalog lookup, `app/streamlit_app.py`, `tests/test_basket.py`. Preferences and nutritional constraints are declared fields only (`declared_not_checked`); enforcement belongs to steps 9–10. |
 | 2 | Acquire and version the product catalog | Done — raw sample + family expansion | `scripts/fetch_data.py --catalog` (base snapshot) and `scripts/expand_catalog.py` (1,678 candidate rows of the three families from the same revision), each with a manifest and audit/tests. |
 | 3 | Build a comparable, usable catalog | Done — rebuilt with expansion | `basket/comparable.py`, `scripts/build_catalog.py`, `data/catalog.parquet` + report + manifest, `tests/test_comparable.py`. 1,684 eligible products in 1,556 groups across three families; CI verifies the committed outputs against a rebuild. |
-| 4 | Create the substitution dataset | In progress — pilot ready | 36 calibration pairs, guidelines and Label Studio form. Independent reviews and adjudication pending. |
+| 4 | Create the substitution dataset | In progress — pilot ready | 36 calibration pairs, guidelines, Label Studio form and `scripts/review_agreement.py` to validate two exports and report agreement. Independent reviews and adjudication pending. |
 | 5 | Split the data before training | Not started | Freeze and verify group partitions; construct within-partition pairs/triplets. |
 | 6 | Establish the baselines | Not started | Category/rules, TF-IDF and frozen-encoder rankings on shared cases. |
 | 7 | Fine-tune the substitution encoder | Not started | Training and comparison with frozen embeddings. |
@@ -86,11 +86,30 @@ Record any other dependency-driven change of order here before proceeding.
 ## Next action
 
 Two people independently review the same 36 tasks using [the pilot guide](docs/ANNOTATION.md).
-Retain both exports, record agreement before discussion, and adjudicate disagreements.
+Retain both exports, run `python scripts/review_agreement.py <first>.json <second>.json`
+before discussion to record agreement, and adjudicate disagreements.
 Before generating model-development pairs, inspect near-duplicate aliases and freeze
 the remaining product groups into disjoint partitions.
 
 ## Change log
+
+### 2026-11-26 — Review validation and agreement report (step 4)
+
+- Added `scripts/review_agreement.py`. It reads two full-JSON Label Studio exports,
+  joins them on `data.pair_id` and refuses to compute agreement unless both hold
+  all 36 pairs with one submitted annotation, one label from the form and a
+  nonempty reason, with task data matching the task file. It reports identical
+  decisions, the 3×3 label table, Cohen's kappa, per-family counts, disagreements
+  with both reasons and the pairs marked “possible duplicate” with their group IDs.
+  It writes no final label; adjudication stays a human record.
+- Control names and labels are read from `docs/annotation_form.xml`. The export
+  structure was checked against the Label Studio export documentation.
+- Validation: 8 new tests with synthetic in-memory exports (complete review, ten
+  kinds of incomplete or invalid task, other export formats, kappa against a
+  hand-computed value, report contents, command behavior) pass with the existing
+  44. Remote CI for this commit is not known at commit time.
+- Limitations: not run on a real Label Studio export, because no human review
+  exists yet. Step 4 status is unchanged. No labels are stored in the repository.
 
 ### 2026-11-26 — Pilot committed after revalidation (step 4)
 
