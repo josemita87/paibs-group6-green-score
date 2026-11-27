@@ -46,8 +46,11 @@ comparison; a chat API is not required.
   `data/alias_report.json`.
 - `scripts/freeze_partitions.py`: freezes eligible groups into calibration, train,
   validation and test partitions in `data/partitions.json` (step 5).
+- `scripts/build_pairs.py`: samples the unlabeled annotation pairs of each
+  partition into `data/pairs.json` (step 4).
 - `basket/`: Pydantic basket models, validation and read-only catalog lookup (step 1);
-  `basket/comparable.py` holds the step-3 normalization and eligibility rules.
+  `basket/comparable.py` holds the step-3 normalization and eligibility rules;
+  `basket/pairs.py` holds the step-4 pair sampling rules.
 - `app/streamlit_app.py`: minimal Streamlit screen that builds and validates a basket.
 - `requirements-app.txt`: pinned dependencies for the basket models, app and tests.
 - `requirements-data.txt`: optional dependencies for downloading the sample again.
@@ -147,6 +150,28 @@ Only products are partitioned; pairs and triplets do not exist yet. Flavor
 variants of one brand whose names and ingredient texts differ can fall in
 different partitions: 107 same-brand group pairs with a name-token Jaccard of at
 least 0.6 sit across train and test.
+
+## Annotation pairs inside the partitions (step 4)
+
+```sh
+python scripts/build_pairs.py            # rebuild data/pairs.json
+python scripts/build_pairs.py --verify   # check the committed pairs against a rebuild
+```
+
+`data/pairs.json` holds 300 unlabeled Label Studio tasks in the step-4 review form:
+60 pairs per family for train and 20 each for validation and test. Both sides of a
+pair are eligible groups of one family that sit in the same partition and in
+different split units, so no pair joins two near-duplicates and no pair crosses a
+partition. The 72 calibration groups stay reserved for the pilot.
+
+Each family and partition splits its budget over three sampling strategies. The
+`lookalike` strategy takes the pairs with the highest name-token Jaccard, which is
+at least 0.4. The `brand_variant` strategy takes pairs that share a brand entry and
+score below 0.4. The `family_random` strategy takes pairs that share no brand entry
+and score below 0.4. A seeded barcode hash orders the last two and breaks ties in
+the first. No group appears in more than three pairs of one family and partition.
+The file records the strategy and the name overlap of every pair and no label; a
+strategy says how a pair was sampled, not whether the products substitute.
 
 ## Family-targeted expansion (step 2, in support of step 4)
 

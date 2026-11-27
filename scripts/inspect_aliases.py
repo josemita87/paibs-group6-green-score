@@ -20,7 +20,7 @@ import pyarrow.parquet as pq
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from basket.comparable import normalize_key  # noqa: E402
+from basket.comparable import brand_tokens, normalize_key  # noqa: E402
 from scripts.build_catalog import MANIFEST, PARQUET, content_sha256  # noqa: E402
 from scripts.fetch_data import write_atomic  # noqa: E402
 
@@ -33,11 +33,6 @@ MERGE_SIGNALS = ('same_name_shared_brand', 'same_ingredients_shared_brand',
                  'similar_name_shared_brand')
 # Links listed for a human decision; they do not merge groups.
 REVIEW_SIGNALS = ('same_ingredients_other_brand',)
-
-
-def brand_tokens(brands):
-    """Normalized entries of a comma-separated brand string."""
-    return {token for token in (normalize_key(part) for part in (brands or '').split(',')) if token}
 
 
 def group_profiles(rows):

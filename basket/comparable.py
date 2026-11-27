@@ -83,6 +83,11 @@ def normalize_key(text: Optional[str]) -> str:
     return _NON_WORD.sub(' ', folded).strip()
 
 
+def brand_tokens(brands: Optional[str]) -> set[str]:
+    """Normalized entries of a comma-separated brand string."""
+    return {token for token in (normalize_key(part) for part in (brands or '').split(',')) if token}
+
+
 def language_entries(entries) -> list[dict]:
     """Cleaned ``{lang, text}`` entries with empty texts dropped."""
     result = []
