@@ -34,5 +34,7 @@ jobs:
         run: python scripts/freeze_partitions.py --verify
       - name: Verify annotation pairs against a rebuild
         run: python scripts/build_pairs.py --verify
+      - name: Verify stored frozen-encoder embeddings against their manifest and the catalog
+        run: python scripts/encode_frozen.py --verify
       - name: Verify baseline rankings against a rebuild
         run: python scripts/run_baselines.py --verify

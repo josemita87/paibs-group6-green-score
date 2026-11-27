@@ -164,7 +164,7 @@ class CommittedReportChecks(unittest.TestCase):
         self.assertEqual(self.report['partitions_version'], self.partitions['version'])
         self.assertFalse(self.report['parameters']['trained_on_labels'])
         self.assertEqual(self.report['parameters']['top_k'], TOP_K)
-        self.assertIn('frozen_encoder', self.report['not_implemented'])
+        self.assertNotIn('not_implemented', self.report)
 
 
 if __name__ == '__main__':

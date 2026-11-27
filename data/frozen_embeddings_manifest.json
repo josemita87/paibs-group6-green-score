@@ -1,0 +1,27 @@
+{
+  "version": "frozen-embeddings-v1",
+  "file": "frozen_embeddings.npy",
+  "file_sha256": "d66ee5648b0411c8b4448f4f546e50a18cae5de7ca95f0d80e421682c270c332",
+  "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+  "model_revision": "e8f8c211226b894fcb81acc59f3b34ba3efd5f42",
+  "model_license": "apache-2.0",
+  "weights_updated": false,
+  "device": "cpu",
+  "batch_size": 32,
+  "max_seq_length": 128,
+  "texts_truncated": 329,
+  "libraries": {
+    "sentence-transformers": "6.3.0",
+    "transformers": "5.24.1",
+    "torch": "2.15.0"
+  },
+  "text": "cleaned name, a period, then the ingredient text of the lowest eligible barcode",
+  "rows": 1556,
+  "row_order": "eligible groups by lowest eligible barcode",
+  "dimension": 384,
+  "dtype": "int16",
+  "scale": 32767,
+  "catalog_content_sha256": "d3b6d569a5dfc9c7923c5bdda28880e6877a53a223c78314933ef7dca5561143",
+  "texts_sha256": "d16cb79d96eb04fe5b165b27f06b2387e2fc2cf2457adabc90f34f0d3341ed39",
+  "note": "Unit vectors rounded to int16 so cosines are computed with integer sums and are identical across machines. Re-encoding on other hardware can differ by a few int16 steps; the committed file is the reference for every ranking."
+}

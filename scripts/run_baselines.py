@@ -3,13 +3,16 @@
 Reads the comparable catalog, the frozen partitions, the annotation pairs and the
 model-drafted pilot labels, then writes ``data/baseline_report.json``: where each
 baseline places the recorded candidate among the other groups of its family and
-partition, how the three baselines compare per sampling strategy, how far the two
-text and rule baselines agree, and how they score the 36 labeled pilot pairs.
+partition, how the baselines compare per sampling strategy, how far the informative
+baselines agree, and how they score the 36 labeled pilot pairs.
 
-The run uses no human label, because none exists. It trains nothing.
+The frozen-encoder baseline reads the embeddings stored by
+``scripts/encode_frozen.py``; this script does not load the encoder. The run uses
+no human label, because none exists. It trains nothing.
 """
 import argparse
 from collections import Counter, defaultdict
+from itertools import combinations
 import json
 from pathlib import Path
 from statistics import mean, median
@@ -21,13 +24,15 @@ sys.path.insert(0, str(ROOT))
 from basket.baselines import BASELINES, NGRAM, Baselines, percentile, rank_of, roc_auc  # noqa: E402
 from basket.pairs import representatives  # noqa: E402
 from scripts.build_pairs import OUTPUT as PAIRS, load_inputs  # noqa: E402
+from scripts.encode_frozen import MANIFEST as EMBEDDINGS_MANIFEST, load_embeddings  # noqa: E402
 from scripts.fetch_data import write_atomic  # noqa: E402
 
 OUTPUT = ROOT / 'data/baseline_report.json'
 PILOT_LABELS = ROOT / 'data/pilot_review_model.json'
-VERSION = 'baselines-v1'
+VERSION = 'baselines-v2'   # v1 plus the frozen-encoder baseline; v1 numbers are unchanged
 SEED = 'basket-optimizer-baselines-v1'
 TOP_K = 10
+INFORMATIVE = tuple(baseline for baseline in BASELINES if baseline != 'random_control')
 LABELS = ('acceptable', 'ambiguous', 'unacceptable')
 
 
@@ -48,7 +53,9 @@ def rank_pair(baselines, data, pool, partition):
     """Rank the candidate of one pair under every baseline."""
     original, candidate = data['original_group_id'], data['candidate_group_id']
     row = {'pair_id': data['pair_id'], 'partition': partition, 'family': data['family'],
-           'strategy': data.get('strategy', 'pilot'), 'pool': len(pool)}
+           'strategy': data.get('strategy', 'pilot'),
+           'languages': 'same' if data['original_lang'] == data['candidate_lang'] else 'different',
+           'pool': len(pool)}
     tops = {}
     for baseline in BASELINES:
         ranking = baselines.rank(baseline, original, pool)
@@ -106,10 +113,12 @@ def label_scores(rows, pairs):
 def build_report(rows, digest, pairs_report, partitions):
     """Rank every pair of the pair file and the pilot, then summarize."""
     products = representatives(rows)
+    embeddings = load_embeddings(products, digest)
+    encoder = json.loads(EMBEDDINGS_MANIFEST.read_text())
     units = {group_id: (unit['unit_id'], unit['partition'])
              for unit in partitions['units'] for group_id in unit['group_ids']}
     train = [group_id for group_id, (_, partition) in units.items() if partition == 'train']
-    baselines = Baselines(products, train, SEED)
+    baselines = Baselines(products, train, SEED, embeddings)
 
     pools = {}
     for group_id, row in products.items():
@@ -118,14 +127,15 @@ def build_report(rows, digest, pairs_report, partitions):
     labeled = pilot_pairs()
     tasks = ([(task['data'], task['data']['partition']) for task in pairs_report['tasks']]
              + [(data, 'calibration') for data, _ in labeled])
-    rows_out, overlaps = [], []
+    rows_out, overlaps = [], defaultdict(list)
     for data, partition in tasks:
         own_unit = units[data['original_group_id']][0]
         pool = [group_id for group_id in sorted(pools[(data['family'], partition)])
                 if units[group_id][0] != own_unit]
         row, tops = rank_pair(baselines, data, pool, partition)
         rows_out.append(row)
-        overlaps.append(len(tops['category_rules'] & tops['tfidf_char']) / TOP_K)
+        for first, second in combinations(INFORMATIVE, 2):
+            overlaps[f'{first}|{second}'].append(len(tops[first] & tops[second]) / TOP_K)
     rows_out.sort(key=lambda row: row['pair_id'])
 
     sampled = [row for row in rows_out if row['partition'] != 'calibration']
@@ -146,26 +156,34 @@ def build_report(rows, digest, pairs_report, partitions):
             'top_k': TOP_K,
             'trained_on_labels': False,
         },
-        'not_implemented': {
-            'frozen_encoder': ('The third baseline of docs/PIPELINE.md needs Sentence '
-                               'Transformers and a downloaded model; it is not run here.'),
+        'frozen_encoder': {
+            'embeddings_version': encoder['version'],
+            'embeddings_sha256': encoder['file_sha256'],
+            'model': encoder['model'],
+            'model_revision': encoder['model_revision'],
+            'weights_updated': encoder['weights_updated'],
+            'max_seq_length': encoder['max_seq_length'],
+            'texts_truncated': encoder['texts_truncated'],
+            'score': 'cosine of the stored int16 unit vectors, computed with integer sums',
         },
         'pool_sizes': {f'{family}|{partition}': len(members)
                        for (family, partition), members in sorted(pools.items())},
         'pairs_ranked': len(rows_out),
         'by_strategy': summarize(sampled, 'strategy'),
         'by_partition': summarize(sampled, 'partition'),
+        'by_languages': summarize(sampled, 'languages'),
         'pilot': summarize(pilot_rows, 'family'),
         'top_10_agreement': {
-            'definition': f'mean share of the top {TOP_K} that category_rules and tfidf_char share',
-            'value': round(mean(overlaps), 4),
+            'definition': f'mean share of the top {TOP_K} that two baselines share, per pair',
+            **{name: round(mean(values), 4) for name, values in sorted(overlaps.items())},
         },
         'pilot_labels': label_scores(pilot_rows, labeled),
         'rankings': rows_out,
         'note': ('Rankings of untrained baselines over unlabeled pairs. A high percentile means '
                  'the baseline places the sampled candidate near the top of its pool, which '
-                 'reflects the sampling strategy, not substitutability. Nothing here is a '
-                 'trained result and no human label exists.'),
+                 'reflects the sampling strategy, not substitutability. The frozen encoder was '
+                 'pretrained elsewhere and none of its weights were updated here. Nothing here '
+                 'is a trained result and no human label exists.'),
     }
 
 

@@ -14,9 +14,10 @@ with model-drafted labels; a human review agreeing with them is reported but no
 reviewer export is in the repository. Step 4 also has 300 unlabeled annotation
 pairs sampled inside the frozen partitions (`pairs-v1`); no human has labeled them.
 Step 5 has frozen product partitions (`partitions-v1`); no triplet exists yet.
-Step 6 has two of the three planned baselines, both untrained, ranked over those
-pairs (`baselines-v1`). No substitution model, optimizer or recommendation
-interface has been implemented.
+Step 6 has the three planned baselines ranked over those pairs (`baselines-v2`):
+rules, TF-IDF and a frozen pretrained encoder. None was trained here and none is
+evaluated against a human label. No substitution model has been fine-tuned, and
+no optimizer or recommendation interface has been implemented.
 
 Earlier conversation called raw acquisition “step 1.” In the canonical pipeline
 it is **step 2**. Use the document's 1–13 numbering from now on; do not rename steps.
@@ -30,7 +31,7 @@ it is **step 2**. Use the document's 1–13 numbering from now on; do not rename
 | 3 | Build a comparable, usable catalog | Done — rebuilt with expansion | `basket/comparable.py`, `scripts/build_catalog.py`, `data/catalog.parquet` + report + manifest, `tests/test_comparable.py`. 1,684 eligible products in 1,556 groups across three families; CI verifies the committed outputs against a rebuild. |
 | 4 | Create the substitution dataset | In progress — pairs ready, labels pending | 36 calibration pairs, guidelines, Label Studio form and `scripts/review_agreement.py` to validate two exports and report agreement. Model-drafted labels for the 36 pairs are in `data/pilot_review_model.json`; a human review agreeing with them is reported but no reviewer export is in the repository. `scripts/build_pairs.py` and `data/pairs.json` add 300 unlabeled pairs inside the train, validation and test partitions, in three sampling strategies, verified in CI. No pair outside the pilot carries a label. |
 | 5 | Split the data before training | In progress — product partitions frozen | `scripts/freeze_partitions.py`, `data/partitions.json` (`partitions-v1`), `tests/test_partitions.py`: 72 calibration, 936 train, 200 validation and 200 test units from 1,556 eligible groups. The alias links behind the units are unreviewed. Within-partition pairs exist in `data/pairs.json`; triplets need step-4 labels. |
-| 6 | Establish the baselines | In progress — two of three baselines | `basket/baselines.py`, `scripts/run_baselines.py`, `data/baseline_report.json` (`baselines-v1`), `tests/test_baselines.py`: `category_rules`, `tfidf_char` and a seeded `random_control` rank the recorded candidate of all 336 pairs inside its family and partition pool. The frozen-encoder baseline needs Sentence Transformers and is not run. Without labels these are rank statistics against the sampling strategy, not accuracy. |
+| 6 | Establish the baselines | In progress — three baselines ranked, evaluation needs labels | `basket/baselines.py`, `scripts/run_baselines.py`, `data/baseline_report.json` (`baselines-v2`), `tests/test_baselines.py`: `category_rules`, `tfidf_char`, `frozen_encoder` and a seeded `random_control` rank the recorded candidate of all 336 pairs inside its family and partition pool. `scripts/encode_frozen.py`, `basket/embeddings.py`, `data/frozen_embeddings.npy` + manifest and `tests/test_frozen_encoder.py` hold the frozen encoder. Without labels these are rank statistics against the sampling strategy, not accuracy. |
 | 7 | Fine-tune the substitution encoder | Not started | Training and comparison with frozen embeddings. |
 | 8 | Encode and index the catalog | Not started | Versioned embeddings and retrieval. |
 | 9 | Filter and accept candidates | Not started | Eligibility, preference filters and abstention. |
@@ -107,13 +108,25 @@ Record any other dependency-driven change of order here before proceeding.
   and 76; recall@10 0.397, 0.200 and 0.060. On the 108 `lookalike` pairs
   `tfidf_char` reaches 0.962 mean percentile and 0.815 recall@10; on the 96
   `family_random` pairs it falls to 0.433, below `category_rules` at 0.490. The
-  two informative baselines share 0.284 of their top 10 on average. Pools hold 540
+  rule and TF-IDF baselines share 0.284 of their top 10 on average. Pools hold 540
   (yogurts), 283 (cereals) and 222 (plant-based) train groups and 25 to 26 groups
   per family in calibration.
+- Frozen encoder (`paraphrase-multilingual-MiniLM-L12-v2`, revision `e8f8c21`, no
+  weight updated; 1,556 groups in 384 dimensions): mean percentile 0.657, median
+  rank 30, recall@10 0.297 over the 300 sampled pairs, between `tfidf_char` and
+  `category_rules`. By strategy: 0.901 on `lookalike`, 0.590 on `brand_variant`,
+  0.451 on `family_random`. It shares 0.423 of its top 10 with `tfidf_char` and
+  0.249 with `category_rules`. The `lookalike` pairs were chosen by name overlap,
+  so this order favors TF-IDF by construction and is not a quality ranking.
+- Same language against different languages (217 and 83 sampled pairs): mean
+  percentile falls from 0.797 to 0.478 for `tfidf_char`, from 0.713 to 0.512 for
+  `frozen_encoder` and from 0.668 to 0.526 for `category_rules`. The split is
+  confounded with strategy: 43 of the 83 cross-language pairs are `family_random`.
 - On the 36 model-drafted pilot labels (25 acceptable, 9 ambiguous, 2
   unacceptable) `category_rules` scores 0.614 mean on acceptable against 0.286 on
-  unacceptable and `tfidf_char` 0.051 against 0.010. Two negative examples cannot
-  establish baseline quality; the report states this.
+  unacceptable, `tfidf_char` 0.051 against 0.010 and `frozen_encoder` 0.552
+  against 0.491. Two negative examples cannot establish baseline quality; the
+  report states this.
 - Families not selected (dairy desserts, cheeses, biscuits, breads, sweet
   spreads, plant-based beverages, fruit juices) are still reported with base-sample
   counts only; they were not expanded.
@@ -125,8 +138,10 @@ Record any other dependency-driven change of order here before proceeding.
 ## Next action
 
 Label the 300 pairs of `data/pairs.json` with the step-4 form. Every later number
-depends on them: the baselines of step 6 can only be compared against each other
-until a label exists, and step 7 cannot train without triplets.
+depends on them: the three baselines of step 6 can only be compared against each
+other until a label exists, and step 7 cannot train without triplets. The code
+for baselines is in place; with labels, add label-based metrics to
+`scripts/run_baselines.py` for the validation and test pairs.
 
 Make the reported pilot review verifiable: add each reviewer's own export (or a
 record naming them and saying whether they labeled before seeing the model's
@@ -141,6 +156,47 @@ partitions (107 such group pairs cross train and test). A change of rule means a
 new partition version, which is cheap now and costly once labels exist.
 
 ## Change log
+
+### 2026-11-27 — Frozen-encoder baseline (step 6, third baseline)
+
+- Pulled the pair sampler and the first two baselines (merge `5d93555`) by
+  fast-forward before starting; no local commit was pending.
+- Added `scripts/encode_frozen.py`, `basket/embeddings.py`,
+  `data/frozen_embeddings.npy` and `data/frozen_embeddings_manifest.json`
+  (`frozen-embeddings-v1`). The 1,556 eligible groups are encoded once with
+  `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2` at revision
+  `e8f8c211226b894fcb81acc59f3b34ba3efd5f42` on CPU, from the name and ingredient
+  text of each group's lowest barcode. No weight is updated and no label is read.
+- The unit vectors are stored as int16 and cosines use integer sums, so every
+  machine computes the same score. `run_baselines.py` reads the stored file,
+  refuses it when its checksum, model revision or catalog texts do not match, and
+  never loads the encoder. `requirements-model.txt` pins Sentence Transformers
+  6.3.0, Transformers 5.24.1 and PyTorch 2.15.0 for encoding only;
+  `requirements-app.txt` now pins NumPy 2.5.4, which was already installed as a
+  pandas dependency.
+- `data/baseline_report.json` is now `baselines-v2`: `frozen_encoder` is added to
+  every ranking and summary, top-10 agreement is reported for each two baselines,
+  and a same-language against cross-language summary is added. The ranks, scores
+  and summaries of the three v1 baselines were compared with the previous file
+  and are identical for all 336 pairs.
+- Measured: see “Available evidence and limitations” for the encoder numbers.
+- Validation: 10 new tests (quantization, exact cosine and row order, rejected
+  shapes, text fingerprint, baseline wiring; stored file against its manifest and
+  the pinned revision, one unit vector per eligible group from the current
+  texts, refusal of changed texts, report scores equal to the stored cosines for
+  the 300 sampled pairs, language split and agreement keys) pass with the other
+  100. `encode_frozen.py --verify`, `run_baselines.py --verify` and every earlier
+  verification pass locally. `encode_frozen.py --reencode` reproduced the stored
+  vectors exactly on the same machine (largest difference 0 int16 steps); another
+  machine was not tried. CI gained the embedding check; its remote result is not
+  known at commit time.
+- Limitations: CI checks the stored vectors against their manifest and the
+  catalog texts but cannot re-run the encoder, so the encoding rests on the local
+  run. The encoder reads 128 tokens; 329 of 1,556 texts are longer and are cut.
+  Only one representative product per group is encoded. One pretrained model was
+  tried and no alternative was compared. No baseline is evaluated against a
+  human label, so step 6 is not complete: its evaluation metrics need the step-4
+  labels.
 
 ### 2026-11-27 — Untrained ranking baselines (step 6, first part)
 

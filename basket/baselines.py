@@ -1,16 +1,16 @@
 """Rank substitution candidates without a trained model (pipeline step 6).
 
-Three baselines score an ordered product pair between 0 and 1:
+Four baselines score an ordered product pair; a higher score ranks first:
 
 - ``category_rules`` rejects a candidate of another family or comparison unit and
   otherwise scores how close the two products are on protein, sugars and salt.
 - ``tfidf_char`` is the cosine of character 4-gram TF-IDF vectors of the name and
   the ingredient text. Document frequencies come from the train partition only.
+- ``frozen_encoder`` is the cosine of stored embeddings from a pretrained
+  multilingual encoder whose weights were not updated (``basket/embeddings.py``).
+  It can be negative.
 - ``random_control`` is a seeded hash of the pair id. It measures nothing and gives
-  the other two a reference: its mean percentile is near 0.5 by construction.
-
-The frozen-encoder baseline of the pipeline document is not implemented here; it
-needs the Sentence Transformers dependency and a downloaded model.
+  the others a reference: its mean percentile is near 0.5 by construction.
 
 A score ranks candidates. It is not a probability and no baseline was trained on
 a label, because no human label exists yet.
@@ -27,7 +27,7 @@ SCORE_DIGITS = 6
 RULE_NUTRIENTS: dict[str, float] = {
     'proteins_g_per_100': 1.0, 'sugars_g_per_100': 1.0, 'salt_g_per_100': 0.1,
 }
-BASELINES = ('category_rules', 'tfidf_char', 'random_control')
+BASELINES = ('category_rules', 'tfidf_char', 'frozen_encoder', 'random_control')
 
 
 def product_text(row) -> str:
@@ -100,11 +100,15 @@ def random_control(original, candidate, seed: str) -> float:
 
 
 class Baselines:
-    """The three baselines over one catalog, with the TF-IDF fit corpus recorded."""
+    """The baselines over one catalog, with the TF-IDF fit corpus recorded.
 
-    def __init__(self, products: dict[int, dict], fit_group_ids, seed: str):
+    ``embeddings`` is a ``StoredEmbeddings``; without it ``frozen_encoder`` cannot score.
+    """
+
+    def __init__(self, products: dict[int, dict], fit_group_ids, seed: str, embeddings=None):
         self.products = products
         self.seed = seed
+        self.embeddings = embeddings
         texts = {group_id: product_text(row) for group_id, row in products.items()}
         frequencies, documents = document_frequencies(texts[group_id]
                                                       for group_id in sorted(fit_group_ids))
@@ -117,8 +121,14 @@ class Baselines:
             value = category_rules(original, candidate)
         elif baseline == 'tfidf_char':
             value = cosine(self.vectors[original_id], self.vectors[candidate_id])
-        else:
+        elif baseline == 'frozen_encoder':
+            if self.embeddings is None:
+                raise ValueError('frozen_encoder needs stored embeddings')
+            value = self.embeddings.cosine(original_id, candidate_id)
+        elif baseline == 'random_control':
             value = random_control(original, candidate, self.seed)
+        else:
+            raise ValueError(f'Unknown baseline: {baseline}')
         return round(value, SCORE_DIGITS)
 
     def rank(self, baseline: str, original_id: int, pool) -> list[tuple[int, float]]:

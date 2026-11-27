@@ -1,5 +1,5 @@
 {
- "version": "baselines-v1",
+ "version": "baselines-v2",
  "catalog_content_sha256": "d3b6d569a5dfc9c7923c5bdda28880e6877a53a223c78314933ef7dca5561143",
  "pairs_version": "pairs-v1",
  "partitions_version": "partitions-v1",
@@ -8,6 +8,7 @@
   "baselines": [
    "category_rules",
    "tfidf_char",
+   "frozen_encoder",
    "random_control"
   ],
   "char_ngram": 4,
@@ -17,8 +18,15 @@
   "top_k": 10,
   "trained_on_labels": false
  },
- "not_implemented": {
-  "frozen_encoder": "The third baseline of docs/PIPELINE.md needs Sentence Transformers and a downloaded model; it is not run here."
+ "frozen_encoder": {
+  "embeddings_version": "frozen-embeddings-v1",
+  "embeddings_sha256": "d66ee5648b0411c8b4448f4f546e50a18cae5de7ca95f0d80e421682c270c332",
+  "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+  "model_revision": "e8f8c211226b894fcb81acc59f3b34ba3efd5f42",
+  "weights_updated": false,
+  "max_seq_length": 128,
+  "texts_truncated": 329,
+  "score": "cosine of the stored int16 unit vectors, computed with integer sums"
  },
  "pool_sizes": {
   "breakfast_cereals|calibration": 26,
@@ -48,6 +56,11 @@
     "median_rank": 26.0,
     "recall_at_10": 0.3967
    },
+   "frozen_encoder": {
+    "mean_percentile": 0.6574,
+    "median_rank": 30.0,
+    "recall_at_10": 0.2967
+   },
    "random_control": {
     "mean_percentile": 0.4839,
     "median_rank": 76.0,
@@ -65,6 +78,11 @@
     "mean_percentile": 0.7013,
     "median_rank": 45.0,
     "recall_at_10": 0.2604
+   },
+   "frozen_encoder": {
+    "mean_percentile": 0.5895,
+    "median_rank": 48.5,
+    "recall_at_10": 0.1562
    },
    "random_control": {
     "mean_percentile": 0.4952,
@@ -84,6 +102,11 @@
     "median_rank": 96.0,
     "recall_at_10": 0.0625
    },
+   "frozen_encoder": {
+    "mean_percentile": 0.4514,
+    "median_rank": 91.5,
+    "recall_at_10": 0.0625
+   },
    "random_control": {
     "mean_percentile": 0.4264,
     "median_rank": 87.5,
@@ -101,6 +124,11 @@
     "mean_percentile": 0.9616,
     "median_rank": 3.0,
     "recall_at_10": 0.8148
+   },
+   "frozen_encoder": {
+    "mean_percentile": 0.901,
+    "median_rank": 5.5,
+    "recall_at_10": 0.6296
    },
    "random_control": {
     "mean_percentile": 0.5249,
@@ -122,6 +150,11 @@
     "median_rank": 26.0,
     "recall_at_10": 0.3967
    },
+   "frozen_encoder": {
+    "mean_percentile": 0.6574,
+    "median_rank": 30.0,
+    "recall_at_10": 0.2967
+   },
    "random_control": {
     "mean_percentile": 0.4839,
     "median_rank": 76.0,
@@ -139,6 +172,11 @@
     "mean_percentile": 0.7498,
     "median_rank": 7.5,
     "recall_at_10": 0.55
+   },
+   "frozen_encoder": {
+    "mean_percentile": 0.7085,
+    "median_rank": 14.0,
+    "recall_at_10": 0.45
    },
    "random_control": {
     "mean_percentile": 0.4959,
@@ -158,6 +196,11 @@
     "median_rank": 59.5,
     "recall_at_10": 0.2944
    },
+   "frozen_encoder": {
+    "mean_percentile": 0.6311,
+    "median_rank": 113.5,
+    "recall_at_10": 0.2
+   },
    "random_control": {
     "mean_percentile": 0.4814,
     "median_rank": 155.0,
@@ -176,10 +219,86 @@
     "median_rank": 6.5,
     "recall_at_10": 0.55
    },
+   "frozen_encoder": {
+    "mean_percentile": 0.6855,
+    "median_rank": 15.5,
+    "recall_at_10": 0.4333
+   },
    "random_control": {
     "mean_percentile": 0.4793,
     "median_rank": 32.5,
     "recall_at_10": 0.1667
+   }
+  }
+ },
+ "by_languages": {
+  "all": {
+   "pairs": 300,
+   "category_rules": {
+    "mean_percentile": 0.6283,
+    "median_rank": 46.0,
+    "recall_at_10": 0.2
+   },
+   "tfidf_char": {
+    "mean_percentile": 0.709,
+    "median_rank": 26.0,
+    "recall_at_10": 0.3967
+   },
+   "frozen_encoder": {
+    "mean_percentile": 0.6574,
+    "median_rank": 30.0,
+    "recall_at_10": 0.2967
+   },
+   "random_control": {
+    "mean_percentile": 0.4839,
+    "median_rank": 76.0,
+    "recall_at_10": 0.06
+   }
+  },
+  "different": {
+   "pairs": 83,
+   "category_rules": {
+    "mean_percentile": 0.5255,
+    "median_rank": 74,
+    "recall_at_10": 0.1084
+   },
+   "tfidf_char": {
+    "mean_percentile": 0.4781,
+    "median_rank": 61,
+    "recall_at_10": 0.1807
+   },
+   "frozen_encoder": {
+    "mean_percentile": 0.5117,
+    "median_rank": 60,
+    "recall_at_10": 0.1807
+   },
+   "random_control": {
+    "mean_percentile": 0.4079,
+    "median_rank": 94,
+    "recall_at_10": 0.0241
+   }
+  },
+  "same": {
+   "pairs": 217,
+   "category_rules": {
+    "mean_percentile": 0.6676,
+    "median_rank": 38,
+    "recall_at_10": 0.235
+   },
+   "tfidf_char": {
+    "mean_percentile": 0.7973,
+    "median_rank": 12,
+    "recall_at_10": 0.4793
+   },
+   "frozen_encoder": {
+    "mean_percentile": 0.7132,
+    "median_rank": 27,
+    "recall_at_10": 0.341
+   },
+   "random_control": {
+    "mean_percentile": 0.5129,
+    "median_rank": 71,
+    "recall_at_10": 0.0737
    }
   }
  },
@@ -195,6 +314,11 @@
     "mean_percentile": 0.6343,
     "median_rank": 8.0,
     "recall_at_10": 0.6111
+   },
+   "frozen_encoder": {
+    "mean_percentile": 0.5806,
+    "median_rank": 10.0,
+    "recall_at_10": 0.5556
    },
    "random_control": {
     "mean_percentile": 0.5008,
@@ -214,6 +338,11 @@
     "median_rank": 9.5,
     "recall_at_10": 0.5833
    },
+   "frozen_encoder": {
+    "mean_percentile": 0.4835,
+    "median_rank": 13.0,
+    "recall_at_10": 0.4167
+   },
    "random_control": {
     "mean_percentile": 0.4304,
     "median_rank": 13.5,
@@ -231,6 +360,11 @@
     "mean_percentile": 0.6111,
     "median_rank": 11.5,
     "recall_at_10": 0.5
+   },
+   "frozen_encoder": {
+    "mean_percentile": 0.6458,
+    "median_rank": 8.0,
+    "recall_at_10": 0.6667
    },
    "random_control": {
     "mean_percentile": 0.5972,
@@ -250,6 +384,11 @@
     "median_rank": 4.5,
     "recall_at_10": 0.75
    },
+   "frozen_encoder": {
+    "mean_percentile": 0.6123,
+    "median_rank": 9.0,
+    "recall_at_10": 0.5833
+   },
    "random_control": {
     "mean_percentile": 0.4747,
     "median_rank": 14.5,
@@ -258,8 +397,10 @@
   }
  },
  "top_10_agreement": {
-  "definition": "mean share of the top 10 that category_rules and tfidf_char share",
-  "value": 0.2842
+  "definition": "mean share of the top 10 that two baselines share, per pair",
+  "category_rules|frozen_encoder": 0.2488,
+  "category_rules|tfidf_char": 0.2842,
+  "tfidf_char|frozen_encoder": 0.4226
  },
  "pilot_labels": {
   "label_source": "model-drafted, not human (data/pilot_review_model.json)",
@@ -298,6 +439,21 @@
    },
    "auc_acceptable_over_unacceptable": 0.82
   },
+  "frozen_encoder": {
+   "acceptable": {
+    "mean": 0.5523,
+    "median": 0.5543
+   },
+   "ambiguous": {
+    "mean": 0.6369,
+    "median": 0.6693
+   },
+   "unacceptable": {
+    "mean": 0.4911,
+    "median": 0.4911
+   },
+   "auc_acceptable_over_unacceptable": 0.7
+  },
   "random_control": {
    "acceptable": {
     "mean": 0.5105,
@@ -321,6 +477,7 @@
    "partition": "test",
    "family": "breakfast_cereals",
    "strategy": "family_random",
+   "languages": "same",
    "pool": 59,
    "category_rules": {
     "score": 0.600752,
@@ -331,6 +488,11 @@
     "score": 0.180077,
     "rank": 2,
     "percentile": 0.9828
+   },
+   "frozen_encoder": {
+    "score": 0.60427,
+    "rank": 1,
+    "percentile": 1.0
    },
    "random_control": {
     "score": 0.372237,
@@ -343,6 +505,7 @@
    "partition": "test",
    "family": "breakfast_cereals",
    "strategy": "family_random",
+   "languages": "different",
    "pool": 59,
    "category_rules": {
     "score": 0.520096,
@@ -353,6 +516,11 @@
     "score": 0.0,
     "rank": 52,
     "percentile": 0.1207
+   },
+   "frozen_encoder": {
+    "score": 0.025993,
+    "rank": 57,
+    "percentile": 0.0345
    },
    "random_control": {
     "score": 0.181942,
@@ -365,6 +533,7 @@
    "partition": "test",
    "family": "breakfast_cereals",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 59,
    "category_rules": {
     "score": 0.916667,
@@ -375,6 +544,11 @@
     "score": 0.427704,
     "rank": 2,
     "percentile": 0.9828
+   },
+   "frozen_encoder": {
+    "score": 0.623263,
+    "rank": 4,
+    "percentile": 0.9483
    },
    "random_control": {
     "score": 0.087538,
@@ -387,6 +561,7 @@
    "partition": "test",
    "family": "breakfast_cereals",
    "strategy": "family_random",
+   "languages": "same",
    "pool": 59,
    "category_rules": {
     "score": 0.643771,
@@ -397,6 +572,11 @@
     "score": 0.073455,
     "rank": 19,
     "percentile": 0.6897
+   },
+   "frozen_encoder": {
+    "score": 0.369942,
+    "rank": 28,
+    "percentile": 0.5345
    },
    "random_control": {
     "score": 0.655348,
@@ -409,6 +589,7 @@
    "partition": "test",
    "family": "breakfast_cereals",
    "strategy": "family_random",
+   "languages": "same",
    "pool": 59,
    "category_rules": {
     "score": 0.41314,
@@ -419,6 +600,11 @@
     "score": 0.064347,
     "rank": 49,
     "percentile": 0.1724
+   },
+   "frozen_encoder": {
+    "score": 0.192672,
+    "rank": 58,
+    "percentile": 0.0172
    },
    "random_control": {
     "score": 0.318772,
@@ -431,6 +617,7 @@
    "partition": "test",
    "family": "breakfast_cereals",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 59,
    "category_rules": {
     "score": 0.342393,
@@ -441,6 +628,11 @@
     "score": 0.016593,
     "rank": 50,
     "percentile": 0.1552
+   },
+   "frozen_encoder": {
+    "score": 0.641201,
+    "rank": 24,
+    "percentile": 0.6034
    },
    "random_control": {
     "score": 0.326127,
@@ -453,6 +645,7 @@
    "partition": "test",
    "family": "breakfast_cereals",
    "strategy": "family_random",
+   "languages": "same",
    "pool": 59,
    "category_rules": {
     "score": 0.520045,
@@ -463,6 +656,11 @@
     "score": 0.052384,
     "rank": 39,
     "percentile": 0.3448
+   },
+   "frozen_encoder": {
+    "score": 0.671355,
+    "rank": 18,
+    "percentile": 0.7069
    },
    "random_control": {
     "score": 0.955428,
@@ -475,6 +673,7 @@
    "partition": "test",
    "family": "breakfast_cereals",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 59,
    "category_rules": {
     "score": 0.459848,
@@ -485,6 +684,11 @@
     "score": 0.230867,
     "rank": 7,
     "percentile": 0.8966
+   },
+   "frozen_encoder": {
+    "score": 0.694943,
+    "rank": 5,
+    "percentile": 0.931
    },
    "random_control": {
     "score": 0.882122,
@@ -497,6 +701,7 @@
    "partition": "test",
    "family": "breakfast_cereals",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 59,
    "category_rules": {
     "score": 0.520825,
@@ -507,6 +712,11 @@
     "score": 0.129698,
     "rank": 9,
     "percentile": 0.8621
+   },
+   "frozen_encoder": {
+    "score": 0.671198,
+    "rank": 3,
+    "percentile": 0.9655
    },
    "random_control": {
     "score": 0.695891,
@@ -519,6 +729,7 @@
    "partition": "test",
    "family": "breakfast_cereals",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 59,
    "category_rules": {
     "score": 0.774471,
@@ -529,6 +740,11 @@
     "score": 0.144152,
     "rank": 18,
     "percentile": 0.7069
+   },
+   "frozen_encoder": {
+    "score": 0.440524,
+    "rank": 48,
+    "percentile": 0.1897
    },
    "random_control": {
     "score": 0.288825,
@@ -541,6 +757,7 @@
    "partition": "test",
    "family": "breakfast_cereals",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 59,
    "category_rules": {
     "score": 0.881594,
@@ -551,6 +768,11 @@
     "score": 0.490253,
     "rank": 3,
     "percentile": 0.9655
+   },
+   "frozen_encoder": {
+    "score": 0.816269,
+    "rank": 1,
+    "percentile": 1.0
    },
    "random_control": {
     "score": 0.833007,
@@ -563,6 +785,7 @@
    "partition": "test",
    "family": "breakfast_cereals",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 59,
    "category_rules": {
     "score": 0.881594,
@@ -573,6 +796,11 @@
     "score": 0.500702,
     "rank": 1,
     "percentile": 1.0
+   },
+   "frozen_encoder": {
+    "score": 0.802801,
+    "rank": 2,
+    "percentile": 0.9828
    },
    "random_control": {
     "score": 0.010291,
@@ -585,6 +813,7 @@
    "partition": "test",
    "family": "breakfast_cereals",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 59,
    "category_rules": {
     "score": 0.861688,
@@ -595,6 +824,11 @@
     "score": 0.15302,
     "rank": 26,
     "percentile": 0.569
+   },
+   "frozen_encoder": {
+    "score": 0.677777,
+    "rank": 23,
+    "percentile": 0.6207
    },
    "random_control": {
     "score": 0.414325,
@@ -607,6 +841,7 @@
    "partition": "test",
    "family": "breakfast_cereals",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 59,
    "category_rules": {
     "score": 0.931363,
@@ -617,6 +852,11 @@
     "score": 0.330597,
     "rank": 2,
     "percentile": 0.9828
+   },
+   "frozen_encoder": {
+    "score": 0.726122,
+    "rank": 12,
+    "percentile": 0.8103
    },
    "random_control": {
     "score": 0.466432,
@@ -629,6 +869,7 @@
    "partition": "test",
    "family": "breakfast_cereals",
    "strategy": "brand_variant",
+   "languages": "different",
    "pool": 59,
    "category_rules": {
     "score": 0.704342,
@@ -639,6 +880,11 @@
     "score": 0.003067,
     "rank": 55,
     "percentile": 0.069
+   },
+   "frozen_encoder": {
+    "score": 0.510753,
+    "rank": 34,
+    "percentile": 0.431
    },
    "random_control": {
     "score": 0.414275,
@@ -651,6 +897,7 @@
    "partition": "test",
    "family": "breakfast_cereals",
    "strategy": "family_random",
+   "languages": "different",
    "pool": 59,
    "category_rules": {
     "score": 0.804821,
@@ -661,6 +908,11 @@
     "score": 0.025653,
     "rank": 31,
     "percentile": 0.4828
+   },
+   "frozen_encoder": {
+    "score": 0.671649,
+    "rank": 4,
+    "percentile": 0.9483
    },
    "random_control": {
     "score": 0.686637,
@@ -673,6 +925,7 @@
    "partition": "test",
    "family": "breakfast_cereals",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 59,
    "category_rules": {
     "score": 1.0,
@@ -681,6 +934,11 @@
    },
    "tfidf_char": {
     "score": 0.883568,
+    "rank": 1,
+    "percentile": 1.0
+   },
+   "frozen_encoder": {
+    "score": 0.960568,
     "rank": 1,
     "percentile": 1.0
    },
@@ -695,6 +953,7 @@
    "partition": "test",
    "family": "breakfast_cereals",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 59,
    "category_rules": {
     "score": 0.790625,
@@ -705,6 +964,11 @@
     "score": 0.185159,
     "rank": 16,
     "percentile": 0.7414
+   },
+   "frozen_encoder": {
+    "score": 0.681867,
+    "rank": 21,
+    "percentile": 0.6552
    },
    "random_control": {
     "score": 0.793208,
@@ -717,6 +981,7 @@
    "partition": "test",
    "family": "breakfast_cereals",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 59,
    "category_rules": {
     "score": 0.946596,
@@ -725,6 +990,11 @@
    },
    "tfidf_char": {
     "score": 0.767308,
+    "rank": 1,
+    "percentile": 1.0
+   },
+   "frozen_encoder": {
+    "score": 0.929086,
     "rank": 1,
     "percentile": 1.0
    },
@@ -739,6 +1009,7 @@
    "partition": "test",
    "family": "breakfast_cereals",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 59,
    "category_rules": {
     "score": 0.940711,
@@ -747,6 +1018,11 @@
    },
    "tfidf_char": {
     "score": 0.505127,
+    "rank": 1,
+    "percentile": 1.0
+   },
+   "frozen_encoder": {
+    "score": 0.93208,
     "rank": 1,
     "percentile": 1.0
    },
@@ -761,6 +1037,7 @@
    "partition": "test",
    "family": "plant_based_milk_alternatives",
    "strategy": "family_random",
+   "languages": "different",
    "pool": 46,
    "category_rules": {
     "score": 0.691919,
@@ -771,6 +1048,11 @@
     "score": 0.09634,
     "rank": 7,
     "percentile": 0.8667
+   },
+   "frozen_encoder": {
+    "score": 0.625573,
+    "rank": 6,
+    "percentile": 0.8889
    },
    "random_control": {
     "score": 0.690542,
@@ -783,6 +1065,7 @@
    "partition": "test",
    "family": "plant_based_milk_alternatives",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 46,
    "category_rules": {
     "score": 0.445221,
@@ -793,6 +1076,11 @@
     "score": 0.116458,
     "rank": 12,
     "percentile": 0.7556
+   },
+   "frozen_encoder": {
+    "score": 0.713264,
+    "rank": 14,
+    "percentile": 0.7111
    },
    "random_control": {
     "score": 0.545317,
@@ -805,6 +1093,7 @@
    "partition": "test",
    "family": "plant_based_milk_alternatives",
    "strategy": "family_random",
+   "languages": "same",
    "pool": 46,
    "category_rules": {
     "score": 0.659829,
@@ -815,6 +1104,11 @@
     "score": 0.042002,
     "rank": 33,
     "percentile": 0.2889
+   },
+   "frozen_encoder": {
+    "score": 0.576066,
+    "rank": 34,
+    "percentile": 0.2667
    },
    "random_control": {
     "score": 0.391254,
@@ -827,6 +1121,7 @@
    "partition": "test",
    "family": "plant_based_milk_alternatives",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 46,
    "category_rules": {
     "score": 0.617172,
@@ -835,6 +1130,11 @@
    },
    "tfidf_char": {
     "score": 0.489152,
+    "rank": 1,
+    "percentile": 1.0
+   },
+   "frozen_encoder": {
+    "score": 0.841496,
     "rank": 1,
     "percentile": 1.0
    },
@@ -849,6 +1149,7 @@
    "partition": "test",
    "family": "plant_based_milk_alternatives",
    "strategy": "family_random",
+   "languages": "same",
    "pool": 46,
    "category_rules": {
     "score": 0.486232,
@@ -859,6 +1160,11 @@
     "score": 0.082794,
     "rank": 15,
     "percentile": 0.6889
+   },
+   "frozen_encoder": {
+    "score": 0.669639,
+    "rank": 22,
+    "percentile": 0.5333
    },
    "random_control": {
     "score": 0.525076,
@@ -871,6 +1177,7 @@
    "partition": "test",
    "family": "plant_based_milk_alternatives",
    "strategy": "family_random",
+   "languages": "different",
    "pool": 46,
    "category_rules": {
     "score": 0.341319,
@@ -881,6 +1188,11 @@
     "score": 0.022953,
     "rank": 32,
     "percentile": 0.3111
+   },
+   "frozen_encoder": {
+    "score": 0.692006,
+    "rank": 10,
+    "percentile": 0.8
    },
    "random_control": {
     "score": 0.152461,
@@ -893,6 +1205,7 @@
    "partition": "test",
    "family": "plant_based_milk_alternatives",
    "strategy": "brand_variant",
+   "languages": "different",
    "pool": 46,
    "category_rules": {
     "score": 0.359596,
@@ -903,6 +1216,11 @@
     "score": 0.185933,
     "rank": 6,
     "percentile": 0.8889
+   },
+   "frozen_encoder": {
+    "score": 0.700453,
+    "rank": 18,
+    "percentile": 0.6222
    },
    "random_control": {
     "score": 0.356262,
@@ -915,6 +1233,7 @@
    "partition": "test",
    "family": "plant_based_milk_alternatives",
    "strategy": "brand_variant",
+   "languages": "different",
    "pool": 46,
    "category_rules": {
     "score": 0.688889,
@@ -925,6 +1244,11 @@
     "score": 0.399314,
     "rank": 1,
     "percentile": 1.0
+   },
+   "frozen_encoder": {
+    "score": 0.615603,
+    "rank": 16,
+    "percentile": 0.6667
    },
    "random_control": {
     "score": 0.638337,
@@ -937,6 +1261,7 @@
    "partition": "test",
    "family": "plant_based_milk_alternatives",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 46,
    "category_rules": {
     "score": 0.546063,
@@ -947,6 +1272,11 @@
     "score": 0.480728,
     "rank": 2,
     "percentile": 0.9778
+   },
+   "frozen_encoder": {
+    "score": 0.700079,
+    "rank": 10,
+    "percentile": 0.8
    },
    "random_control": {
     "score": 0.998266,
@@ -959,6 +1289,7 @@
    "partition": "test",
    "family": "plant_based_milk_alternatives",
    "strategy": "family_random",
+   "languages": "same",
    "pool": 46,
    "category_rules": {
     "score": 0.479661,
@@ -969,6 +1300,11 @@
     "score": 0.00907,
     "rank": 35,
     "percentile": 0.2444
+   },
+   "frozen_encoder": {
+    "score": 0.531572,
+    "rank": 32,
+    "percentile": 0.3111
    },
    "random_control": {
     "score": 0.712005,
@@ -981,6 +1317,7 @@
    "partition": "test",
    "family": "plant_based_milk_alternatives",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 46,
    "category_rules": {
     "score": 0.680189,
@@ -989,6 +1326,11 @@
    },
    "tfidf_char": {
     "score": 0.496349,
+    "rank": 1,
+    "percentile": 1.0
+   },
+   "frozen_encoder": {
+    "score": 0.75081,
     "rank": 1,
     "percentile": 1.0
    },
@@ -1003,6 +1345,7 @@
    "partition": "test",
    "family": "plant_based_milk_alternatives",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 46,
    "category_rules": {
     "score": 0.722544,
@@ -1013,6 +1356,11 @@
     "score": 0.374229,
     "rank": 1,
     "percentile": 1.0
+   },
+   "frozen_encoder": {
+    "score": 0.681797,
+    "rank": 14,
+    "percentile": 0.7111
    },
    "random_control": {
     "score": 0.885052,
@@ -1025,6 +1373,7 @@
    "partition": "test",
    "family": "plant_based_milk_alternatives",
    "strategy": "brand_variant",
+   "languages": "different",
    "pool": 46,
    "category_rules": {
     "score": 0.379825,
@@ -1035,6 +1384,11 @@
     "score": 0.072148,
     "rank": 8,
     "percentile": 0.8444
+   },
+   "frozen_encoder": {
+    "score": 0.626157,
+    "rank": 11,
+    "percentile": 0.7778
    },
    "random_control": {
     "score": 0.009361,
@@ -1047,6 +1401,7 @@
    "partition": "test",
    "family": "plant_based_milk_alternatives",
    "strategy": "family_random",
+   "languages": "different",
    "pool": 46,
    "category_rules": {
     "score": 0.483205,
@@ -1057,6 +1412,11 @@
     "score": 0.008689,
     "rank": 32,
     "percentile": 0.3111
+   },
+   "frozen_encoder": {
+    "score": 0.529455,
+    "rank": 29,
+    "percentile": 0.3778
    },
    "random_control": {
     "score": 0.087213,
@@ -1069,6 +1429,7 @@
    "partition": "test",
    "family": "plant_based_milk_alternatives",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 46,
    "category_rules": {
     "score": 0.625,
@@ -1079,6 +1440,11 @@
     "score": 0.208164,
     "rank": 5,
     "percentile": 0.9111
+   },
+   "frozen_encoder": {
+    "score": 0.332605,
+    "rank": 46,
+    "percentile": 0.0
    },
    "random_control": {
     "score": 0.280222,
@@ -1091,6 +1457,7 @@
    "partition": "test",
    "family": "plant_based_milk_alternatives",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 46,
    "category_rules": {
     "score": 0.611111,
@@ -1099,6 +1466,11 @@
    },
    "tfidf_char": {
     "score": 0.341609,
+    "rank": 1,
+    "percentile": 1.0
+   },
+   "frozen_encoder": {
+    "score": 0.907409,
     "rank": 1,
     "percentile": 1.0
    },
@@ -1113,6 +1485,7 @@
    "partition": "test",
    "family": "plant_based_milk_alternatives",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 46,
    "category_rules": {
     "score": 0.608578,
@@ -1121,6 +1494,11 @@
    },
    "tfidf_char": {
     "score": 0.269115,
+    "rank": 2,
+    "percentile": 0.9778
+   },
+   "frozen_encoder": {
+    "score": 0.895708,
     "rank": 2,
     "percentile": 0.9778
    },
@@ -1135,6 +1513,7 @@
    "partition": "test",
    "family": "plant_based_milk_alternatives",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 46,
    "category_rules": {
     "score": 0.597222,
@@ -1145,6 +1524,11 @@
     "score": 0.417126,
     "rank": 1,
     "percentile": 1.0
+   },
+   "frozen_encoder": {
+    "score": 0.346619,
+    "rank": 30,
+    "percentile": 0.3556
    },
    "random_control": {
     "score": 0.154564,
@@ -1157,6 +1541,7 @@
    "partition": "test",
    "family": "plant_based_milk_alternatives",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 46,
    "category_rules": {
     "score": 0.880392,
@@ -1167,6 +1552,11 @@
     "score": 0.218952,
     "rank": 6,
     "percentile": 0.8889
+   },
+   "frozen_encoder": {
+    "score": 0.349036,
+    "rank": 29,
+    "percentile": 0.3778
    },
    "random_control": {
     "score": 0.060919,
@@ -1179,6 +1569,7 @@
    "partition": "test",
    "family": "plant_based_milk_alternatives",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 46,
    "category_rules": {
     "score": 0.50719,
@@ -1189,6 +1580,11 @@
     "score": 0.235738,
     "rank": 4,
     "percentile": 0.9333
+   },
+   "frozen_encoder": {
+    "score": 0.904759,
+    "rank": 2,
+    "percentile": 0.9778
    },
    "random_control": {
     "score": 0.699824,
@@ -1201,6 +1597,7 @@
    "partition": "test",
    "family": "yogurts",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 107,
    "category_rules": {
     "score": 0.914862,
@@ -1211,6 +1608,11 @@
     "score": 0.448958,
     "rank": 1,
     "percentile": 1.0
+   },
+   "frozen_encoder": {
+    "score": 0.858364,
+    "rank": 3,
+    "percentile": 0.9811
    },
    "random_control": {
     "score": 0.595796,
@@ -1223,6 +1625,7 @@
    "partition": "test",
    "family": "yogurts",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 107,
    "category_rules": {
     "score": 0.928736,
@@ -1231,6 +1634,11 @@
    },
    "tfidf_char": {
     "score": 0.750544,
+    "rank": 1,
+    "percentile": 1.0
+   },
+   "frozen_encoder": {
+    "score": 0.902858,
     "rank": 1,
     "percentile": 1.0
    },
@@ -1245,6 +1653,7 @@
    "partition": "test",
    "family": "yogurts",
    "strategy": "family_random",
+   "languages": "same",
    "pool": 107,
    "category_rules": {
     "score": 0.8362,
@@ -1255,6 +1664,11 @@
     "score": 0.176213,
     "rank": 33,
     "percentile": 0.6981
+   },
+   "frozen_encoder": {
+    "score": 0.73427,
+    "rank": 30,
+    "percentile": 0.7264
    },
    "random_control": {
     "score": 0.960037,
@@ -1267,6 +1681,7 @@
    "partition": "test",
    "family": "yogurts",
    "strategy": "family_random",
+   "languages": "different",
    "pool": 107,
    "category_rules": {
     "score": 0.692991,
@@ -1277,6 +1692,11 @@
     "score": 0.006904,
     "rank": 98,
     "percentile": 0.0849
+   },
+   "frozen_encoder": {
+    "score": 0.602712,
+    "rank": 62,
+    "percentile": 0.4245
    },
    "random_control": {
     "score": 0.190664,
@@ -1289,6 +1709,7 @@
    "partition": "test",
    "family": "yogurts",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 107,
    "category_rules": {
     "score": 0.751426,
@@ -1299,6 +1720,11 @@
     "score": 0.078266,
     "rank": 17,
     "percentile": 0.8491
+   },
+   "frozen_encoder": {
+    "score": 0.555018,
+    "rank": 48,
+    "percentile": 0.5566
    },
    "random_control": {
     "score": 0.032899,
@@ -1311,6 +1737,7 @@
    "partition": "test",
    "family": "yogurts",
    "strategy": "family_random",
+   "languages": "same",
    "pool": 107,
    "category_rules": {
     "score": 0.694417,
@@ -1321,6 +1748,11 @@
     "score": 0.123282,
     "rank": 42,
     "percentile": 0.6132
+   },
+   "frozen_encoder": {
+    "score": 0.596946,
+    "rank": 86,
+    "percentile": 0.1981
    },
    "random_control": {
     "score": 0.316778,
@@ -1333,6 +1765,7 @@
    "partition": "test",
    "family": "yogurts",
    "strategy": "family_random",
+   "languages": "same",
    "pool": 107,
    "category_rules": {
     "score": 0.639508,
@@ -1343,6 +1776,11 @@
     "score": 0.069028,
     "rank": 71,
     "percentile": 0.3396
+   },
+   "frozen_encoder": {
+    "score": 0.475709,
+    "rank": 76,
+    "percentile": 0.2925
    },
    "random_control": {
     "score": 0.567445,
@@ -1355,6 +1793,7 @@
    "partition": "test",
    "family": "yogurts",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 106,
    "category_rules": {
     "score": 0.688123,
@@ -1365,6 +1804,11 @@
     "score": 0.186993,
     "rank": 41,
     "percentile": 0.619
+   },
+   "frozen_encoder": {
+    "score": 0.667524,
+    "rank": 35,
+    "percentile": 0.6762
    },
    "random_control": {
     "score": 0.790702,
@@ -1377,6 +1821,7 @@
    "partition": "test",
    "family": "yogurts",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 106,
    "category_rules": {
     "score": 0.882622,
@@ -1387,6 +1832,11 @@
     "score": 0.280433,
     "rank": 12,
     "percentile": 0.8952
+   },
+   "frozen_encoder": {
+    "score": 0.722488,
+    "rank": 23,
+    "percentile": 0.7905
    },
    "random_control": {
     "score": 0.784738,
@@ -1399,6 +1849,7 @@
    "partition": "test",
    "family": "yogurts",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 104,
    "category_rules": {
     "score": 0.615332,
@@ -1409,6 +1860,11 @@
     "score": 0.199563,
     "rank": 10,
     "percentile": 0.9126
+   },
+   "frozen_encoder": {
+    "score": 0.639922,
+    "rank": 9,
+    "percentile": 0.9223
    },
    "random_control": {
     "score": 0.126824,
@@ -1421,6 +1877,7 @@
    "partition": "test",
    "family": "yogurts",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 107,
    "category_rules": {
     "score": 0.907296,
@@ -1431,6 +1888,11 @@
     "score": 0.473711,
     "rank": 2,
     "percentile": 0.9906
+   },
+   "frozen_encoder": {
+    "score": 0.836388,
+    "rank": 4,
+    "percentile": 0.9717
    },
    "random_control": {
     "score": 0.689191,
@@ -1443,6 +1905,7 @@
    "partition": "test",
    "family": "yogurts",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 107,
    "category_rules": {
     "score": 0.824369,
@@ -1453,6 +1916,11 @@
     "score": 0.28972,
     "rank": 5,
     "percentile": 0.9623
+   },
+   "frozen_encoder": {
+    "score": 0.813974,
+    "rank": 4,
+    "percentile": 0.9717
    },
    "random_control": {
     "score": 0.820802,
@@ -1465,6 +1933,7 @@
    "partition": "test",
    "family": "yogurts",
    "strategy": "family_random",
+   "languages": "different",
    "pool": 107,
    "category_rules": {
     "score": 0.729755,
@@ -1475,6 +1944,11 @@
     "score": 0.012789,
     "rank": 97,
     "percentile": 0.0943
+   },
+   "frozen_encoder": {
+    "score": 0.489713,
+    "rank": 100,
+    "percentile": 0.066
    },
    "random_control": {
     "score": 0.364411,
@@ -1487,6 +1961,7 @@
    "partition": "test",
    "family": "yogurts",
    "strategy": "family_random",
+   "languages": "same",
    "pool": 107,
    "category_rules": {
     "score": 0.941018,
@@ -1497,6 +1972,11 @@
     "score": 0.259403,
     "rank": 14,
     "percentile": 0.8774
+   },
+   "frozen_encoder": {
+    "score": 0.824602,
+    "rank": 18,
+    "percentile": 0.8396
    },
    "random_control": {
     "score": 0.054666,
@@ -1509,6 +1989,7 @@
    "partition": "test",
    "family": "yogurts",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 107,
    "category_rules": {
     "score": 0.948026,
@@ -1519,6 +2000,11 @@
     "score": 0.137731,
     "rank": 38,
     "percentile": 0.6509
+   },
+   "frozen_encoder": {
+    "score": 0.77208,
+    "rank": 3,
+    "percentile": 0.9811
    },
    "random_control": {
     "score": 0.69295,
@@ -1531,6 +2017,7 @@
    "partition": "test",
    "family": "yogurts",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 106,
    "category_rules": {
     "score": 0.865512,
@@ -1541,6 +2028,11 @@
     "score": 0.49503,
     "rank": 3,
     "percentile": 0.981
+   },
+   "frozen_encoder": {
+    "score": 0.839127,
+    "rank": 1,
+    "percentile": 1.0
    },
    "random_control": {
     "score": 0.82549,
@@ -1553,6 +2045,7 @@
    "partition": "test",
    "family": "yogurts",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 106,
    "category_rules": {
     "score": 0.865512,
@@ -1563,6 +2056,11 @@
     "score": 0.59786,
     "rank": 1,
     "percentile": 1.0
+   },
+   "frozen_encoder": {
+    "score": 0.755552,
+    "rank": 27,
+    "percentile": 0.7524
    },
    "random_control": {
     "score": 0.80805,
@@ -1575,6 +2073,7 @@
    "partition": "test",
    "family": "yogurts",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 107,
    "category_rules": {
     "score": 1.0,
@@ -1583,6 +2082,11 @@
    },
    "tfidf_char": {
     "score": 0.61325,
+    "rank": 1,
+    "percentile": 1.0
+   },
+   "frozen_encoder": {
+    "score": 0.850554,
     "rank": 1,
     "percentile": 1.0
    },
@@ -1597,6 +2101,7 @@
    "partition": "test",
    "family": "yogurts",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 107,
    "category_rules": {
     "score": 0.938889,
@@ -1607,6 +2112,11 @@
     "score": 0.631212,
     "rank": 1,
     "percentile": 1.0
+   },
+   "frozen_encoder": {
+    "score": 0.858673,
+    "rank": 2,
+    "percentile": 0.9906
    },
    "random_control": {
     "score": 0.575013,
@@ -1619,6 +2129,7 @@
    "partition": "test",
    "family": "yogurts",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 105,
    "category_rules": {
     "score": 0.494197,
@@ -1629,6 +2140,11 @@
     "score": 0.200969,
     "rank": 21,
     "percentile": 0.8077
+   },
+   "frozen_encoder": {
+    "score": 0.738119,
+    "rank": 18,
+    "percentile": 0.8365
    },
    "random_control": {
     "score": 0.184775,
@@ -1641,6 +2157,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 282,
    "category_rules": {
     "score": 0.529915,
@@ -1649,6 +2166,11 @@
    },
    "tfidf_char": {
     "score": 0.536921,
+    "rank": 1,
+    "percentile": 1.0
+   },
+   "frozen_encoder": {
+    "score": 0.74781,
     "rank": 1,
     "percentile": 1.0
    },
@@ -1663,6 +2185,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 282,
    "category_rules": {
     "score": 0.733333,
@@ -1673,6 +2196,11 @@
     "score": 0.395291,
     "rank": 6,
     "percentile": 0.9822
+   },
+   "frozen_encoder": {
+    "score": 0.6812,
+    "rank": 14,
+    "percentile": 0.9537
    },
    "random_control": {
     "score": 0.159271,
@@ -1685,6 +2213,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "family_random",
+   "languages": "different",
    "pool": 282,
    "category_rules": {
     "score": 0.511056,
@@ -1695,6 +2224,11 @@
     "score": 0.033508,
     "rank": 242,
     "percentile": 0.1423
+   },
+   "frozen_encoder": {
+    "score": 0.514005,
+    "rank": 238,
+    "percentile": 0.1566
    },
    "random_control": {
     "score": 0.75781,
@@ -1707,6 +2241,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "family_random",
+   "languages": "same",
    "pool": 282,
    "category_rules": {
     "score": 0.461273,
@@ -1717,6 +2252,11 @@
     "score": 0.131035,
     "rank": 82,
     "percentile": 0.7117
+   },
+   "frozen_encoder": {
+    "score": 0.671621,
+    "rank": 86,
+    "percentile": 0.6975
    },
    "random_control": {
     "score": 0.213656,
@@ -1729,6 +2269,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 282,
    "category_rules": {
     "score": 0.514052,
@@ -1739,6 +2280,11 @@
     "score": 0.315098,
     "rank": 9,
     "percentile": 0.9715
+   },
+   "frozen_encoder": {
+    "score": 0.918119,
+    "rank": 1,
+    "percentile": 1.0
    },
    "random_control": {
     "score": 0.571933,
@@ -1751,6 +2297,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "family_random",
+   "languages": "different",
    "pool": 282,
    "category_rules": {
     "score": 0.419619,
@@ -1761,6 +2308,11 @@
     "score": 0.021148,
     "rank": 240,
     "percentile": 0.1495
+   },
+   "frozen_encoder": {
+    "score": 0.61378,
+    "rank": 179,
+    "percentile": 0.3665
    },
    "random_control": {
     "score": 0.387559,
@@ -1773,6 +2325,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 282,
    "category_rules": {
     "score": 0.429813,
@@ -1783,6 +2336,11 @@
     "score": 0.409485,
     "rank": 1,
     "percentile": 1.0
+   },
+   "frozen_encoder": {
+    "score": 0.760284,
+    "rank": 70,
+    "percentile": 0.7544
    },
    "random_control": {
     "score": 0.237912,
@@ -1795,6 +2353,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 282,
    "category_rules": {
     "score": 0.480159,
@@ -1805,6 +2364,11 @@
     "score": 0.719431,
     "rank": 3,
     "percentile": 0.9929
+   },
+   "frozen_encoder": {
+    "score": 0.820878,
+    "rank": 4,
+    "percentile": 0.9893
    },
    "random_control": {
     "score": 0.145425,
@@ -1817,6 +2381,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 282,
    "category_rules": {
     "score": 0.377778,
@@ -1827,6 +2392,11 @@
     "score": 0.640872,
     "rank": 4,
     "percentile": 0.9893
+   },
+   "frozen_encoder": {
+    "score": 0.85068,
+    "rank": 1,
+    "percentile": 1.0
    },
    "random_control": {
     "score": 0.638699,
@@ -1839,6 +2409,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 282,
    "category_rules": {
     "score": 0.498187,
@@ -1849,6 +2420,11 @@
     "score": 0.348129,
     "rank": 12,
     "percentile": 0.9609
+   },
+   "frozen_encoder": {
+    "score": 0.825772,
+    "rank": 21,
+    "percentile": 0.9288
    },
    "random_control": {
     "score": 0.191778,
@@ -1861,6 +2437,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 282,
    "category_rules": {
     "score": 0.64697,
@@ -1871,6 +2448,11 @@
     "score": 0.307744,
     "rank": 5,
     "percentile": 0.9858
+   },
+   "frozen_encoder": {
+    "score": 0.825996,
+    "rank": 3,
+    "percentile": 0.9929
    },
    "random_control": {
     "score": 0.929386,
@@ -1883,6 +2465,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "family_random",
+   "languages": "different",
    "pool": 282,
    "category_rules": {
     "score": 0.805322,
@@ -1893,6 +2476,11 @@
     "score": 0.006547,
     "rank": 208,
     "percentile": 0.2633
+   },
+   "frozen_encoder": {
+    "score": 0.51868,
+    "rank": 29,
+    "percentile": 0.9004
    },
    "random_control": {
     "score": 0.717444,
@@ -1905,6 +2493,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 282,
    "category_rules": {
     "score": 0.989247,
@@ -1913,6 +2502,11 @@
    },
    "tfidf_char": {
     "score": 0.882017,
+    "rank": 1,
+    "percentile": 1.0
+   },
+   "frozen_encoder": {
+    "score": 0.935864,
     "rank": 1,
     "percentile": 1.0
    },
@@ -1927,6 +2521,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "family_random",
+   "languages": "same",
    "pool": 282,
    "category_rules": {
     "score": 0.284698,
@@ -1937,6 +2532,11 @@
     "score": 0.051503,
     "rank": 227,
     "percentile": 0.1957
+   },
+   "frozen_encoder": {
+    "score": 0.569602,
+    "rank": 164,
+    "percentile": 0.4199
    },
    "random_control": {
     "score": 0.92423,
@@ -1949,6 +2549,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 282,
    "category_rules": {
     "score": 0.720696,
@@ -1959,6 +2560,11 @@
     "score": 0.706329,
     "rank": 2,
     "percentile": 0.9964
+   },
+   "frozen_encoder": {
+    "score": 0.626818,
+    "rank": 11,
+    "percentile": 0.9644
    },
    "random_control": {
     "score": 0.954183,
@@ -1971,6 +2577,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 282,
    "category_rules": {
     "score": 0.941667,
@@ -1981,6 +2588,11 @@
     "score": 0.43483,
     "rank": 8,
     "percentile": 0.9751
+   },
+   "frozen_encoder": {
+    "score": 0.567994,
+    "rank": 17,
+    "percentile": 0.9431
    },
    "random_control": {
     "score": 0.589639,
@@ -1993,6 +2605,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "family_random",
+   "languages": "same",
    "pool": 282,
    "category_rules": {
     "score": 0.290384,
@@ -2003,6 +2616,11 @@
     "score": 0.010753,
     "rank": 192,
     "percentile": 0.3203
+   },
+   "frozen_encoder": {
+    "score": 0.240561,
+    "rank": 268,
+    "percentile": 0.0498
    },
    "random_control": {
     "score": 0.907104,
@@ -2015,6 +2633,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "family_random",
+   "languages": "same",
    "pool": 282,
    "category_rules": {
     "score": 0.272098,
@@ -2025,6 +2644,11 @@
     "score": 0.0,
     "rank": 273,
     "percentile": 0.032
+   },
+   "frozen_encoder": {
+    "score": 0.285307,
+    "rank": 232,
+    "percentile": 0.1779
    },
    "random_control": {
     "score": 0.939825,
@@ -2037,6 +2661,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 282,
    "category_rules": {
     "score": 0.839683,
@@ -2047,6 +2672,11 @@
     "score": 0.615559,
     "rank": 2,
     "percentile": 0.9964
+   },
+   "frozen_encoder": {
+    "score": 0.729829,
+    "rank": 10,
+    "percentile": 0.968
    },
    "random_control": {
     "score": 0.963206,
@@ -2059,6 +2689,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 282,
    "category_rules": {
     "score": 0.938889,
@@ -2069,6 +2700,11 @@
     "score": 0.440394,
     "rank": 7,
     "percentile": 0.9786
+   },
+   "frozen_encoder": {
+    "score": 0.773837,
+    "rank": 6,
+    "percentile": 0.9822
    },
    "random_control": {
     "score": 0.489012,
@@ -2081,6 +2717,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 282,
    "category_rules": {
     "score": 0.822222,
@@ -2091,6 +2728,11 @@
     "score": 0.263784,
     "rank": 21,
     "percentile": 0.9288
+   },
+   "frozen_encoder": {
+    "score": 0.731245,
+    "rank": 6,
+    "percentile": 0.9822
    },
    "random_control": {
     "score": 0.648764,
@@ -2103,6 +2745,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "family_random",
+   "languages": "same",
    "pool": 282,
    "category_rules": {
     "score": 0.320581,
@@ -2113,6 +2756,11 @@
     "score": 0.260582,
     "rank": 32,
     "percentile": 0.8897
+   },
+   "frozen_encoder": {
+    "score": 0.694763,
+    "rank": 134,
+    "percentile": 0.5267
    },
    "random_control": {
     "score": 0.198186,
@@ -2125,6 +2773,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 282,
    "category_rules": {
     "score": 0.643268,
@@ -2135,6 +2784,11 @@
     "score": 0.270595,
     "rank": 30,
     "percentile": 0.8968
+   },
+   "frozen_encoder": {
+    "score": 0.701888,
+    "rank": 107,
+    "percentile": 0.6228
    },
    "random_control": {
     "score": 0.845923,
@@ -2147,6 +2801,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "family_random",
+   "languages": "same",
    "pool": 282,
    "category_rules": {
     "score": 0.658901,
@@ -2157,6 +2812,11 @@
     "score": 0.085575,
     "rank": 224,
     "percentile": 0.2064
+   },
+   "frozen_encoder": {
+    "score": 0.729278,
+    "rank": 61,
+    "percentile": 0.7865
    },
    "random_control": {
     "score": 0.837895,
@@ -2169,6 +2829,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 282,
    "category_rules": {
     "score": 0.835714,
@@ -2179,6 +2840,11 @@
     "score": 0.441361,
     "rank": 7,
     "percentile": 0.9786
+   },
+   "frozen_encoder": {
+    "score": 0.483999,
+    "rank": 30,
+    "percentile": 0.8968
    },
    "random_control": {
     "score": 0.424214,
@@ -2191,6 +2857,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 282,
    "category_rules": {
     "score": 0.716484,
@@ -2201,6 +2868,11 @@
     "score": 0.421519,
     "rank": 7,
     "percentile": 0.9786
+   },
+   "frozen_encoder": {
+    "score": 0.463888,
+    "rank": 30,
+    "percentile": 0.8968
    },
    "random_control": {
     "score": 0.75899,
@@ -2213,6 +2885,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "family_random",
+   "languages": "same",
    "pool": 282,
    "category_rules": {
     "score": 0.161111,
@@ -2223,6 +2896,11 @@
     "score": 0.013584,
     "rank": 213,
     "percentile": 0.2456
+   },
+   "frozen_encoder": {
+    "score": 0.325268,
+    "rank": 176,
+    "percentile": 0.3772
    },
    "random_control": {
     "score": 0.00508,
@@ -2235,6 +2913,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 282,
    "category_rules": {
     "score": 0.640866,
@@ -2245,6 +2924,11 @@
     "score": 0.219617,
     "rank": 35,
     "percentile": 0.879
+   },
+   "frozen_encoder": {
+    "score": 0.80208,
+    "rank": 39,
+    "percentile": 0.8648
    },
    "random_control": {
     "score": 0.676769,
@@ -2257,6 +2941,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 282,
    "category_rules": {
     "score": 0.762963,
@@ -2267,6 +2952,11 @@
     "score": 0.226039,
     "rank": 59,
     "percentile": 0.7936
+   },
+   "frozen_encoder": {
+    "score": 0.684107,
+    "rank": 114,
+    "percentile": 0.5979
    },
    "random_control": {
     "score": 0.666771,
@@ -2279,6 +2969,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "family_random",
+   "languages": "same",
    "pool": 282,
    "category_rules": {
     "score": 0.358418,
@@ -2289,6 +2980,11 @@
     "score": 0.272753,
     "rank": 19,
     "percentile": 0.9359
+   },
+   "frozen_encoder": {
+    "score": 0.794868,
+    "rank": 26,
+    "percentile": 0.911
    },
    "random_control": {
     "score": 0.290095,
@@ -2301,6 +2997,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 282,
    "category_rules": {
     "score": 0.307756,
@@ -2311,6 +3008,11 @@
     "score": 0.154587,
     "rank": 80,
     "percentile": 0.7189
+   },
+   "frozen_encoder": {
+    "score": 0.72125,
+    "rank": 70,
+    "percentile": 0.7544
    },
    "random_control": {
     "score": 0.911274,
@@ -2323,6 +3025,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "family_random",
+   "languages": "same",
    "pool": 282,
    "category_rules": {
     "score": 0.723895,
@@ -2333,6 +3036,11 @@
     "score": 0.180427,
     "rank": 60,
     "percentile": 0.79
+   },
+   "frozen_encoder": {
+    "score": 0.637452,
+    "rank": 145,
+    "percentile": 0.4875
    },
    "random_control": {
     "score": 0.725349,
@@ -2345,6 +3053,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "family_random",
+   "languages": "same",
    "pool": 282,
    "category_rules": {
     "score": 0.409532,
@@ -2355,6 +3064,11 @@
     "score": 0.096434,
     "rank": 191,
     "percentile": 0.3238
+   },
+   "frozen_encoder": {
+    "score": 0.618757,
+    "rank": 190,
+    "percentile": 0.3274
    },
    "random_control": {
     "score": 0.907208,
@@ -2367,6 +3081,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "family_random",
+   "languages": "same",
    "pool": 282,
    "category_rules": {
     "score": 0.506667,
@@ -2377,6 +3092,11 @@
     "score": 0.094128,
     "rank": 176,
     "percentile": 0.3772
+   },
+   "frozen_encoder": {
+    "score": 0.690268,
+    "rank": 126,
+    "percentile": 0.5552
    },
    "random_control": {
     "score": 0.616063,
@@ -2389,6 +3109,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 281,
    "category_rules": {
     "score": 0.867619,
@@ -2399,6 +3120,11 @@
     "score": 0.300782,
     "rank": 9,
     "percentile": 0.9714
+   },
+   "frozen_encoder": {
+    "score": 0.550161,
+    "rank": 27,
+    "percentile": 0.9071
    },
    "random_control": {
     "score": 0.858616,
@@ -2411,6 +3137,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "family_random",
+   "languages": "different",
    "pool": 282,
    "category_rules": {
     "score": 0.450058,
@@ -2421,6 +3148,11 @@
     "score": 0.0,
     "rank": 279,
     "percentile": 0.0107
+   },
+   "frozen_encoder": {
+    "score": 0.48124,
+    "rank": 204,
+    "percentile": 0.2776
    },
    "random_control": {
     "score": 0.90184,
@@ -2433,6 +3165,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 281,
    "category_rules": {
     "score": 0.741861,
@@ -2443,6 +3176,11 @@
     "score": 0.04606,
     "rank": 159,
     "percentile": 0.4357
+   },
+   "frozen_encoder": {
+    "score": 0.535238,
+    "rank": 213,
+    "percentile": 0.2429
    },
    "random_control": {
     "score": 0.43668,
@@ -2455,6 +3193,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "brand_variant",
+   "languages": "different",
    "pool": 281,
    "category_rules": {
     "score": 0.680641,
@@ -2465,6 +3204,11 @@
     "score": 0.003577,
     "rank": 258,
     "percentile": 0.0821
+   },
+   "frozen_encoder": {
+    "score": 0.768939,
+    "rank": 10,
+    "percentile": 0.9679
    },
    "random_control": {
     "score": 0.568242,
@@ -2477,6 +3221,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 281,
    "category_rules": {
     "score": 0.827088,
@@ -2487,6 +3232,11 @@
     "score": 0.215921,
     "rank": 9,
     "percentile": 0.9714
+   },
+   "frozen_encoder": {
+    "score": 0.570813,
+    "rank": 179,
+    "percentile": 0.3643
    },
    "random_control": {
     "score": 0.84062,
@@ -2499,6 +3249,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "brand_variant",
+   "languages": "different",
    "pool": 281,
    "category_rules": {
     "score": 0.407894,
@@ -2509,6 +3260,11 @@
     "score": 0.012685,
     "rank": 61,
     "percentile": 0.7857
+   },
+   "frozen_encoder": {
+    "score": 0.602438,
+    "rank": 120,
+    "percentile": 0.575
    },
    "random_control": {
     "score": 0.021398,
@@ -2521,6 +3277,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "family_random",
+   "languages": "different",
    "pool": 281,
    "category_rules": {
     "score": 0.258684,
@@ -2531,6 +3288,11 @@
     "score": 0.0,
     "rank": 277,
     "percentile": 0.0143
+   },
+   "frozen_encoder": {
+    "score": 0.222778,
+    "rank": 281,
+    "percentile": 0.0
    },
    "random_control": {
     "score": 0.254059,
@@ -2543,6 +3305,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 280,
    "category_rules": {
     "score": 0.926669,
@@ -2553,6 +3316,11 @@
     "score": 0.342225,
     "rank": 8,
     "percentile": 0.9749
+   },
+   "frozen_encoder": {
+    "score": 0.56121,
+    "rank": 143,
+    "percentile": 0.491
    },
    "random_control": {
     "score": 0.723486,
@@ -2565,6 +3333,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 282,
    "category_rules": {
     "score": 0.911868,
@@ -2575,6 +3344,11 @@
     "score": 0.113638,
     "rank": 117,
     "percentile": 0.5872
+   },
+   "frozen_encoder": {
+    "score": 0.566604,
+    "rank": 217,
+    "percentile": 0.2313
    },
    "random_control": {
     "score": 0.318144,
@@ -2587,6 +3361,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "brand_variant",
+   "languages": "different",
    "pool": 282,
    "category_rules": {
     "score": 0.874429,
@@ -2597,6 +3372,11 @@
     "score": 0.001979,
     "rank": 264,
     "percentile": 0.0641
+   },
+   "frozen_encoder": {
+    "score": 0.496474,
+    "rank": 131,
+    "percentile": 0.5374
    },
    "random_control": {
     "score": 0.18353,
@@ -2609,6 +3389,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 281,
    "category_rules": {
     "score": 0.377694,
@@ -2619,6 +3400,11 @@
     "score": 0.049349,
     "rank": 102,
     "percentile": 0.6393
+   },
+   "frozen_encoder": {
+    "score": 0.757909,
+    "rank": 38,
+    "percentile": 0.8679
    },
    "random_control": {
     "score": 0.801172,
@@ -2631,6 +3417,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 282,
    "category_rules": {
     "score": 0.504762,
@@ -2641,6 +3428,11 @@
     "score": 0.1321,
     "rank": 102,
     "percentile": 0.6406
+   },
+   "frozen_encoder": {
+    "score": 0.582717,
+    "rank": 122,
+    "percentile": 0.5694
    },
    "random_control": {
     "score": 0.445113,
@@ -2653,6 +3445,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "family_random",
+   "languages": "same",
    "pool": 282,
    "category_rules": {
     "score": 0.307283,
@@ -2663,6 +3456,11 @@
     "score": 0.038144,
     "rank": 231,
     "percentile": 0.1815
+   },
+   "frozen_encoder": {
+    "score": 0.325765,
+    "rank": 260,
+    "percentile": 0.0783
    },
    "random_control": {
     "score": 0.804622,
@@ -2675,6 +3473,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "lookalike",
+   "languages": "different",
    "pool": 282,
    "category_rules": {
     "score": 1.0,
@@ -2685,6 +3484,11 @@
     "score": 0.185819,
     "rank": 32,
     "percentile": 0.8897
+   },
+   "frozen_encoder": {
+    "score": 0.340507,
+    "rank": 154,
+    "percentile": 0.4555
    },
    "random_control": {
     "score": 0.330063,
@@ -2697,6 +3501,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "brand_variant",
+   "languages": "different",
    "pool": 282,
    "category_rules": {
     "score": 0.767671,
@@ -2707,6 +3512,11 @@
     "score": 0.006013,
     "rank": 98,
     "percentile": 0.6548
+   },
+   "frozen_encoder": {
+    "score": 0.291859,
+    "rank": 155,
+    "percentile": 0.452
    },
    "random_control": {
     "score": 0.8509,
@@ -2719,6 +3529,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 282,
    "category_rules": {
     "score": 0.834441,
@@ -2729,6 +3540,11 @@
     "score": 0.169018,
     "rank": 49,
     "percentile": 0.8292
+   },
+   "frozen_encoder": {
+    "score": 0.598791,
+    "rank": 133,
+    "percentile": 0.5302
    },
    "random_control": {
     "score": 0.333044,
@@ -2741,6 +3557,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "family_random",
+   "languages": "different",
    "pool": 282,
    "category_rules": {
     "score": 0.317042,
@@ -2751,6 +3568,11 @@
     "score": 0.0,
     "rank": 270,
     "percentile": 0.0427
+   },
+   "frozen_encoder": {
+    "score": 0.435274,
+    "rank": 253,
+    "percentile": 0.1032
    },
    "random_control": {
     "score": 0.112163,
@@ -2763,6 +3585,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 282,
    "category_rules": {
     "score": 0.979167,
@@ -2771,6 +3594,11 @@
    },
    "tfidf_char": {
     "score": 0.825652,
+    "rank": 2,
+    "percentile": 0.9964
+   },
+   "frozen_encoder": {
+    "score": 0.885942,
     "rank": 2,
     "percentile": 0.9964
    },
@@ -2785,6 +3613,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 282,
    "category_rules": {
     "score": 0.787126,
@@ -2795,6 +3624,11 @@
     "score": 0.039146,
     "rank": 257,
     "percentile": 0.089
+   },
+   "frozen_encoder": {
+    "score": 0.609501,
+    "rank": 191,
+    "percentile": 0.3238
    },
    "random_control": {
     "score": 0.605438,
@@ -2807,6 +3641,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 282,
    "category_rules": {
     "score": 0.492557,
@@ -2817,6 +3652,11 @@
     "score": 0.169601,
     "rank": 96,
     "percentile": 0.6619
+   },
+   "frozen_encoder": {
+    "score": 0.657492,
+    "rank": 176,
+    "percentile": 0.3772
    },
    "random_control": {
     "score": 0.570412,
@@ -2829,6 +3669,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "brand_variant",
+   "languages": "different",
    "pool": 282,
    "category_rules": {
     "score": 0.597148,
@@ -2839,6 +3680,11 @@
     "score": 0.03203,
     "rank": 67,
     "percentile": 0.7651
+   },
+   "frozen_encoder": {
+    "score": 0.445333,
+    "rank": 219,
+    "percentile": 0.2242
    },
    "random_control": {
     "score": 0.857711,
@@ -2851,6 +3697,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "brand_variant",
+   "languages": "different",
    "pool": 282,
    "category_rules": {
     "score": 0.564452,
@@ -2861,6 +3708,11 @@
     "score": 0.069208,
     "rank": 216,
     "percentile": 0.2349
+   },
+   "frozen_encoder": {
+    "score": 0.677345,
+    "rank": 103,
+    "percentile": 0.637
    },
    "random_control": {
     "score": 0.111063,
@@ -2873,6 +3725,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "brand_variant",
+   "languages": "different",
    "pool": 281,
    "category_rules": {
     "score": 0.692326,
@@ -2883,6 +3736,11 @@
     "score": 0.033605,
     "rank": 241,
     "percentile": 0.1429
+   },
+   "frozen_encoder": {
+    "score": 0.522267,
+    "rank": 172,
+    "percentile": 0.3893
    },
    "random_control": {
     "score": 0.720447,
@@ -2895,6 +3753,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "family_random",
+   "languages": "different",
    "pool": 282,
    "category_rules": {
     "score": 0.703431,
@@ -2905,6 +3764,11 @@
     "score": 0.119321,
     "rank": 26,
     "percentile": 0.911
+   },
+   "frozen_encoder": {
+    "score": 0.727652,
+    "rank": 25,
+    "percentile": 0.9146
    },
    "random_control": {
     "score": 0.999565,
@@ -2917,6 +3781,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 282,
    "category_rules": {
     "score": 0.79217,
@@ -2927,6 +3792,11 @@
     "score": 0.280073,
     "rank": 5,
     "percentile": 0.9858
+   },
+   "frozen_encoder": {
+    "score": 0.594289,
+    "rank": 169,
+    "percentile": 0.4021
    },
    "random_control": {
     "score": 0.245433,
@@ -2939,6 +3809,7 @@
    "partition": "train",
    "family": "breakfast_cereals",
    "strategy": "family_random",
+   "languages": "different",
    "pool": 282,
    "category_rules": {
     "score": 0.625418,
@@ -2949,6 +3820,11 @@
     "score": 0.00865,
     "rank": 271,
     "percentile": 0.0391
+   },
+   "frozen_encoder": {
+    "score": 0.298733,
+    "rank": 276,
+    "percentile": 0.0214
    },
    "random_control": {
     "score": 0.558416,
@@ -2961,6 +3837,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 221,
    "category_rules": {
     "score": 0.551852,
@@ -2971,6 +3848,11 @@
     "score": 0.438273,
     "rank": 7,
     "percentile": 0.9727
+   },
+   "frozen_encoder": {
+    "score": 0.949706,
+    "rank": 4,
+    "percentile": 0.9864
    },
    "random_control": {
     "score": 0.955717,
@@ -2983,6 +3865,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 221,
    "category_rules": {
     "score": 1.0,
@@ -2991,6 +3874,11 @@
    },
    "tfidf_char": {
     "score": 0.803532,
+    "rank": 1,
+    "percentile": 1.0
+   },
+   "frozen_encoder": {
+    "score": 0.980136,
     "rank": 1,
     "percentile": 1.0
    },
@@ -3005,6 +3893,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "family_random",
+   "languages": "different",
    "pool": 221,
    "category_rules": {
     "score": 0.580392,
@@ -3015,6 +3904,11 @@
     "score": 0.003407,
     "rank": 179,
     "percentile": 0.1909
+   },
+   "frozen_encoder": {
+    "score": 0.365413,
+    "rank": 220,
+    "percentile": 0.0045
    },
    "random_control": {
     "score": 0.692271,
@@ -3027,6 +3921,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "family_random",
+   "languages": "different",
    "pool": 221,
    "category_rules": {
     "score": 0.205405,
@@ -3037,6 +3932,11 @@
     "score": 0.01248,
     "rank": 163,
     "percentile": 0.2636
+   },
+   "frozen_encoder": {
+    "score": 0.624352,
+    "rank": 60,
+    "percentile": 0.7318
    },
    "random_control": {
     "score": 0.522847,
@@ -3049,6 +3949,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "family_random",
+   "languages": "different",
    "pool": 221,
    "category_rules": {
     "score": 0.275676,
@@ -3059,6 +3960,11 @@
     "score": 0.001803,
     "rank": 213,
     "percentile": 0.0364
+   },
+   "frozen_encoder": {
+    "score": 0.699941,
+    "rank": 60,
+    "percentile": 0.7318
    },
    "random_control": {
     "score": 0.100818,
@@ -3071,6 +3977,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "family_random",
+   "languages": "different",
    "pool": 221,
    "category_rules": {
     "score": 0.500192,
@@ -3081,6 +3988,11 @@
     "score": 0.006433,
     "rank": 165,
     "percentile": 0.2545
+   },
+   "frozen_encoder": {
+    "score": 0.557806,
+    "rank": 53,
+    "percentile": 0.7636
    },
    "random_control": {
     "score": 0.22357,
@@ -3093,6 +4005,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 221,
    "category_rules": {
     "score": 0.760317,
@@ -3103,6 +4016,11 @@
     "score": 0.263267,
     "rank": 12,
     "percentile": 0.95
+   },
+   "frozen_encoder": {
+    "score": 0.850095,
+    "rank": 6,
+    "percentile": 0.9773
    },
    "random_control": {
     "score": 0.715486,
@@ -3115,6 +4033,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "family_random",
+   "languages": "same",
    "pool": 221,
    "category_rules": {
     "score": 0.441919,
@@ -3125,6 +4044,11 @@
     "score": 0.124061,
     "rank": 37,
     "percentile": 0.8364
+   },
+   "frozen_encoder": {
+    "score": 0.708871,
+    "rank": 18,
+    "percentile": 0.9227
    },
    "random_control": {
     "score": 0.166772,
@@ -3137,6 +4061,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "family_random",
+   "languages": "different",
    "pool": 221,
    "category_rules": {
     "score": 0.47619,
@@ -3147,6 +4072,11 @@
     "score": 0.0258,
     "rank": 119,
     "percentile": 0.4636
+   },
+   "frozen_encoder": {
+    "score": 0.662899,
+    "rank": 113,
+    "percentile": 0.4909
    },
    "random_control": {
     "score": 0.007459,
@@ -3159,6 +4089,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "family_random",
+   "languages": "same",
    "pool": 221,
    "category_rules": {
     "score": 0.698485,
@@ -3169,6 +4100,11 @@
     "score": 0.138084,
     "rank": 40,
     "percentile": 0.8227
+   },
+   "frozen_encoder": {
+    "score": 0.599464,
+    "rank": 136,
+    "percentile": 0.3864
    },
    "random_control": {
     "score": 0.069009,
@@ -3181,6 +4117,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "family_random",
+   "languages": "same",
    "pool": 221,
    "category_rules": {
     "score": 0.436533,
@@ -3191,6 +4128,11 @@
     "score": 0.177603,
     "rank": 8,
     "percentile": 0.9682
+   },
+   "frozen_encoder": {
+    "score": 0.53536,
+    "rank": 168,
+    "percentile": 0.2409
    },
    "random_control": {
     "score": 0.605379,
@@ -3203,6 +4145,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 221,
    "category_rules": {
     "score": 0.8338,
@@ -3213,6 +4156,11 @@
     "score": 0.241762,
     "rank": 4,
     "percentile": 0.9864
+   },
+   "frozen_encoder": {
+    "score": 0.742271,
+    "rank": 30,
+    "percentile": 0.8682
    },
    "random_control": {
     "score": 0.55813,
@@ -3225,6 +4173,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 221,
    "category_rules": {
     "score": 0.548246,
@@ -3235,6 +4184,11 @@
     "score": 0.525073,
     "rank": 1,
     "percentile": 1.0
+   },
+   "frozen_encoder": {
+    "score": 0.623103,
+    "rank": 19,
+    "percentile": 0.9182
    },
    "random_control": {
     "score": 0.789635,
@@ -3247,6 +4201,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "family_random",
+   "languages": "same",
    "pool": 221,
    "category_rules": {
     "score": 0.533333,
@@ -3257,6 +4212,11 @@
     "score": 0.049155,
     "rank": 96,
     "percentile": 0.5682
+   },
+   "frozen_encoder": {
+    "score": 0.514958,
+    "rank": 177,
+    "percentile": 0.2
    },
    "random_control": {
     "score": 0.421548,
@@ -3269,6 +4229,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "brand_variant",
+   "languages": "different",
    "pool": 221,
    "category_rules": {
     "score": 0.511364,
@@ -3279,6 +4240,11 @@
     "score": 0.025031,
     "rank": 123,
     "percentile": 0.4455
+   },
+   "frozen_encoder": {
+    "score": 0.574234,
+    "rank": 160,
+    "percentile": 0.2773
    },
    "random_control": {
     "score": 0.281178,
@@ -3291,6 +4257,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "brand_variant",
+   "languages": "different",
    "pool": 221,
    "category_rules": {
     "score": 0.29009,
@@ -3301,6 +4268,11 @@
     "score": 0.010686,
     "rank": 201,
     "percentile": 0.0909
+   },
+   "frozen_encoder": {
+    "score": 0.347332,
+    "rank": 216,
+    "percentile": 0.0227
    },
    "random_control": {
     "score": 0.648425,
@@ -3313,6 +4285,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "brand_variant",
+   "languages": "different",
    "pool": 221,
    "category_rules": {
     "score": 0.629545,
@@ -3323,6 +4296,11 @@
     "score": 0.069385,
     "rank": 68,
     "percentile": 0.6955
+   },
+   "frozen_encoder": {
+    "score": 0.577226,
+    "rank": 131,
+    "percentile": 0.4091
    },
    "random_control": {
     "score": 0.118092,
@@ -3335,6 +4313,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "brand_variant",
+   "languages": "different",
    "pool": 221,
    "category_rules": {
     "score": 0.564376,
@@ -3345,6 +4324,11 @@
     "score": 0.286302,
     "rank": 10,
     "percentile": 0.9591
+   },
+   "frozen_encoder": {
+    "score": 0.782797,
+    "rank": 8,
+    "percentile": 0.9682
    },
    "random_control": {
     "score": 0.125548,
@@ -3357,6 +4341,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 221,
    "category_rules": {
     "score": 0.516694,
@@ -3367,6 +4352,11 @@
     "score": 0.047122,
     "rank": 109,
     "percentile": 0.5091
+   },
+   "frozen_encoder": {
+    "score": 0.505743,
+    "rank": 172,
+    "percentile": 0.2227
    },
    "random_control": {
     "score": 0.227932,
@@ -3379,6 +4369,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "brand_variant",
+   "languages": "different",
    "pool": 221,
    "category_rules": {
     "score": 0.431192,
@@ -3389,6 +4380,11 @@
     "score": 0.0,
     "rank": 213,
     "percentile": 0.0364
+   },
+   "frozen_encoder": {
+    "score": 0.364372,
+    "rank": 215,
+    "percentile": 0.0273
    },
    "random_control": {
     "score": 0.124832,
@@ -3401,6 +4397,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "brand_variant",
+   "languages": "different",
    "pool": 221,
    "category_rules": {
     "score": 0.516694,
@@ -3411,6 +4408,11 @@
     "score": 0.053668,
     "rank": 94,
     "percentile": 0.5773
+   },
+   "frozen_encoder": {
+    "score": 0.501063,
+    "rank": 175,
+    "percentile": 0.2091
    },
    "random_control": {
     "score": 0.345899,
@@ -3423,6 +4425,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "family_random",
+   "languages": "different",
    "pool": 221,
    "category_rules": {
     "score": 0.485859,
@@ -3433,6 +4436,11 @@
     "score": 0.02913,
     "rank": 117,
     "percentile": 0.4727
+   },
+   "frozen_encoder": {
+    "score": 0.430022,
+    "rank": 210,
+    "percentile": 0.05
    },
    "random_control": {
     "score": 0.102073,
@@ -3445,6 +4453,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "brand_variant",
+   "languages": "different",
    "pool": 221,
    "category_rules": {
     "score": 0.6205,
@@ -3455,6 +4464,11 @@
     "score": 0.064954,
     "rank": 55,
     "percentile": 0.7545
+   },
+   "frozen_encoder": {
+    "score": 0.712661,
+    "rank": 31,
+    "percentile": 0.8636
    },
    "random_control": {
     "score": 0.033937,
@@ -3467,6 +4481,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "brand_variant",
+   "languages": "different",
    "pool": 221,
    "category_rules": {
     "score": 0.479293,
@@ -3477,6 +4492,11 @@
     "score": 0.03001,
     "rank": 53,
     "percentile": 0.7636
+   },
+   "frozen_encoder": {
+    "score": 0.549112,
+    "rank": 149,
+    "percentile": 0.3273
    },
    "random_control": {
     "score": 0.413468,
@@ -3489,6 +4509,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "brand_variant",
+   "languages": "different",
    "pool": 221,
    "category_rules": {
     "score": 0.377778,
@@ -3499,6 +4520,11 @@
     "score": 0.248741,
     "rank": 11,
     "percentile": 0.9545
+   },
+   "frozen_encoder": {
+    "score": 0.742627,
+    "rank": 10,
+    "percentile": 0.9591
    },
    "random_control": {
     "score": 0.934435,
@@ -3511,6 +4537,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "family_random",
+   "languages": "different",
    "pool": 221,
    "category_rules": {
     "score": 0.291667,
@@ -3521,6 +4548,11 @@
     "score": 0.131581,
     "rank": 37,
     "percentile": 0.8364
+   },
+   "frozen_encoder": {
+    "score": 0.610453,
+    "rank": 58,
+    "percentile": 0.7409
    },
    "random_control": {
     "score": 0.718489,
@@ -3533,6 +4565,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "brand_variant",
+   "languages": "different",
    "pool": 221,
    "category_rules": {
     "score": 0.42386,
@@ -3543,6 +4576,11 @@
     "score": 0.057781,
     "rank": 40,
     "percentile": 0.8227
+   },
+   "frozen_encoder": {
+    "score": 0.427616,
+    "rank": 204,
+    "percentile": 0.0773
    },
    "random_control": {
     "score": 0.126766,
@@ -3555,6 +4593,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "family_random",
+   "languages": "different",
    "pool": 221,
    "category_rules": {
     "score": 0.495102,
@@ -3565,6 +4604,11 @@
     "score": 0.017908,
     "rank": 154,
     "percentile": 0.3045
+   },
+   "frozen_encoder": {
+    "score": 0.351887,
+    "rank": 221,
+    "percentile": 0.0
    },
    "random_control": {
     "score": 0.243765,
@@ -3577,6 +4621,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "family_random",
+   "languages": "different",
    "pool": 221,
    "category_rules": {
     "score": 0.536185,
@@ -3587,6 +4632,11 @@
     "score": 0.0,
     "rank": 217,
     "percentile": 0.0182
+   },
+   "frozen_encoder": {
+    "score": 0.693682,
+    "rank": 16,
+    "percentile": 0.9318
    },
    "random_control": {
     "score": 0.399937,
@@ -3599,6 +4649,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "brand_variant",
+   "languages": "different",
    "pool": 221,
    "category_rules": {
     "score": 0.191189,
@@ -3609,6 +4660,11 @@
     "score": 0.050453,
     "rank": 71,
     "percentile": 0.6818
+   },
+   "frozen_encoder": {
+    "score": 0.559372,
+    "rank": 131,
+    "percentile": 0.4091
    },
    "random_control": {
     "score": 0.567839,
@@ -3621,6 +4677,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "brand_variant",
+   "languages": "different",
    "pool": 221,
    "category_rules": {
     "score": 0.440079,
@@ -3631,6 +4688,11 @@
     "score": 0.143391,
     "rank": 29,
     "percentile": 0.8727
+   },
+   "frozen_encoder": {
+    "score": 0.409279,
+    "rank": 170,
+    "percentile": 0.2318
    },
    "random_control": {
     "score": 0.931961,
@@ -3643,6 +4705,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 221,
    "category_rules": {
     "score": 0.255808,
@@ -3653,6 +4716,11 @@
     "score": 0.035546,
     "rank": 99,
     "percentile": 0.5545
+   },
+   "frozen_encoder": {
+    "score": 0.456125,
+    "rank": 129,
+    "percentile": 0.4182
    },
    "random_control": {
     "score": 0.60804,
@@ -3665,6 +4733,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "brand_variant",
+   "languages": "different",
    "pool": 221,
    "category_rules": {
     "score": 0.385997,
@@ -3675,6 +4744,11 @@
     "score": 0.061691,
     "rank": 48,
     "percentile": 0.7864
+   },
+   "frozen_encoder": {
+    "score": 0.388076,
+    "rank": 120,
+    "percentile": 0.4591
    },
    "random_control": {
     "score": 0.113361,
@@ -3687,6 +4761,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "family_random",
+   "languages": "different",
    "pool": 221,
    "category_rules": {
     "score": 0.348485,
@@ -3697,6 +4772,11 @@
     "score": 0.0154,
     "rank": 60,
     "percentile": 0.7318
+   },
+   "frozen_encoder": {
+    "score": 0.557374,
+    "rank": 93,
+    "percentile": 0.5818
    },
    "random_control": {
     "score": 0.76081,
@@ -3709,6 +4789,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 221,
    "category_rules": {
     "score": 0.861095,
@@ -3719,6 +4800,11 @@
     "score": 0.514981,
     "rank": 2,
     "percentile": 0.9955
+   },
+   "frozen_encoder": {
+    "score": 0.876501,
+    "rank": 6,
+    "percentile": 0.9773
    },
    "random_control": {
     "score": 0.35357,
@@ -3731,6 +4817,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "family_random",
+   "languages": "different",
    "pool": 221,
    "category_rules": {
     "score": 0.200733,
@@ -3741,6 +4828,11 @@
     "score": 0.0,
     "rank": 218,
     "percentile": 0.0136
+   },
+   "frozen_encoder": {
+    "score": 0.524949,
+    "rank": 162,
+    "percentile": 0.2682
    },
    "random_control": {
     "score": 0.099608,
@@ -3753,6 +4845,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "family_random",
+   "languages": "different",
    "pool": 220,
    "category_rules": {
     "score": 0.574405,
@@ -3763,6 +4856,11 @@
     "score": 0.0,
     "rank": 218,
     "percentile": 0.0091
+   },
+   "frozen_encoder": {
+    "score": 0.464321,
+    "rank": 167,
+    "percentile": 0.242
    },
    "random_control": {
     "score": 0.321891,
@@ -3775,6 +4873,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 221,
    "category_rules": {
     "score": 0.698039,
@@ -3785,6 +4884,11 @@
     "score": 0.368525,
     "rank": 4,
     "percentile": 0.9864
+   },
+   "frozen_encoder": {
+    "score": 0.659516,
+    "rank": 66,
+    "percentile": 0.7045
    },
    "random_control": {
     "score": 0.457235,
@@ -3797,6 +4901,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "family_random",
+   "languages": "same",
    "pool": 221,
    "category_rules": {
     "score": 0.50055,
@@ -3807,6 +4912,11 @@
     "score": 0.156579,
     "rank": 39,
     "percentile": 0.8273
+   },
+   "frozen_encoder": {
+    "score": 0.586651,
+    "rank": 74,
+    "percentile": 0.6682
    },
    "random_control": {
     "score": 0.46618,
@@ -3819,6 +4929,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "family_random",
+   "languages": "different",
    "pool": 221,
    "category_rules": {
     "score": 0.0,
@@ -3829,6 +4940,11 @@
     "score": 0.0,
     "rank": 215,
     "percentile": 0.0273
+   },
+   "frozen_encoder": {
+    "score": 0.50561,
+    "rank": 191,
+    "percentile": 0.1364
    },
    "random_control": {
     "score": 0.547285,
@@ -3841,6 +4957,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 221,
    "category_rules": {
     "score": 0.68658,
@@ -3851,6 +4968,11 @@
     "score": 0.151686,
     "rank": 45,
     "percentile": 0.8
+   },
+   "frozen_encoder": {
+    "score": 0.666588,
+    "rank": 6,
+    "percentile": 0.9773
    },
    "random_control": {
     "score": 0.071616,
@@ -3863,6 +4985,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "family_random",
+   "languages": "different",
    "pool": 221,
    "category_rules": {
     "score": 0.401363,
@@ -3873,6 +4996,11 @@
     "score": 0.0,
     "rank": 213,
     "percentile": 0.0364
+   },
+   "frozen_encoder": {
+    "score": 0.405147,
+    "rank": 218,
+    "percentile": 0.0136
    },
    "random_control": {
     "score": 0.76287,
@@ -3885,6 +5013,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 220,
    "category_rules": {
     "score": 0.98,
@@ -3893,6 +5022,11 @@
    },
    "tfidf_char": {
     "score": 0.891832,
+    "rank": 1,
+    "percentile": 1.0
+   },
+   "frozen_encoder": {
+    "score": 0.967225,
     "rank": 1,
     "percentile": 1.0
    },
@@ -3907,6 +5041,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 221,
    "category_rules": {
     "score": 0.37265,
@@ -3917,6 +5052,11 @@
     "score": 0.125963,
     "rank": 35,
     "percentile": 0.8455
+   },
+   "frozen_encoder": {
+    "score": 0.700412,
+    "rank": 51,
+    "percentile": 0.7727
    },
    "random_control": {
     "score": 0.739369,
@@ -3929,6 +5069,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 221,
    "category_rules": {
     "score": 0.566667,
@@ -3939,6 +5080,11 @@
     "score": 0.089819,
     "rank": 56,
     "percentile": 0.75
+   },
+   "frozen_encoder": {
+    "score": 0.760594,
+    "rank": 23,
+    "percentile": 0.9
    },
    "random_control": {
     "score": 0.366384,
@@ -3951,6 +5097,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 221,
    "category_rules": {
     "score": 0.675,
@@ -3959,6 +5106,11 @@
    },
    "tfidf_char": {
     "score": 0.773095,
+    "rank": 1,
+    "percentile": 1.0
+   },
+   "frozen_encoder": {
+    "score": 0.846092,
     "rank": 1,
     "percentile": 1.0
    },
@@ -3973,6 +5125,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 221,
    "category_rules": {
     "score": 0.951152,
@@ -3983,6 +5136,11 @@
     "score": 0.172157,
     "rank": 15,
     "percentile": 0.9364
+   },
+   "frozen_encoder": {
+    "score": 0.793835,
+    "rank": 7,
+    "percentile": 0.9727
    },
    "random_control": {
     "score": 0.363384,
@@ -3995,6 +5153,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 220,
    "category_rules": {
     "score": 0.551852,
@@ -4003,6 +5162,11 @@
    },
    "tfidf_char": {
     "score": 0.403729,
+    "rank": 3,
+    "percentile": 0.9909
+   },
+   "frozen_encoder": {
+    "score": 0.933709,
     "rank": 3,
     "percentile": 0.9909
    },
@@ -4017,6 +5181,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "lookalike",
+   "languages": "different",
    "pool": 220,
    "category_rules": {
     "score": 0.934722,
@@ -4027,6 +5192,11 @@
     "score": 0.119266,
     "rank": 23,
     "percentile": 0.8995
+   },
+   "frozen_encoder": {
+    "score": 0.837095,
+    "rank": 6,
+    "percentile": 0.9772
    },
    "random_control": {
     "score": 0.019567,
@@ -4039,6 +5209,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "lookalike",
+   "languages": "different",
    "pool": 221,
    "category_rules": {
     "score": 0.763095,
@@ -4049,6 +5220,11 @@
     "score": 0.315939,
     "rank": 1,
     "percentile": 1.0
+   },
+   "frozen_encoder": {
+    "score": 0.700208,
+    "rank": 9,
+    "percentile": 0.9636
    },
    "random_control": {
     "score": 0.502798,
@@ -4061,6 +5237,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "lookalike",
+   "languages": "different",
    "pool": 221,
    "category_rules": {
     "score": 0.431625,
@@ -4071,6 +5248,11 @@
     "score": 0.047227,
     "rank": 67,
     "percentile": 0.7
+   },
+   "frozen_encoder": {
+    "score": 0.676339,
+    "rank": 12,
+    "percentile": 0.95
    },
    "random_control": {
     "score": 0.506946,
@@ -4083,6 +5265,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "lookalike",
+   "languages": "different",
    "pool": 221,
    "category_rules": {
     "score": 0.828968,
@@ -4093,6 +5276,11 @@
     "score": 0.180532,
     "rank": 8,
     "percentile": 0.9682
+   },
+   "frozen_encoder": {
+    "score": 0.739341,
+    "rank": 5,
+    "percentile": 0.9818
    },
    "random_control": {
     "score": 0.974734,
@@ -4105,6 +5293,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "lookalike",
+   "languages": "different",
    "pool": 221,
    "category_rules": {
     "score": 0.66215,
@@ -4115,6 +5304,11 @@
     "score": 0.346875,
     "rank": 3,
     "percentile": 0.9909
+   },
+   "frozen_encoder": {
+    "score": 0.804691,
+    "rank": 15,
+    "percentile": 0.9364
    },
    "random_control": {
     "score": 0.301955,
@@ -4127,6 +5321,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 221,
    "category_rules": {
     "score": 0.606412,
@@ -4137,6 +5332,11 @@
     "score": 0.318983,
     "rank": 5,
     "percentile": 0.9818
+   },
+   "frozen_encoder": {
+    "score": 0.782789,
+    "rank": 19,
+    "percentile": 0.9182
    },
    "random_control": {
     "score": 0.079985,
@@ -4149,6 +5349,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "lookalike",
+   "languages": "different",
    "pool": 221,
    "category_rules": {
     "score": 0.560264,
@@ -4159,6 +5360,11 @@
     "score": 0.093727,
     "rank": 47,
     "percentile": 0.7909
+   },
+   "frozen_encoder": {
+    "score": 0.692205,
+    "rank": 30,
+    "percentile": 0.8682
    },
    "random_control": {
     "score": 0.306665,
@@ -4171,6 +5377,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "lookalike",
+   "languages": "different",
    "pool": 221,
    "category_rules": {
     "score": 0.62024,
@@ -4181,6 +5388,11 @@
     "score": 0.395558,
     "rank": 8,
     "percentile": 0.9682
+   },
+   "frozen_encoder": {
+    "score": 0.837712,
+    "rank": 11,
+    "percentile": 0.9545
    },
    "random_control": {
     "score": 0.214995,
@@ -4193,6 +5405,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "lookalike",
+   "languages": "different",
    "pool": 221,
    "category_rules": {
     "score": 0.818919,
@@ -4201,6 +5414,11 @@
    },
    "tfidf_char": {
     "score": 0.425015,
+    "rank": 1,
+    "percentile": 1.0
+   },
+   "frozen_encoder": {
+    "score": 0.863708,
     "rank": 1,
     "percentile": 1.0
    },
@@ -4215,6 +5433,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "family_random",
+   "languages": "different",
    "pool": 221,
    "category_rules": {
     "score": 0.0,
@@ -4225,6 +5444,11 @@
     "score": 0.216126,
     "rank": 1,
     "percentile": 1.0
+   },
+   "frozen_encoder": {
+    "score": 0.763366,
+    "rank": 15,
+    "percentile": 0.9364
    },
    "random_control": {
     "score": 0.586152,
@@ -4237,6 +5461,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 219,
    "category_rules": {
     "score": 0.708333,
@@ -4247,6 +5472,11 @@
     "score": 0.267833,
     "rank": 13,
     "percentile": 0.945
+   },
+   "frozen_encoder": {
+    "score": 0.845508,
+    "rank": 10,
+    "percentile": 0.9587
    },
    "random_control": {
     "score": 0.658827,
@@ -4259,6 +5489,7 @@
    "partition": "train",
    "family": "plant_based_milk_alternatives",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 221,
    "category_rules": {
     "score": 0.3,
@@ -4269,6 +5500,11 @@
     "score": 0.186596,
     "rank": 9,
     "percentile": 0.9636
+   },
+   "frozen_encoder": {
+    "score": 0.825383,
+    "rank": 8,
+    "percentile": 0.9682
    },
    "random_control": {
     "score": 0.610505,
@@ -4281,6 +5517,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "family_random",
+   "languages": "same",
    "pool": 539,
    "category_rules": {
     "score": 0.797995,
@@ -4291,6 +5528,11 @@
     "score": 0.14533,
     "rank": 274,
     "percentile": 0.4926
+   },
+   "frozen_encoder": {
+    "score": 0.667579,
+    "rank": 423,
+    "percentile": 0.2156
    },
    "random_control": {
     "score": 0.489187,
@@ -4303,6 +5545,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 539,
    "category_rules": {
     "score": 0.320903,
@@ -4313,6 +5556,11 @@
     "score": 0.473087,
     "rank": 8,
     "percentile": 0.987
+   },
+   "frozen_encoder": {
+    "score": 0.849604,
+    "rank": 11,
+    "percentile": 0.9814
    },
    "random_control": {
     "score": 0.907786,
@@ -4325,6 +5573,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 539,
    "category_rules": {
     "score": 0.699249,
@@ -4335,6 +5584,11 @@
     "score": 0.572421,
     "rank": 2,
     "percentile": 0.9981
+   },
+   "frozen_encoder": {
+    "score": 0.722939,
+    "rank": 161,
+    "percentile": 0.7026
    },
    "random_control": {
     "score": 0.740201,
@@ -4347,6 +5601,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "family_random",
+   "languages": "different",
    "pool": 539,
    "category_rules": {
     "score": 0.567414,
@@ -4357,6 +5612,11 @@
     "score": 0.00612,
     "rank": 249,
     "percentile": 0.539
+   },
+   "frozen_encoder": {
+    "score": 0.457578,
+    "rank": 383,
+    "percentile": 0.29
    },
    "random_control": {
     "score": 0.682923,
@@ -4369,6 +5629,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "family_random",
+   "languages": "same",
    "pool": 539,
    "category_rules": {
     "score": 0.79837,
@@ -4379,6 +5640,11 @@
     "score": 0.213103,
     "rank": 258,
     "percentile": 0.5223
+   },
+   "frozen_encoder": {
+    "score": 0.721476,
+    "rank": 249,
+    "percentile": 0.539
    },
    "random_control": {
     "score": 0.182007,
@@ -4391,6 +5657,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 539,
    "category_rules": {
     "score": 0.504892,
@@ -4401,6 +5668,11 @@
     "score": 0.514541,
     "rank": 2,
     "percentile": 0.9981
+   },
+   "frozen_encoder": {
+    "score": 0.817518,
+    "rank": 26,
+    "percentile": 0.9535
    },
    "random_control": {
     "score": 0.296289,
@@ -4413,6 +5685,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 526,
    "category_rules": {
     "score": 0.702222,
@@ -4423,6 +5696,11 @@
     "score": 0.538946,
     "rank": 1,
     "percentile": 1.0
+   },
+   "frozen_encoder": {
+    "score": 0.771643,
+    "rank": 19,
+    "percentile": 0.9657
    },
    "random_control": {
     "score": 0.580945,
@@ -4435,6 +5713,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 526,
    "category_rules": {
     "score": 0.552222,
@@ -4445,6 +5724,11 @@
     "score": 0.41276,
     "rank": 2,
     "percentile": 0.9981
+   },
+   "frozen_encoder": {
+    "score": 0.929519,
+    "rank": 1,
+    "percentile": 1.0
    },
    "random_control": {
     "score": 0.433304,
@@ -4457,6 +5741,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 539,
    "category_rules": {
     "score": 0.76469,
@@ -4467,6 +5752,11 @@
     "score": 0.275102,
     "rank": 1,
     "percentile": 1.0
+   },
+   "frozen_encoder": {
+    "score": 0.766854,
+    "rank": 18,
+    "percentile": 0.9684
    },
    "random_control": {
     "score": 0.485574,
@@ -4479,6 +5769,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 539,
    "category_rules": {
     "score": 0.721967,
@@ -4489,6 +5780,11 @@
     "score": 0.213255,
     "rank": 134,
     "percentile": 0.7528
+   },
+   "frozen_encoder": {
+    "score": 0.775739,
+    "rank": 157,
+    "percentile": 0.71
    },
    "random_control": {
     "score": 0.824157,
@@ -4501,6 +5797,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 539,
    "category_rules": {
     "score": 0.841939,
@@ -4511,6 +5808,11 @@
     "score": 0.191704,
     "rank": 9,
     "percentile": 0.9851
+   },
+   "frozen_encoder": {
+    "score": 0.545899,
+    "rank": 349,
+    "percentile": 0.3532
    },
    "random_control": {
     "score": 0.692773,
@@ -4523,6 +5825,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 539,
    "category_rules": {
     "score": 0.841939,
@@ -4533,6 +5836,11 @@
     "score": 0.225899,
     "rank": 5,
     "percentile": 0.9926
+   },
+   "frozen_encoder": {
+    "score": 0.666553,
+    "rank": 154,
+    "percentile": 0.7156
    },
    "random_control": {
     "score": 0.267424,
@@ -4545,6 +5853,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "family_random",
+   "languages": "different",
    "pool": 538,
    "category_rules": {
     "score": 0.717303,
@@ -4555,6 +5864,11 @@
     "score": 0.054204,
     "rank": 96,
     "percentile": 0.8231
+   },
+   "frozen_encoder": {
+    "score": 0.48876,
+    "rank": 455,
+    "percentile": 0.1546
    },
    "random_control": {
     "score": 0.134745,
@@ -4567,6 +5881,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "family_random",
+   "languages": "same",
    "pool": 539,
    "category_rules": {
     "score": 0.887387,
@@ -4577,6 +5892,11 @@
     "score": 0.13034,
     "rank": 356,
     "percentile": 0.3401
+   },
+   "frozen_encoder": {
+    "score": 0.680626,
+    "rank": 255,
+    "percentile": 0.5279
    },
    "random_control": {
     "score": 0.665759,
@@ -4589,6 +5909,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "family_random",
+   "languages": "same",
    "pool": 539,
    "category_rules": {
     "score": 0.499566,
@@ -4599,6 +5920,11 @@
     "score": 0.115352,
     "rank": 191,
     "percentile": 0.6468
+   },
+   "frozen_encoder": {
+    "score": 0.581891,
+    "rank": 365,
+    "percentile": 0.3234
    },
    "random_control": {
     "score": 0.101219,
@@ -4611,6 +5937,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 526,
    "category_rules": {
     "score": 0.904265,
@@ -4621,6 +5948,11 @@
     "score": 0.099711,
     "rank": 405,
     "percentile": 0.2305
+   },
+   "frozen_encoder": {
+    "score": 0.751884,
+    "rank": 135,
+    "percentile": 0.7448
    },
    "random_control": {
     "score": 0.446308,
@@ -4633,6 +5965,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 539,
    "category_rules": {
     "score": 0.550835,
@@ -4643,6 +5976,11 @@
     "score": 0.148359,
     "rank": 204,
     "percentile": 0.6227
+   },
+   "frozen_encoder": {
+    "score": 0.539367,
+    "rank": 396,
+    "percentile": 0.2658
    },
    "random_control": {
     "score": 0.299666,
@@ -4655,6 +5993,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "family_random",
+   "languages": "same",
    "pool": 539,
    "category_rules": {
     "score": 0.690124,
@@ -4665,6 +6004,11 @@
     "score": 0.061241,
     "rank": 433,
     "percentile": 0.197
+   },
+   "frozen_encoder": {
+    "score": 0.35201,
+    "rank": 461,
+    "percentile": 0.145
    },
    "random_control": {
     "score": 0.005612,
@@ -4677,6 +6021,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "family_random",
+   "languages": "same",
    "pool": 538,
    "category_rules": {
     "score": 0.743131,
@@ -4687,6 +6032,11 @@
     "score": 0.224163,
     "rank": 44,
     "percentile": 0.9199
+   },
+   "frozen_encoder": {
+    "score": 0.694299,
+    "rank": 173,
+    "percentile": 0.6797
    },
    "random_control": {
     "score": 0.296418,
@@ -4699,6 +6049,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 539,
    "category_rules": {
     "score": 0.602262,
@@ -4709,6 +6060,11 @@
     "score": 0.328311,
     "rank": 35,
     "percentile": 0.9368
+   },
+   "frozen_encoder": {
+    "score": 0.700431,
+    "rank": 200,
+    "percentile": 0.6301
    },
    "random_control": {
     "score": 0.626902,
@@ -4721,6 +6077,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 539,
    "category_rules": {
     "score": 0.818329,
@@ -4731,6 +6088,11 @@
     "score": 0.323808,
     "rank": 33,
     "percentile": 0.9405
+   },
+   "frozen_encoder": {
+    "score": 0.83101,
+    "rank": 27,
+    "percentile": 0.9517
    },
    "random_control": {
     "score": 0.637234,
@@ -4743,6 +6105,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 539,
    "category_rules": {
     "score": 0.954094,
@@ -4753,6 +6116,11 @@
     "score": 0.374925,
     "rank": 19,
     "percentile": 0.9665
+   },
+   "frozen_encoder": {
+    "score": 0.833532,
+    "rank": 23,
+    "percentile": 0.9591
    },
    "random_control": {
     "score": 0.864778,
@@ -4765,6 +6133,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 539,
    "category_rules": {
     "score": 0.928815,
@@ -4775,6 +6144,11 @@
     "score": 0.361718,
     "rank": 24,
     "percentile": 0.9572
+   },
+   "frozen_encoder": {
+    "score": 0.815613,
+    "rank": 47,
+    "percentile": 0.9145
    },
    "random_control": {
     "score": 0.955341,
@@ -4787,6 +6161,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 538,
    "category_rules": {
     "score": 0.644444,
@@ -4797,6 +6172,11 @@
     "score": 0.25029,
     "rank": 22,
     "percentile": 0.9609
+   },
+   "frozen_encoder": {
+    "score": 0.743407,
+    "rank": 23,
+    "percentile": 0.959
    },
    "random_control": {
     "score": 0.53144,
@@ -4809,6 +6189,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 537,
    "category_rules": {
     "score": 0.806938,
@@ -4819,6 +6200,11 @@
     "score": 0.150525,
     "rank": 260,
     "percentile": 0.5168
+   },
+   "frozen_encoder": {
+    "score": 0.491947,
+    "rank": 496,
+    "percentile": 0.0765
    },
    "random_control": {
     "score": 0.359105,
@@ -4831,6 +6217,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "family_random",
+   "languages": "different",
    "pool": 539,
    "category_rules": {
     "score": 0.231151,
@@ -4841,6 +6228,11 @@
     "score": 0.013128,
     "rank": 524,
     "percentile": 0.0279
+   },
+   "frozen_encoder": {
+    "score": 0.563858,
+    "rank": 295,
+    "percentile": 0.4535
    },
    "random_control": {
     "score": 0.612737,
@@ -4853,6 +6245,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "family_random",
+   "languages": "same",
    "pool": 539,
    "category_rules": {
     "score": 0.753175,
@@ -4863,6 +6256,11 @@
     "score": 0.240226,
     "rank": 64,
     "percentile": 0.8829
+   },
+   "frozen_encoder": {
+    "score": 0.581397,
+    "rank": 215,
+    "percentile": 0.6022
    },
    "random_control": {
     "score": 0.294327,
@@ -4875,6 +6273,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 539,
    "category_rules": {
     "score": 0.855718,
@@ -4885,6 +6284,11 @@
     "score": 0.125681,
     "rank": 170,
     "percentile": 0.6859
+   },
+   "frozen_encoder": {
+    "score": 0.668469,
+    "rank": 43,
+    "percentile": 0.9219
    },
    "random_control": {
     "score": 0.885285,
@@ -4897,6 +6301,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 539,
    "category_rules": {
     "score": 0.724518,
@@ -4907,6 +6312,11 @@
     "score": 0.207184,
     "rank": 62,
     "percentile": 0.8866
+   },
+   "frozen_encoder": {
+    "score": 0.765299,
+    "rank": 49,
+    "percentile": 0.9108
    },
    "random_control": {
     "score": 0.042619,
@@ -4919,6 +6329,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 539,
    "category_rules": {
     "score": 0.816844,
@@ -4929,6 +6340,11 @@
     "score": 0.282134,
     "rank": 88,
     "percentile": 0.8383
+   },
+   "frozen_encoder": {
+    "score": 0.793984,
+    "rank": 34,
+    "percentile": 0.9387
    },
    "random_control": {
     "score": 0.50299,
@@ -4941,6 +6357,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 539,
    "category_rules": {
     "score": 0.715112,
@@ -4951,6 +6368,11 @@
     "score": 0.273615,
     "rank": 71,
     "percentile": 0.8699
+   },
+   "frozen_encoder": {
+    "score": 0.450622,
+    "rank": 494,
+    "percentile": 0.0836
    },
    "random_control": {
     "score": 0.644546,
@@ -4963,6 +6385,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "family_random",
+   "languages": "same",
    "pool": 539,
    "category_rules": {
     "score": 0.711851,
@@ -4973,6 +6396,11 @@
     "score": 0.169307,
     "rank": 219,
     "percentile": 0.5948
+   },
+   "frozen_encoder": {
+    "score": 0.716177,
+    "rank": 90,
+    "percentile": 0.8346
    },
    "random_control": {
     "score": 0.167146,
@@ -4985,6 +6413,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "family_random",
+   "languages": "same",
    "pool": 539,
    "category_rules": {
     "score": 0.632407,
@@ -4995,6 +6424,11 @@
     "score": 0.124593,
     "rank": 321,
     "percentile": 0.4052
+   },
+   "frozen_encoder": {
+    "score": 0.649215,
+    "rank": 224,
+    "percentile": 0.5855
    },
    "random_control": {
     "score": 0.085154,
@@ -5007,6 +6441,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "family_random",
+   "languages": "same",
    "pool": 535,
    "category_rules": {
     "score": 0.665733,
@@ -5017,6 +6452,11 @@
     "score": 0.066938,
     "rank": 350,
     "percentile": 0.3464
+   },
+   "frozen_encoder": {
+    "score": 0.619607,
+    "rank": 334,
+    "percentile": 0.3764
    },
    "random_control": {
     "score": 0.016441,
@@ -5029,6 +6469,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "family_random",
+   "languages": "same",
    "pool": 539,
    "category_rules": {
     "score": 0.902562,
@@ -5039,6 +6480,11 @@
     "score": 0.087201,
     "rank": 445,
     "percentile": 0.1747
+   },
+   "frozen_encoder": {
+    "score": 0.412535,
+    "rank": 522,
+    "percentile": 0.0316
    },
    "random_control": {
     "score": 0.065144,
@@ -5051,6 +6497,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "family_random",
+   "languages": "same",
    "pool": 537,
    "category_rules": {
     "score": 0.724411,
@@ -5061,6 +6508,11 @@
     "score": 0.117942,
     "rank": 364,
     "percentile": 0.3228
+   },
+   "frozen_encoder": {
+    "score": 0.610924,
+    "rank": 285,
+    "percentile": 0.4701
    },
    "random_control": {
     "score": 0.507959,
@@ -5073,6 +6525,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 539,
    "category_rules": {
     "score": 1.0,
@@ -5081,6 +6534,11 @@
    },
    "tfidf_char": {
     "score": 0.764965,
+    "rank": 2,
+    "percentile": 0.9981
+   },
+   "frozen_encoder": {
+    "score": 0.902867,
     "rank": 2,
     "percentile": 0.9981
    },
@@ -5095,6 +6553,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 539,
    "category_rules": {
     "score": 0.899719,
@@ -5103,6 +6562,11 @@
    },
    "tfidf_char": {
     "score": 0.991882,
+    "rank": 1,
+    "percentile": 1.0
+   },
+   "frozen_encoder": {
+    "score": 0.965822,
     "rank": 1,
     "percentile": 1.0
    },
@@ -5117,6 +6581,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 539,
    "category_rules": {
     "score": 0.832568,
@@ -5127,6 +6592,11 @@
     "score": 0.500794,
     "rank": 9,
     "percentile": 0.9851
+   },
+   "frozen_encoder": {
+    "score": 0.930715,
+    "rank": 2,
+    "percentile": 0.9981
    },
    "random_control": {
     "score": 0.700749,
@@ -5139,6 +6609,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 539,
    "category_rules": {
     "score": 0.910121,
@@ -5149,6 +6620,11 @@
     "score": 0.483688,
     "rank": 7,
     "percentile": 0.9888
+   },
+   "frozen_encoder": {
+    "score": 0.863824,
+    "rank": 2,
+    "percentile": 0.9981
    },
    "random_control": {
     "score": 0.86628,
@@ -5161,6 +6637,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "family_random",
+   "languages": "same",
    "pool": 539,
    "category_rules": {
     "score": 0.682285,
@@ -5171,6 +6648,11 @@
     "score": 0.079439,
     "rank": 386,
     "percentile": 0.2844
+   },
+   "frozen_encoder": {
+    "score": 0.531672,
+    "rank": 395,
+    "percentile": 0.2677
    },
    "random_control": {
     "score": 0.535545,
@@ -5183,6 +6665,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 539,
    "category_rules": {
     "score": 0.794407,
@@ -5193,6 +6676,11 @@
     "score": 0.499658,
     "rank": 9,
     "percentile": 0.9851
+   },
+   "frozen_encoder": {
+    "score": 0.960936,
+    "rank": 2,
+    "percentile": 0.9981
    },
    "random_control": {
     "score": 0.358257,
@@ -5205,6 +6693,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "family_random",
+   "languages": "same",
    "pool": 539,
    "category_rules": {
     "score": 0.649991,
@@ -5215,6 +6704,11 @@
     "score": 0.191719,
     "rank": 177,
     "percentile": 0.6729
+   },
+   "frozen_encoder": {
+    "score": 0.730661,
+    "rank": 154,
+    "percentile": 0.7156
    },
    "random_control": {
     "score": 0.218226,
@@ -5227,6 +6721,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 538,
    "category_rules": {
     "score": 0.936946,
@@ -5237,6 +6732,11 @@
     "score": 0.862997,
     "rank": 1,
     "percentile": 1.0
+   },
+   "frozen_encoder": {
+    "score": 0.859393,
+    "rank": 5,
+    "percentile": 0.9926
    },
    "random_control": {
     "score": 0.2071,
@@ -5249,6 +6749,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 539,
    "category_rules": {
     "score": 0.836229,
@@ -5259,6 +6760,11 @@
     "score": 0.312283,
     "rank": 42,
     "percentile": 0.9238
+   },
+   "frozen_encoder": {
+    "score": 0.772724,
+    "rank": 139,
+    "percentile": 0.7435
    },
    "random_control": {
     "score": 0.18099,
@@ -5271,6 +6777,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 539,
    "category_rules": {
     "score": 0.808451,
@@ -5281,6 +6788,11 @@
     "score": 0.378285,
     "rank": 11,
     "percentile": 0.9814
+   },
+   "frozen_encoder": {
+    "score": 0.72729,
+    "rank": 227,
+    "percentile": 0.5799
    },
    "random_control": {
     "score": 0.015355,
@@ -5293,6 +6805,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 538,
    "category_rules": {
     "score": 0.868991,
@@ -5301,6 +6814,11 @@
    },
    "tfidf_char": {
     "score": 0.678524,
+    "rank": 1,
+    "percentile": 1.0
+   },
+   "frozen_encoder": {
+    "score": 0.984566,
     "rank": 1,
     "percentile": 1.0
    },
@@ -5315,6 +6833,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "family_random",
+   "languages": "same",
    "pool": 539,
    "category_rules": {
     "score": 0.82942,
@@ -5325,6 +6844,11 @@
     "score": 0.10354,
     "rank": 391,
     "percentile": 0.2751
+   },
+   "frozen_encoder": {
+    "score": 0.567424,
+    "rank": 445,
+    "percentile": 0.1747
    },
    "random_control": {
     "score": 0.810024,
@@ -5337,6 +6861,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "family_random",
+   "languages": "different",
    "pool": 539,
    "category_rules": {
     "score": 0.807426,
@@ -5347,6 +6872,11 @@
     "score": 0.040014,
     "rank": 489,
     "percentile": 0.0929
+   },
+   "frozen_encoder": {
+    "score": 0.64223,
+    "rank": 353,
+    "percentile": 0.3457
    },
    "random_control": {
     "score": 0.072187,
@@ -5359,6 +6889,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 539,
    "category_rules": {
     "score": 0.552744,
@@ -5369,6 +6900,11 @@
     "score": 0.231293,
     "rank": 95,
     "percentile": 0.8253
+   },
+   "frozen_encoder": {
+    "score": 0.816029,
+    "rank": 36,
+    "percentile": 0.9349
    },
    "random_control": {
     "score": 0.558017,
@@ -5381,6 +6917,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 539,
    "category_rules": {
     "score": 0.854922,
@@ -5391,6 +6928,11 @@
     "score": 0.218755,
     "rank": 77,
     "percentile": 0.8587
+   },
+   "frozen_encoder": {
+    "score": 0.557905,
+    "rank": 432,
+    "percentile": 0.1989
    },
    "random_control": {
     "score": 0.906105,
@@ -5403,6 +6945,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 537,
    "category_rules": {
     "score": 0.901132,
@@ -5413,6 +6956,11 @@
     "score": 0.159398,
     "rank": 50,
     "percentile": 0.9086
+   },
+   "frozen_encoder": {
+    "score": 0.721721,
+    "rank": 40,
+    "percentile": 0.9272
    },
    "random_control": {
     "score": 0.578826,
@@ -5425,6 +6973,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 539,
    "category_rules": {
     "score": 0.862967,
@@ -5435,6 +6984,11 @@
     "score": 0.076265,
     "rank": 291,
     "percentile": 0.461
+   },
+   "frozen_encoder": {
+    "score": 0.623382,
+    "rank": 350,
+    "percentile": 0.3513
    },
    "random_control": {
     "score": 0.496147,
@@ -5447,6 +7001,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 539,
    "category_rules": {
     "score": 0.585131,
@@ -5457,6 +7012,11 @@
     "score": 0.151393,
     "rank": 212,
     "percentile": 0.6078
+   },
+   "frozen_encoder": {
+    "score": 0.740291,
+    "rank": 150,
+    "percentile": 0.723
    },
    "random_control": {
     "score": 0.264037,
@@ -5469,6 +7029,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 539,
    "category_rules": {
     "score": 0.759091,
@@ -5479,6 +7040,11 @@
     "score": 0.12372,
     "rank": 174,
     "percentile": 0.6784
+   },
+   "frozen_encoder": {
+    "score": 0.620186,
+    "rank": 315,
+    "percentile": 0.4164
    },
    "random_control": {
     "score": 0.213719,
@@ -5491,6 +7057,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 538,
    "category_rules": {
     "score": 0.708974,
@@ -5501,6 +7068,11 @@
     "score": 0.220066,
     "rank": 161,
     "percentile": 0.702
+   },
+   "frozen_encoder": {
+    "score": 0.845735,
+    "rank": 51,
+    "percentile": 0.9069
    },
    "random_control": {
     "score": 0.393012,
@@ -5513,6 +7085,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 539,
    "category_rules": {
     "score": 0.725523,
@@ -5523,6 +7096,11 @@
     "score": 0.211953,
     "rank": 208,
     "percentile": 0.6152
+   },
+   "frozen_encoder": {
+    "score": 0.736098,
+    "rank": 115,
+    "percentile": 0.7881
    },
    "random_control": {
     "score": 0.032817,
@@ -5535,6 +7113,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 539,
    "category_rules": {
     "score": 0.879198,
@@ -5545,6 +7124,11 @@
     "score": 0.174297,
     "rank": 119,
     "percentile": 0.7807
+   },
+   "frozen_encoder": {
+    "score": 0.657298,
+    "rank": 195,
+    "percentile": 0.6394
    },
    "random_control": {
     "score": 0.069477,
@@ -5557,6 +7141,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 539,
    "category_rules": {
     "score": 0.784064,
@@ -5567,6 +7152,11 @@
     "score": 0.129027,
     "rank": 366,
     "percentile": 0.3216
+   },
+   "frozen_encoder": {
+    "score": 0.713849,
+    "rank": 326,
+    "percentile": 0.3959
    },
    "random_control": {
     "score": 0.871311,
@@ -5579,6 +7169,7 @@
    "partition": "train",
    "family": "yogurts",
    "strategy": "family_random",
+   "languages": "same",
    "pool": 539,
    "category_rules": {
     "score": 0.711131,
@@ -5589,6 +7180,11 @@
     "score": 0.134838,
     "rank": 347,
     "percentile": 0.3569
+   },
+   "frozen_encoder": {
+    "score": 0.469704,
+    "rank": 353,
+    "percentile": 0.3457
    },
    "random_control": {
     "score": 0.34696,
@@ -5601,6 +7197,7 @@
    "partition": "validation",
    "family": "breakfast_cereals",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 60,
    "category_rules": {
     "score": 0.884127,
@@ -5611,6 +7208,11 @@
     "score": 0.20665,
     "rank": 3,
     "percentile": 0.9661
+   },
+   "frozen_encoder": {
+    "score": 0.527925,
+    "rank": 9,
+    "percentile": 0.8644
    },
    "random_control": {
     "score": 0.338972,
@@ -5623,6 +7225,7 @@
    "partition": "validation",
    "family": "breakfast_cereals",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 60,
    "category_rules": {
     "score": 0.818315,
@@ -5631,6 +7234,11 @@
    },
    "tfidf_char": {
     "score": 0.302786,
+    "rank": 2,
+    "percentile": 0.9831
+   },
+   "frozen_encoder": {
+    "score": 0.622927,
     "rank": 2,
     "percentile": 0.9831
    },
@@ -5645,6 +7253,7 @@
    "partition": "validation",
    "family": "breakfast_cereals",
    "strategy": "family_random",
+   "languages": "same",
    "pool": 60,
    "category_rules": {
     "score": 0.613553,
@@ -5653,6 +7262,11 @@
    },
    "tfidf_char": {
     "score": 0.144989,
+    "rank": 12,
+    "percentile": 0.8136
+   },
+   "frozen_encoder": {
+    "score": 0.507205,
     "rank": 12,
     "percentile": 0.8136
    },
@@ -5667,6 +7281,7 @@
    "partition": "validation",
    "family": "breakfast_cereals",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 60,
    "category_rules": {
     "score": 0.864762,
@@ -5677,6 +7292,11 @@
     "score": 0.30136,
     "rank": 4,
     "percentile": 0.9492
+   },
+   "frozen_encoder": {
+    "score": 0.568995,
+    "rank": 27,
+    "percentile": 0.5593
    },
    "random_control": {
     "score": 0.188957,
@@ -5689,6 +7309,7 @@
    "partition": "validation",
    "family": "breakfast_cereals",
    "strategy": "family_random",
+   "languages": "same",
    "pool": 60,
    "category_rules": {
     "score": 0.850306,
@@ -5699,6 +7320,11 @@
     "score": 0.205153,
     "rank": 4,
     "percentile": 0.9492
+   },
+   "frozen_encoder": {
+    "score": 0.73754,
+    "rank": 7,
+    "percentile": 0.8983
    },
    "random_control": {
     "score": 0.221491,
@@ -5711,6 +7337,7 @@
    "partition": "validation",
    "family": "breakfast_cereals",
    "strategy": "family_random",
+   "languages": "same",
    "pool": 60,
    "category_rules": {
     "score": 0.514815,
@@ -5721,6 +7348,11 @@
     "score": 0.186745,
     "rank": 6,
     "percentile": 0.9153
+   },
+   "frozen_encoder": {
+    "score": 0.556578,
+    "rank": 14,
+    "percentile": 0.7797
    },
    "random_control": {
     "score": 0.321628,
@@ -5733,6 +7365,7 @@
    "partition": "validation",
    "family": "breakfast_cereals",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 60,
    "category_rules": {
     "score": 0.752778,
@@ -5741,6 +7374,11 @@
    },
    "tfidf_char": {
     "score": 0.704584,
+    "rank": 1,
+    "percentile": 1.0
+   },
+   "frozen_encoder": {
+    "score": 0.821443,
     "rank": 1,
     "percentile": 1.0
    },
@@ -5755,6 +7393,7 @@
    "partition": "validation",
    "family": "breakfast_cereals",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 60,
    "category_rules": {
     "score": 0.297305,
@@ -5765,6 +7404,11 @@
     "score": 0.245181,
     "rank": 3,
     "percentile": 0.9661
+   },
+   "frozen_encoder": {
+    "score": 0.433927,
+    "rank": 42,
+    "percentile": 0.3051
    },
    "random_control": {
     "score": 0.470826,
@@ -5777,6 +7421,7 @@
    "partition": "validation",
    "family": "breakfast_cereals",
    "strategy": "family_random",
+   "languages": "same",
    "pool": 60,
    "category_rules": {
     "score": 0.598191,
@@ -5787,6 +7432,11 @@
     "score": 0.130154,
     "rank": 26,
     "percentile": 0.5763
+   },
+   "frozen_encoder": {
+    "score": 0.599846,
+    "rank": 30,
+    "percentile": 0.5085
    },
    "random_control": {
     "score": 0.094332,
@@ -5799,6 +7449,7 @@
    "partition": "validation",
    "family": "breakfast_cereals",
    "strategy": "family_random",
+   "languages": "same",
    "pool": 60,
    "category_rules": {
     "score": 0.545277,
@@ -5809,6 +7460,11 @@
     "score": 0.113084,
     "rank": 31,
     "percentile": 0.4915
+   },
+   "frozen_encoder": {
+    "score": 0.656369,
+    "rank": 17,
+    "percentile": 0.7288
    },
    "random_control": {
     "score": 0.507462,
@@ -5821,6 +7477,7 @@
    "partition": "validation",
    "family": "breakfast_cereals",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 60,
    "category_rules": {
     "score": 0.614158,
@@ -5831,6 +7488,11 @@
     "score": 0.328835,
     "rank": 5,
     "percentile": 0.9322
+   },
+   "frozen_encoder": {
+    "score": 0.838846,
+    "rank": 2,
+    "percentile": 0.9831
    },
    "random_control": {
     "score": 0.947877,
@@ -5843,6 +7505,7 @@
    "partition": "validation",
    "family": "breakfast_cereals",
    "strategy": "family_random",
+   "languages": "same",
    "pool": 60,
    "category_rules": {
     "score": 0.539758,
@@ -5853,6 +7516,11 @@
     "score": 0.168791,
     "rank": 27,
     "percentile": 0.5593
+   },
+   "frozen_encoder": {
+    "score": 0.580059,
+    "rank": 45,
+    "percentile": 0.2542
    },
    "random_control": {
     "score": 0.541632,
@@ -5865,6 +7533,7 @@
    "partition": "validation",
    "family": "breakfast_cereals",
    "strategy": "brand_variant",
+   "languages": "different",
    "pool": 60,
    "category_rules": {
     "score": 0.532298,
@@ -5875,6 +7544,11 @@
     "score": 0.011939,
     "rank": 45,
     "percentile": 0.2542
+   },
+   "frozen_encoder": {
+    "score": 0.586338,
+    "rank": 35,
+    "percentile": 0.4237
    },
    "random_control": {
     "score": 0.009559,
@@ -5887,6 +7561,7 @@
    "partition": "validation",
    "family": "breakfast_cereals",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 60,
    "category_rules": {
     "score": 0.588326,
@@ -5897,6 +7572,11 @@
     "score": 0.113597,
     "rank": 34,
     "percentile": 0.4407
+   },
+   "frozen_encoder": {
+    "score": 0.569132,
+    "rank": 30,
+    "percentile": 0.5085
    },
    "random_control": {
     "score": 0.852604,
@@ -5909,6 +7589,7 @@
    "partition": "validation",
    "family": "breakfast_cereals",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 59,
    "category_rules": {
     "score": 1.0,
@@ -5919,6 +7600,11 @@
     "score": 0.410453,
     "rank": 1,
     "percentile": 1.0
+   },
+   "frozen_encoder": {
+    "score": 0.629948,
+    "rank": 8,
+    "percentile": 0.8793
    },
    "random_control": {
     "score": 0.57221,
@@ -5931,6 +7617,7 @@
    "partition": "validation",
    "family": "breakfast_cereals",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 59,
    "category_rules": {
     "score": 0.678589,
@@ -5941,6 +7628,11 @@
     "score": 0.110035,
     "rank": 5,
     "percentile": 0.931
+   },
+   "frozen_encoder": {
+    "score": 0.562274,
+    "rank": 7,
+    "percentile": 0.8966
    },
    "random_control": {
     "score": 0.975904,
@@ -5953,6 +7645,7 @@
    "partition": "validation",
    "family": "breakfast_cereals",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 59,
    "category_rules": {
     "score": 0.861645,
@@ -5961,6 +7654,11 @@
    },
    "tfidf_char": {
     "score": 0.948926,
+    "rank": 1,
+    "percentile": 1.0
+   },
+   "frozen_encoder": {
+    "score": 0.98442,
     "rank": 1,
     "percentile": 1.0
    },
@@ -5975,6 +7673,7 @@
    "partition": "validation",
    "family": "breakfast_cereals",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 59,
    "category_rules": {
     "score": 0.92152,
@@ -5985,6 +7684,11 @@
     "score": 0.687147,
     "rank": 2,
     "percentile": 0.9828
+   },
+   "frozen_encoder": {
+    "score": 0.827317,
+    "rank": 5,
+    "percentile": 0.931
    },
    "random_control": {
     "score": 0.907533,
@@ -5997,6 +7701,7 @@
    "partition": "validation",
    "family": "breakfast_cereals",
    "strategy": "brand_variant",
+   "languages": "different",
    "pool": 60,
    "category_rules": {
     "score": 0.734788,
@@ -6007,6 +7712,11 @@
     "score": 0.022543,
     "rank": 32,
     "percentile": 0.4746
+   },
+   "frozen_encoder": {
+    "score": 0.474132,
+    "rank": 31,
+    "percentile": 0.4915
    },
    "random_control": {
     "score": 0.568009,
@@ -6019,6 +7729,7 @@
    "partition": "validation",
    "family": "breakfast_cereals",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 59,
    "category_rules": {
     "score": 0.983876,
@@ -6027,6 +7738,11 @@
    },
    "tfidf_char": {
     "score": 0.959728,
+    "rank": 1,
+    "percentile": 1.0
+   },
+   "frozen_encoder": {
+    "score": 0.927895,
     "rank": 1,
     "percentile": 1.0
    },
@@ -6041,6 +7757,7 @@
    "partition": "validation",
    "family": "plant_based_milk_alternatives",
    "strategy": "lookalike",
+   "languages": "different",
    "pool": 48,
    "category_rules": {
     "score": 0.594282,
@@ -6051,6 +7768,11 @@
     "score": 0.129795,
     "rank": 2,
     "percentile": 0.9787
+   },
+   "frozen_encoder": {
+    "score": 0.729224,
+    "rank": 1,
+    "percentile": 1.0
    },
    "random_control": {
     "score": 0.094621,
@@ -6063,6 +7785,7 @@
    "partition": "validation",
    "family": "plant_based_milk_alternatives",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 48,
    "category_rules": {
     "score": 0.483114,
@@ -6073,6 +7796,11 @@
     "score": 0.081364,
     "rank": 16,
     "percentile": 0.6809
+   },
+   "frozen_encoder": {
+    "score": 0.56195,
+    "rank": 27,
+    "percentile": 0.4468
    },
    "random_control": {
     "score": 0.337146,
@@ -6085,6 +7813,7 @@
    "partition": "validation",
    "family": "plant_based_milk_alternatives",
    "strategy": "family_random",
+   "languages": "different",
    "pool": 47,
    "category_rules": {
     "score": 0.716667,
@@ -6095,6 +7824,11 @@
     "score": 0.004456,
     "rank": 32,
     "percentile": 0.3261
+   },
+   "frozen_encoder": {
+    "score": 0.360435,
+    "rank": 42,
+    "percentile": 0.1087
    },
    "random_control": {
     "score": 0.655194,
@@ -6107,6 +7841,7 @@
    "partition": "validation",
    "family": "plant_based_milk_alternatives",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 48,
    "category_rules": {
     "score": 0.783333,
@@ -6117,6 +7852,11 @@
     "score": 0.128407,
     "rank": 7,
     "percentile": 0.8723
+   },
+   "frozen_encoder": {
+    "score": 0.598216,
+    "rank": 38,
+    "percentile": 0.2128
    },
    "random_control": {
     "score": 0.129125,
@@ -6129,6 +7869,7 @@
    "partition": "validation",
    "family": "plant_based_milk_alternatives",
    "strategy": "family_random",
+   "languages": "different",
    "pool": 48,
    "category_rules": {
     "score": 0.891904,
@@ -6139,6 +7880,11 @@
     "score": 0.040168,
     "rank": 20,
     "percentile": 0.5957
+   },
+   "frozen_encoder": {
+    "score": 0.596079,
+    "rank": 25,
+    "percentile": 0.4894
    },
    "random_control": {
     "score": 0.374609,
@@ -6151,6 +7897,7 @@
    "partition": "validation",
    "family": "plant_based_milk_alternatives",
    "strategy": "brand_variant",
+   "languages": "different",
    "pool": 48,
    "category_rules": {
     "score": 0.619355,
@@ -6161,6 +7908,11 @@
     "score": 0.012773,
     "rank": 33,
     "percentile": 0.3191
+   },
+   "frozen_encoder": {
+    "score": 0.494499,
+    "rank": 39,
+    "percentile": 0.1915
    },
    "random_control": {
     "score": 0.519286,
@@ -6173,6 +7925,7 @@
    "partition": "validation",
    "family": "plant_based_milk_alternatives",
    "strategy": "family_random",
+   "languages": "different",
    "pool": 48,
    "category_rules": {
     "score": 0.416609,
@@ -6183,6 +7936,11 @@
     "score": 0.0,
     "rank": 47,
     "percentile": 0.0213
+   },
+   "frozen_encoder": {
+    "score": 0.621795,
+    "rank": 13,
+    "percentile": 0.7447
    },
    "random_control": {
     "score": 0.316503,
@@ -6195,6 +7953,7 @@
    "partition": "validation",
    "family": "plant_based_milk_alternatives",
    "strategy": "family_random",
+   "languages": "different",
    "pool": 48,
    "category_rules": {
     "score": 0.526455,
@@ -6205,6 +7964,11 @@
     "score": 0.041826,
     "rank": 16,
     "percentile": 0.6809
+   },
+   "frozen_encoder": {
+    "score": 0.659008,
+    "rank": 7,
+    "percentile": 0.8723
    },
    "random_control": {
     "score": 0.422671,
@@ -6217,6 +7981,7 @@
    "partition": "validation",
    "family": "plant_based_milk_alternatives",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 48,
    "category_rules": {
     "score": 0.720912,
@@ -6227,6 +7992,11 @@
     "score": 0.103261,
     "rank": 4,
     "percentile": 0.9362
+   },
+   "frozen_encoder": {
+    "score": 0.349447,
+    "rank": 47,
+    "percentile": 0.0213
    },
    "random_control": {
     "score": 0.622399,
@@ -6239,6 +8009,7 @@
    "partition": "validation",
    "family": "plant_based_milk_alternatives",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 48,
    "category_rules": {
     "score": 0.576479,
@@ -6249,6 +8020,11 @@
     "score": 0.002972,
     "rank": 36,
     "percentile": 0.2553
+   },
+   "frozen_encoder": {
+    "score": 0.513208,
+    "rank": 34,
+    "percentile": 0.2979
    },
    "random_control": {
     "score": 0.042475,
@@ -6261,6 +8037,7 @@
    "partition": "validation",
    "family": "plant_based_milk_alternatives",
    "strategy": "family_random",
+   "languages": "different",
    "pool": 48,
    "category_rules": {
     "score": 0.396215,
@@ -6269,6 +8046,11 @@
    },
    "tfidf_char": {
     "score": 0.0,
+    "rank": 44,
+    "percentile": 0.0851
+   },
+   "frozen_encoder": {
+    "score": 0.375485,
     "rank": 44,
     "percentile": 0.0851
    },
@@ -6283,6 +8065,7 @@
    "partition": "validation",
    "family": "plant_based_milk_alternatives",
    "strategy": "lookalike",
+   "languages": "different",
    "pool": 48,
    "category_rules": {
     "score": 0.44697,
@@ -6293,6 +8076,11 @@
     "score": 0.131066,
     "rank": 10,
     "percentile": 0.8085
+   },
+   "frozen_encoder": {
+    "score": 0.568904,
+    "rank": 7,
+    "percentile": 0.8723
    },
    "random_control": {
     "score": 0.396415,
@@ -6305,6 +8093,7 @@
    "partition": "validation",
    "family": "plant_based_milk_alternatives",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 47,
    "category_rules": {
     "score": 0.900452,
@@ -6315,6 +8104,11 @@
     "score": 0.23331,
     "rank": 2,
     "percentile": 0.9783
+   },
+   "frozen_encoder": {
+    "score": 0.847743,
+    "rank": 1,
+    "percentile": 1.0
    },
    "random_control": {
     "score": 0.703512,
@@ -6327,6 +8121,7 @@
    "partition": "validation",
    "family": "plant_based_milk_alternatives",
    "strategy": "brand_variant",
+   "languages": "different",
    "pool": 48,
    "category_rules": {
     "score": 0.933918,
@@ -6337,6 +8132,11 @@
     "score": 0.450695,
     "rank": 1,
     "percentile": 1.0
+   },
+   "frozen_encoder": {
+    "score": 0.70864,
+    "rank": 4,
+    "percentile": 0.9362
    },
    "random_control": {
     "score": 0.463009,
@@ -6349,6 +8149,7 @@
    "partition": "validation",
    "family": "plant_based_milk_alternatives",
    "strategy": "family_random",
+   "languages": "different",
    "pool": 47,
    "category_rules": {
     "score": 0.0,
@@ -6359,6 +8160,11 @@
     "score": 0.0178,
     "rank": 24,
     "percentile": 0.5
+   },
+   "frozen_encoder": {
+    "score": 0.564073,
+    "rank": 29,
+    "percentile": 0.3913
    },
    "random_control": {
     "score": 0.48681,
@@ -6371,6 +8177,7 @@
    "partition": "validation",
    "family": "plant_based_milk_alternatives",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 48,
    "category_rules": {
     "score": 0.0,
@@ -6381,6 +8188,11 @@
     "score": 0.317789,
     "rank": 3,
     "percentile": 0.9574
+   },
+   "frozen_encoder": {
+    "score": 0.805095,
+    "rank": 2,
+    "percentile": 0.9787
    },
    "random_control": {
     "score": 0.18991,
@@ -6393,6 +8205,7 @@
    "partition": "validation",
    "family": "plant_based_milk_alternatives",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 48,
    "category_rules": {
     "score": 0.0,
@@ -6403,6 +8216,11 @@
     "score": 0.272224,
     "rank": 4,
     "percentile": 0.9362
+   },
+   "frozen_encoder": {
+    "score": 0.818449,
+    "rank": 1,
+    "percentile": 1.0
    },
    "random_control": {
     "score": 0.169394,
@@ -6415,6 +8233,7 @@
    "partition": "validation",
    "family": "plant_based_milk_alternatives",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 48,
    "category_rules": {
     "score": 0.4729,
@@ -6425,6 +8244,11 @@
     "score": 0.201924,
     "rank": 4,
     "percentile": 0.9362
+   },
+   "frozen_encoder": {
+    "score": 0.784983,
+    "rank": 2,
+    "percentile": 0.9787
    },
    "random_control": {
     "score": 0.635853,
@@ -6437,6 +8261,7 @@
    "partition": "validation",
    "family": "plant_based_milk_alternatives",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 48,
    "category_rules": {
     "score": 0.474506,
@@ -6447,6 +8272,11 @@
     "score": 0.207557,
     "rank": 4,
     "percentile": 0.9362
+   },
+   "frozen_encoder": {
+    "score": 0.741784,
+    "rank": 2,
+    "percentile": 0.9787
    },
    "random_control": {
     "score": 0.513452,
@@ -6459,6 +8289,7 @@
    "partition": "validation",
    "family": "plant_based_milk_alternatives",
    "strategy": "lookalike",
+   "languages": "different",
    "pool": 48,
    "category_rules": {
     "score": 0.0,
@@ -6467,6 +8298,11 @@
    },
    "tfidf_char": {
     "score": 0.104186,
+    "rank": 2,
+    "percentile": 0.9787
+   },
+   "frozen_encoder": {
+    "score": 0.786568,
     "rank": 2,
     "percentile": 0.9787
    },
@@ -6481,6 +8317,7 @@
    "partition": "validation",
    "family": "yogurts",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 108,
    "category_rules": {
     "score": 0.749039,
@@ -6491,6 +8328,11 @@
     "score": 0.207225,
     "rank": 13,
     "percentile": 0.8879
+   },
+   "frozen_encoder": {
+    "score": 0.530354,
+    "rank": 56,
+    "percentile": 0.486
    },
    "random_control": {
     "score": 0.576628,
@@ -6503,6 +8345,7 @@
    "partition": "validation",
    "family": "yogurts",
    "strategy": "family_random",
+   "languages": "same",
    "pool": 108,
    "category_rules": {
     "score": 0.640978,
@@ -6513,6 +8356,11 @@
     "score": 0.212449,
     "rank": 20,
     "percentile": 0.8224
+   },
+   "frozen_encoder": {
+    "score": 0.6485,
+    "rank": 56,
+    "percentile": 0.486
    },
    "random_control": {
     "score": 0.491139,
@@ -6525,6 +8373,7 @@
    "partition": "validation",
    "family": "yogurts",
    "strategy": "family_random",
+   "languages": "same",
    "pool": 107,
    "category_rules": {
     "score": 0.547485,
@@ -6535,6 +8384,11 @@
     "score": 0.134792,
     "rank": 46,
     "percentile": 0.5755
+   },
+   "frozen_encoder": {
+    "score": 0.650399,
+    "rank": 51,
+    "percentile": 0.5283
    },
    "random_control": {
     "score": 0.018635,
@@ -6547,6 +8401,7 @@
    "partition": "validation",
    "family": "yogurts",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 108,
    "category_rules": {
     "score": 0.720042,
@@ -6557,6 +8412,11 @@
     "score": 0.208931,
     "rank": 15,
     "percentile": 0.8692
+   },
+   "frozen_encoder": {
+    "score": 0.735011,
+    "rank": 22,
+    "percentile": 0.8037
    },
    "random_control": {
     "score": 0.402642,
@@ -6569,6 +8429,7 @@
    "partition": "validation",
    "family": "yogurts",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 107,
    "category_rules": {
     "score": 0.886259,
@@ -6579,6 +8440,11 @@
     "score": 0.361655,
     "rank": 2,
     "percentile": 0.9906
+   },
+   "frozen_encoder": {
+    "score": 0.871252,
+    "rank": 1,
+    "percentile": 1.0
    },
    "random_control": {
     "score": 0.519842,
@@ -6591,6 +8457,7 @@
    "partition": "validation",
    "family": "yogurts",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 107,
    "category_rules": {
     "score": 0.73522,
@@ -6601,6 +8468,11 @@
     "score": 0.404238,
     "rank": 1,
     "percentile": 1.0
+   },
+   "frozen_encoder": {
+    "score": 0.812764,
+    "rank": 12,
+    "percentile": 0.8962
    },
    "random_control": {
     "score": 0.917243,
@@ -6613,6 +8485,7 @@
    "partition": "validation",
    "family": "yogurts",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 108,
    "category_rules": {
     "score": 0.635901,
@@ -6623,6 +8496,11 @@
     "score": 0.182034,
     "rank": 27,
     "percentile": 0.757
+   },
+   "frozen_encoder": {
+    "score": 0.62984,
+    "rank": 51,
+    "percentile": 0.5327
    },
    "random_control": {
     "score": 0.893675,
@@ -6635,6 +8513,7 @@
    "partition": "validation",
    "family": "yogurts",
    "strategy": "family_random",
+   "languages": "different",
    "pool": 108,
    "category_rules": {
     "score": 0.877996,
@@ -6645,6 +8524,11 @@
     "score": 0.033079,
     "rank": 96,
     "percentile": 0.1121
+   },
+   "frozen_encoder": {
+    "score": 0.583821,
+    "rank": 68,
+    "percentile": 0.3738
    },
    "random_control": {
     "score": 0.674819,
@@ -6657,6 +8541,7 @@
    "partition": "validation",
    "family": "yogurts",
    "strategy": "family_random",
+   "languages": "different",
    "pool": 108,
    "category_rules": {
     "score": 0.694345,
@@ -6667,6 +8552,11 @@
     "score": 0.018479,
     "rank": 94,
     "percentile": 0.1308
+   },
+   "frozen_encoder": {
+    "score": 0.618209,
+    "rank": 29,
+    "percentile": 0.7383
    },
    "random_control": {
     "score": 0.066161,
@@ -6679,6 +8569,7 @@
    "partition": "validation",
    "family": "yogurts",
    "strategy": "family_random",
+   "languages": "different",
    "pool": 108,
    "category_rules": {
     "score": 0.611165,
@@ -6689,6 +8580,11 @@
     "score": 0.071722,
     "rank": 81,
     "percentile": 0.2523
+   },
+   "frozen_encoder": {
+    "score": 0.301771,
+    "rank": 106,
+    "percentile": 0.0187
    },
    "random_control": {
     "score": 0.278343,
@@ -6701,6 +8597,7 @@
    "partition": "validation",
    "family": "yogurts",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 108,
    "category_rules": {
     "score": 0.897677,
@@ -6709,6 +8606,11 @@
    },
    "tfidf_char": {
     "score": 0.730667,
+    "rank": 1,
+    "percentile": 1.0
+   },
+   "frozen_encoder": {
+    "score": 0.943446,
     "rank": 1,
     "percentile": 1.0
    },
@@ -6723,6 +8625,7 @@
    "partition": "validation",
    "family": "yogurts",
    "strategy": "family_random",
+   "languages": "same",
    "pool": 108,
    "category_rules": {
     "score": 0.953114,
@@ -6733,6 +8636,11 @@
     "score": 0.112052,
     "rank": 52,
     "percentile": 0.5234
+   },
+   "frozen_encoder": {
+    "score": 0.445376,
+    "rank": 77,
+    "percentile": 0.2897
    },
    "random_control": {
     "score": 0.439477,
@@ -6745,6 +8653,7 @@
    "partition": "validation",
    "family": "yogurts",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 108,
    "category_rules": {
     "score": 0.95614,
@@ -6755,6 +8664,11 @@
     "score": 0.232808,
     "rank": 12,
     "percentile": 0.8972
+   },
+   "frozen_encoder": {
+    "score": 0.879194,
+    "rank": 1,
+    "percentile": 1.0
    },
    "random_control": {
     "score": 0.072275,
@@ -6767,6 +8681,7 @@
    "partition": "validation",
    "family": "yogurts",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 108,
    "category_rules": {
     "score": 0.64336,
@@ -6777,6 +8692,11 @@
     "score": 0.404628,
     "rank": 4,
     "percentile": 0.972
+   },
+   "frozen_encoder": {
+    "score": 0.789084,
+    "rank": 6,
+    "percentile": 0.9533
    },
    "random_control": {
     "score": 0.052433,
@@ -6789,6 +8709,7 @@
    "partition": "validation",
    "family": "yogurts",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 108,
    "category_rules": {
     "score": 0.707965,
@@ -6799,6 +8720,11 @@
     "score": 0.317264,
     "rank": 1,
     "percentile": 1.0
+   },
+   "frozen_encoder": {
+    "score": 0.735015,
+    "rank": 17,
+    "percentile": 0.8505
    },
    "random_control": {
     "score": 0.977926,
@@ -6811,6 +8737,7 @@
    "partition": "validation",
    "family": "yogurts",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 106,
    "category_rules": {
     "score": 0.656414,
@@ -6821,6 +8748,11 @@
     "score": 0.161513,
     "rank": 42,
     "percentile": 0.6095
+   },
+   "frozen_encoder": {
+    "score": 0.70701,
+    "rank": 36,
+    "percentile": 0.6667
    },
    "random_control": {
     "score": 0.796412,
@@ -6833,6 +8765,7 @@
    "partition": "validation",
    "family": "yogurts",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 108,
    "category_rules": {
     "score": 0.647108,
@@ -6843,6 +8776,11 @@
     "score": 0.39153,
     "rank": 7,
     "percentile": 0.9439
+   },
+   "frozen_encoder": {
+    "score": 0.785811,
+    "rank": 28,
+    "percentile": 0.7477
    },
    "random_control": {
     "score": 0.758751,
@@ -6855,6 +8793,7 @@
    "partition": "validation",
    "family": "yogurts",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 106,
    "category_rules": {
     "score": 0.839092,
@@ -6863,6 +8802,11 @@
    },
    "tfidf_char": {
     "score": 0.500143,
+    "rank": 2,
+    "percentile": 0.9905
+   },
+   "frozen_encoder": {
+    "score": 0.914605,
     "rank": 2,
     "percentile": 0.9905
    },
@@ -6877,6 +8821,7 @@
    "partition": "validation",
    "family": "yogurts",
    "strategy": "lookalike",
+   "languages": "same",
    "pool": 106,
    "category_rules": {
     "score": 0.845049,
@@ -6887,6 +8832,11 @@
     "score": 0.699313,
     "rank": 2,
     "percentile": 0.9905
+   },
+   "frozen_encoder": {
+    "score": 0.971066,
+    "rank": 1,
+    "percentile": 1.0
    },
    "random_control": {
     "score": 0.628122,
@@ -6899,6 +8849,7 @@
    "partition": "validation",
    "family": "yogurts",
    "strategy": "brand_variant",
+   "languages": "same",
    "pool": 108,
    "category_rules": {
     "score": 0.866244,
@@ -6909,6 +8860,11 @@
     "score": 0.340069,
     "rank": 6,
     "percentile": 0.9533
+   },
+   "frozen_encoder": {
+    "score": 0.620333,
+    "rank": 68,
+    "percentile": 0.3738
    },
    "random_control": {
     "score": 0.304486,
@@ -6921,6 +8877,7 @@
    "partition": "calibration",
    "family": "breakfast_cereals",
    "strategy": "pilot",
+   "languages": "different",
    "pool": 25,
    "category_rules": {
     "score": 0.529693,
@@ -6931,6 +8888,11 @@
     "score": 0.032878,
     "rank": 8,
     "percentile": 0.7083
+   },
+   "frozen_encoder": {
+    "score": 0.423896,
+    "rank": 19,
+    "percentile": 0.25
    },
    "random_control": {
     "score": 0.622328,
@@ -6943,6 +8905,7 @@
    "partition": "calibration",
    "family": "breakfast_cereals",
    "strategy": "pilot",
+   "languages": "different",
    "pool": 25,
    "category_rules": {
     "score": 0.579149,
@@ -6953,6 +8916,11 @@
     "score": 0.0139,
     "rank": 21,
     "percentile": 0.1667
+   },
+   "frozen_encoder": {
+    "score": 0.387395,
+    "rank": 22,
+    "percentile": 0.125
    },
    "random_control": {
     "score": 0.03737,
@@ -6965,6 +8933,7 @@
    "partition": "calibration",
    "family": "breakfast_cereals",
    "strategy": "pilot",
+   "languages": "different",
    "pool": 25,
    "category_rules": {
     "score": 0.727377,
@@ -6975,6 +8944,11 @@
     "score": 0.018559,
     "rank": 13,
     "percentile": 0.5
+   },
+   "frozen_encoder": {
+    "score": 0.677637,
+    "rank": 9,
+    "percentile": 0.6667
    },
    "random_control": {
     "score": 0.141252,
@@ -6987,6 +8961,7 @@
    "partition": "calibration",
    "family": "breakfast_cereals",
    "strategy": "pilot",
+   "languages": "different",
    "pool": 25,
    "category_rules": {
     "score": 0.167855,
@@ -6997,6 +8972,11 @@
     "score": 0.013363,
     "rank": 6,
     "percentile": 0.7917
+   },
+   "frozen_encoder": {
+    "score": 0.409275,
+    "rank": 20,
+    "percentile": 0.2083
    },
    "random_control": {
     "score": 0.201454,
@@ -7009,6 +8989,7 @@
    "partition": "calibration",
    "family": "breakfast_cereals",
    "strategy": "pilot",
+   "languages": "different",
    "pool": 24,
    "category_rules": {
     "score": 0.633333,
@@ -7019,6 +9000,11 @@
     "score": 0.097543,
     "rank": 2,
     "percentile": 0.9565
+   },
+   "frozen_encoder": {
+    "score": 0.612331,
+    "rank": 1,
+    "percentile": 1.0
    },
    "random_control": {
     "score": 0.424486,
@@ -7031,6 +9017,7 @@
    "partition": "calibration",
    "family": "breakfast_cereals",
    "strategy": "pilot",
+   "languages": "different",
    "pool": 24,
    "category_rules": {
     "score": 0.715644,
@@ -7041,6 +9028,11 @@
     "score": 0.03849,
     "rank": 9,
     "percentile": 0.6522
+   },
+   "frozen_encoder": {
+    "score": 0.468635,
+    "rank": 18,
+    "percentile": 0.2609
    },
    "random_control": {
     "score": 0.581465,
@@ -7053,6 +9045,7 @@
    "partition": "calibration",
    "family": "breakfast_cereals",
    "strategy": "pilot",
+   "languages": "different",
    "pool": 25,
    "category_rules": {
     "score": 0.533602,
@@ -7063,6 +9056,11 @@
     "score": 0.009668,
     "rank": 19,
     "percentile": 0.25
+   },
+   "frozen_encoder": {
+    "score": 0.499281,
+    "rank": 10,
+    "percentile": 0.625
    },
    "random_control": {
     "score": 0.320356,
@@ -7075,6 +9073,7 @@
    "partition": "calibration",
    "family": "breakfast_cereals",
    "strategy": "pilot",
+   "languages": "different",
    "pool": 25,
    "category_rules": {
     "score": 0.502729,
@@ -7085,6 +9084,11 @@
     "score": 0.030616,
     "rank": 5,
     "percentile": 0.8333
+   },
+   "frozen_encoder": {
+    "score": 0.554309,
+    "rank": 13,
+    "percentile": 0.5
    },
    "random_control": {
     "score": 0.738474,
@@ -7097,6 +9101,7 @@
    "partition": "calibration",
    "family": "breakfast_cereals",
    "strategy": "pilot",
+   "languages": "different",
    "pool": 25,
    "category_rules": {
     "score": 0.548391,
@@ -7107,6 +9112,11 @@
     "score": 0.027439,
     "rank": 11,
     "percentile": 0.5833
+   },
+   "frozen_encoder": {
+    "score": 0.503132,
+    "rank": 13,
+    "percentile": 0.5
    },
    "random_control": {
     "score": 0.941769,
@@ -7119,6 +9129,7 @@
    "partition": "calibration",
    "family": "breakfast_cereals",
    "strategy": "pilot",
+   "languages": "different",
    "pool": 25,
    "category_rules": {
     "score": 0.436293,
@@ -7127,6 +9138,11 @@
    },
    "tfidf_char": {
     "score": 0.004053,
+    "rank": 21,
+    "percentile": 0.1667
+   },
+   "frozen_encoder": {
+    "score": 0.39967,
     "rank": 21,
     "percentile": 0.1667
    },
@@ -7141,6 +9157,7 @@
    "partition": "calibration",
    "family": "breakfast_cereals",
    "strategy": "pilot",
+   "languages": "different",
    "pool": 25,
    "category_rules": {
     "score": 0.575387,
@@ -7151,6 +9168,11 @@
     "score": 0.086717,
     "rank": 4,
     "percentile": 0.875
+   },
+   "frozen_encoder": {
+    "score": 0.594277,
+    "rank": 8,
+    "percentile": 0.7083
    },
    "random_control": {
     "score": 0.711856,
@@ -7163,6 +9185,7 @@
    "partition": "calibration",
    "family": "breakfast_cereals",
    "strategy": "pilot",
+   "languages": "different",
    "pool": 25,
    "category_rules": {
     "score": 0.493667,
@@ -7173,6 +9196,11 @@
     "score": 0.055104,
     "rank": 10,
     "percentile": 0.625
+   },
+   "frozen_encoder": {
+    "score": 0.686651,
+    "rank": 6,
+    "percentile": 0.7917
    },
    "random_control": {
     "score": 0.091021,
@@ -7185,6 +9213,7 @@
    "partition": "calibration",
    "family": "plant_based_milk_alternatives",
    "strategy": "pilot",
+   "languages": "same",
    "pool": 25,
    "category_rules": {
     "score": 0.615789,
@@ -7195,6 +9224,11 @@
     "score": 0.121724,
     "rank": 2,
     "percentile": 0.9583
+   },
+   "frozen_encoder": {
+    "score": 0.578764,
+    "rank": 12,
+    "percentile": 0.5417
    },
    "random_control": {
     "score": 0.9793,
@@ -7207,6 +9241,7 @@
    "partition": "calibration",
    "family": "plant_based_milk_alternatives",
    "strategy": "pilot",
+   "languages": "different",
    "pool": 25,
    "category_rules": {
     "score": 0.402431,
@@ -7217,6 +9252,11 @@
     "score": 0.022518,
     "rank": 13,
     "percentile": 0.5
+   },
+   "frozen_encoder": {
+    "score": 0.662167,
+    "rank": 7,
+    "percentile": 0.75
    },
    "random_control": {
     "score": 0.427999,
@@ -7229,6 +9269,7 @@
    "partition": "calibration",
    "family": "plant_based_milk_alternatives",
    "strategy": "pilot",
+   "languages": "different",
    "pool": 25,
    "category_rules": {
     "score": 0.550794,
@@ -7239,6 +9280,11 @@
     "score": 0.04012,
     "rank": 10,
     "percentile": 0.625
+   },
+   "frozen_encoder": {
+    "score": 0.648142,
+    "rank": 6,
+    "percentile": 0.7917
    },
    "random_control": {
     "score": 0.192164,
@@ -7251,6 +9297,7 @@
    "partition": "calibration",
    "family": "plant_based_milk_alternatives",
    "strategy": "pilot",
+   "languages": "different",
    "pool": 25,
    "category_rules": {
     "score": 0.6625,
@@ -7261,6 +9308,11 @@
     "score": 0.014901,
     "rank": 16,
     "percentile": 0.375
+   },
+   "frozen_encoder": {
+    "score": 0.593367,
+    "rank": 6,
+    "percentile": 0.7917
    },
    "random_control": {
     "score": 0.716656,
@@ -7273,6 +9325,7 @@
    "partition": "calibration",
    "family": "plant_based_milk_alternatives",
    "strategy": "pilot",
+   "languages": "different",
    "pool": 25,
    "category_rules": {
     "score": 0.403167,
@@ -7283,6 +9336,11 @@
     "score": 0.00619,
     "rank": 16,
     "percentile": 0.375
+   },
+   "frozen_encoder": {
+    "score": 0.572998,
+    "rank": 17,
+    "percentile": 0.3333
    },
    "random_control": {
     "score": 0.896636,
@@ -7295,6 +9353,7 @@
    "partition": "calibration",
    "family": "plant_based_milk_alternatives",
    "strategy": "pilot",
+   "languages": "different",
    "pool": 25,
    "category_rules": {
     "score": 0.608536,
@@ -7305,6 +9364,11 @@
     "score": 0.017263,
     "rank": 14,
     "percentile": 0.4583
+   },
+   "frozen_encoder": {
+    "score": 0.396077,
+    "rank": 24,
+    "percentile": 0.0417
    },
    "random_control": {
     "score": 0.503322,
@@ -7317,6 +9381,7 @@
    "partition": "calibration",
    "family": "plant_based_milk_alternatives",
    "strategy": "pilot",
+   "languages": "different",
    "pool": 25,
    "category_rules": {
     "score": 0.486728,
@@ -7327,6 +9392,11 @@
     "score": 0.114445,
     "rank": 2,
     "percentile": 0.9583
+   },
+   "frozen_encoder": {
+    "score": 0.476824,
+    "rank": 7,
+    "percentile": 0.75
    },
    "random_control": {
     "score": 0.68507,
@@ -7339,6 +9409,7 @@
    "partition": "calibration",
    "family": "plant_based_milk_alternatives",
    "strategy": "pilot",
+   "languages": "different",
    "pool": 25,
    "category_rules": {
     "score": 0.734589,
@@ -7349,6 +9420,11 @@
     "score": 0.001713,
     "rank": 20,
     "percentile": 0.2083
+   },
+   "frozen_encoder": {
+    "score": 0.489549,
+    "rank": 11,
+    "percentile": 0.5833
    },
    "random_control": {
     "score": 0.550676,
@@ -7361,6 +9437,7 @@
    "partition": "calibration",
    "family": "plant_based_milk_alternatives",
    "strategy": "pilot",
+   "languages": "different",
    "pool": 25,
    "category_rules": {
     "score": 0.502683,
@@ -7371,6 +9448,11 @@
     "score": 0.013614,
     "rank": 20,
     "percentile": 0.2083
+   },
+   "frozen_encoder": {
+    "score": 0.665614,
+    "rank": 9,
+    "percentile": 0.6667
    },
    "random_control": {
     "score": 0.623864,
@@ -7383,6 +9465,7 @@
    "partition": "calibration",
    "family": "plant_based_milk_alternatives",
    "strategy": "pilot",
+   "languages": "same",
    "pool": 25,
    "category_rules": {
     "score": 0.834722,
@@ -7393,6 +9476,11 @@
     "score": 0.44901,
     "rank": 1,
     "percentile": 1.0
+   },
+   "frozen_encoder": {
+    "score": 0.782127,
+    "rank": 2,
+    "percentile": 0.9583
    },
    "random_control": {
     "score": 0.840065,
@@ -7405,6 +9493,7 @@
    "partition": "calibration",
    "family": "plant_based_milk_alternatives",
    "strategy": "pilot",
+   "languages": "different",
    "pool": 25,
    "category_rules": {
     "score": 0.566667,
@@ -7415,6 +9504,11 @@
     "score": 0.124536,
     "rank": 4,
     "percentile": 0.875
+   },
+   "frozen_encoder": {
+    "score": 0.669299,
+    "rank": 3,
+    "percentile": 0.9167
    },
    "random_control": {
     "score": 0.515548,
@@ -7427,6 +9521,7 @@
    "partition": "calibration",
    "family": "plant_based_milk_alternatives",
    "strategy": "pilot",
+   "languages": "different",
    "pool": 25,
    "category_rules": {
     "score": 0.582428,
@@ -7437,6 +9532,11 @@
     "score": 0.039468,
     "rank": 6,
     "percentile": 0.7917
+   },
+   "frozen_encoder": {
+    "score": 0.600121,
+    "rank": 10,
+    "percentile": 0.625
    },
    "random_control": {
     "score": 0.031554,
@@ -7449,6 +9549,7 @@
    "partition": "calibration",
    "family": "yogurts",
    "strategy": "pilot",
+   "languages": "different",
    "pool": 24,
    "category_rules": {
     "score": 0.61746,
@@ -7459,6 +9560,11 @@
     "score": 0.0,
     "rank": 23,
     "percentile": 0.0435
+   },
+   "frozen_encoder": {
+    "score": 0.245223,
+    "rank": 8,
+    "percentile": 0.6957
    },
    "random_control": {
     "score": 0.206075,
@@ -7471,6 +9577,7 @@
    "partition": "calibration",
    "family": "yogurts",
    "strategy": "pilot",
+   "languages": "different",
    "pool": 24,
    "category_rules": {
     "score": 0.763957,
@@ -7481,6 +9588,11 @@
     "score": 0.070479,
     "rank": 4,
     "percentile": 0.8696
+   },
+   "frozen_encoder": {
+    "score": 0.537282,
+    "rank": 15,
+    "percentile": 0.3913
    },
    "random_control": {
     "score": 0.516682,
@@ -7493,6 +9605,7 @@
    "partition": "calibration",
    "family": "yogurts",
    "strategy": "pilot",
+   "languages": "different",
    "pool": 24,
    "category_rules": {
     "score": 0.701389,
@@ -7503,6 +9616,11 @@
     "score": 0.058959,
     "rank": 8,
     "percentile": 0.6957
+   },
+   "frozen_encoder": {
+    "score": 0.737503,
+    "rank": 3,
+    "percentile": 0.913
    },
    "random_control": {
     "score": 0.352618,
@@ -7515,6 +9633,7 @@
    "partition": "calibration",
    "family": "yogurts",
    "strategy": "pilot",
+   "languages": "different",
    "pool": 24,
    "category_rules": {
     "score": 0.744506,
@@ -7525,6 +9644,11 @@
     "score": 0.163437,
     "rank": 1,
     "percentile": 1.0
+   },
+   "frozen_encoder": {
+    "score": 0.691985,
+    "rank": 2,
+    "percentile": 0.9565
    },
    "random_control": {
     "score": 0.452213,
@@ -7537,6 +9661,7 @@
    "partition": "calibration",
    "family": "yogurts",
    "strategy": "pilot",
+   "languages": "different",
    "pool": 24,
    "category_rules": {
     "score": 0.574153,
@@ -7547,6 +9672,11 @@
     "score": 0.055546,
     "rank": 4,
     "percentile": 0.8696
+   },
+   "frozen_encoder": {
+    "score": 0.667075,
+    "rank": 5,
+    "percentile": 0.8261
    },
    "random_control": {
     "score": 0.128969,
@@ -7559,6 +9689,7 @@
    "partition": "calibration",
    "family": "yogurts",
    "strategy": "pilot",
+   "languages": "same",
    "pool": 24,
    "category_rules": {
     "score": 0.827932,
@@ -7569,6 +9700,11 @@
     "score": 0.134453,
     "rank": 4,
     "percentile": 0.8696
+   },
+   "frozen_encoder": {
+    "score": 0.731318,
+    "rank": 3,
+    "percentile": 0.913
    },
    "random_control": {
     "score": 0.721778,
@@ -7581,6 +9717,7 @@
    "partition": "calibration",
    "family": "yogurts",
    "strategy": "pilot",
+   "languages": "different",
    "pool": 24,
    "category_rules": {
     "score": 0.837211,
@@ -7591,6 +9728,11 @@
     "score": 0.03806,
     "rank": 6,
     "percentile": 0.7826
+   },
+   "frozen_encoder": {
+    "score": 0.687432,
+    "rank": 10,
+    "percentile": 0.6087
    },
    "random_control": {
     "score": 0.475984,
@@ -7603,6 +9745,7 @@
    "partition": "calibration",
    "family": "yogurts",
    "strategy": "pilot",
+   "languages": "different",
    "pool": 24,
    "category_rules": {
     "score": 0.510924,
@@ -7613,6 +9756,11 @@
     "score": 0.019518,
     "rank": 18,
     "percentile": 0.2609
+   },
+   "frozen_encoder": {
+    "score": 0.621622,
+    "rank": 13,
+    "percentile": 0.4783
    },
    "random_control": {
     "score": 0.883405,
@@ -7625,6 +9773,7 @@
    "partition": "calibration",
    "family": "yogurts",
    "strategy": "pilot",
+   "languages": "different",
    "pool": 24,
    "category_rules": {
     "score": 0.896899,
@@ -7635,6 +9784,11 @@
     "score": 0.003502,
     "rank": 18,
     "percentile": 0.2609
+   },
+   "frozen_encoder": {
+    "score": 0.534298,
+    "rank": 14,
+    "percentile": 0.4348
    },
    "random_control": {
     "score": 0.460134,
@@ -7647,6 +9801,7 @@
    "partition": "calibration",
    "family": "yogurts",
    "strategy": "pilot",
+   "languages": "different",
    "pool": 24,
    "category_rules": {
     "score": 0.69838,
@@ -7657,6 +9812,11 @@
     "score": 0.033049,
     "rank": 5,
     "percentile": 0.8261
+   },
+   "frozen_encoder": {
+    "score": 0.496171,
+    "rank": 19,
+    "percentile": 0.2174
    },
    "random_control": {
     "score": 0.833118,
@@ -7669,6 +9829,7 @@
    "partition": "calibration",
    "family": "yogurts",
    "strategy": "pilot",
+   "languages": "same",
    "pool": 24,
    "category_rules": {
     "score": 0.557778,
@@ -7679,6 +9840,11 @@
     "score": 0.170236,
     "rank": 3,
     "percentile": 0.913
+   },
+   "frozen_encoder": {
+    "score": 0.456845,
+    "rank": 22,
+    "percentile": 0.087
    },
    "random_control": {
     "score": 0.443103,
@@ -7691,6 +9857,7 @@
    "partition": "calibration",
    "family": "yogurts",
    "strategy": "pilot",
+   "languages": "different",
    "pool": 24,
    "category_rules": {
     "score": 0.784416,
@@ -7702,6 +9869,11 @@
     "rank": 1,
     "percentile": 1.0
    },
+   "frozen_encoder": {
+    "score": 0.763018,
+    "rank": 5,
+    "percentile": 0.8261
+   },
    "random_control": {
     "score": 0.236044,
     "rank": 19,
@@ -7709,5 +9881,5 @@
    }
   }
  ],
- "note": "Rankings of untrained baselines over unlabeled pairs. A high percentile means the baseline places the sampled candidate near the top of its pool, which reflects the sampling strategy, not substitutability. Nothing here is a trained result and no human label exists."
+ "note": "Rankings of untrained baselines over unlabeled pairs. A high percentile means the baseline places the sampled candidate near the top of its pool, which reflects the sampling strategy, not substitutability. The frozen encoder was pretrained elsewhere and none of its weights were updated here. Nothing here is a trained result and no human label exists."
 }

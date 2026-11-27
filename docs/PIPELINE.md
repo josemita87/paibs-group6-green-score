@@ -175,6 +175,13 @@ whether fine-tuning actually helps.
 
 **Tools:** scikit-learn, NumPy and Sentence Transformers.
 
+All three baselines and a random control rank the 336 pairs in
+`data/baseline_report.json`. The TF-IDF baseline is written in plain Python
+instead of scikit-learn. The frozen encoder is
+`sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2` at a pinned
+revision; its embeddings are stored in `data/frozen_embeddings.npy`. Evaluation
+metrics against human labels do not exist yet because no human label does.
+
 **Output:** baseline rankings and evaluation metrics.
 
 ## 7. Fine-tune the substitution encoder

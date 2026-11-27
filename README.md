@@ -48,15 +48,19 @@ comparison; a chat API is not required.
   validation and test partitions in `data/partitions.json` (step 5).
 - `scripts/build_pairs.py`: samples the unlabeled annotation pairs of each
   partition into `data/pairs.json` (step 4).
+- `scripts/encode_frozen.py`: encodes the eligible groups with a pinned pretrained
+  encoder into `data/frozen_embeddings.npy` and its manifest (step 6).
 - `scripts/run_baselines.py`: ranks every pair with the untrained baselines into
   `data/baseline_report.json` (step 6).
 - `basket/`: Pydantic basket models, validation and read-only catalog lookup (step 1);
   `basket/comparable.py` holds the step-3 normalization and eligibility rules;
-  `basket/pairs.py` holds the step-4 pair sampling rules and `basket/baselines.py`
-  the step-6 ranking baselines.
+  `basket/pairs.py` holds the step-4 pair sampling rules, `basket/baselines.py`
+  the step-6 ranking baselines and `basket/embeddings.py` the exact comparison of
+  stored embeddings.
 - `app/streamlit_app.py`: minimal Streamlit screen that builds and validates a basket.
 - `requirements-app.txt`: pinned dependencies for the basket models, app and tests.
 - `requirements-data.txt`: optional dependencies for downloading the sample again.
+- `requirements-model.txt`: optional dependencies for encoding products again.
 - `DATA_LICENSE.md`: data attribution and licensing terms.
 
 ## Verify the data
@@ -181,9 +185,10 @@ strategy says how a pair was sampled, not whether the products substitute.
 ```sh
 python scripts/run_baselines.py            # rebuild data/baseline_report.json
 python scripts/run_baselines.py --verify   # check the committed report against a rebuild
+python scripts/encode_frozen.py --verify   # check the stored embeddings; no encoder needed
 ```
 
-Three untrained baselines rank candidates for every pair of `data/pairs.json` and
+Four baselines, none trained here, rank candidates for every pair of `data/pairs.json` and
 for the 36 pilot pairs. The pool of one pair is every eligible group of the same
 family and partition, except the groups of the original's own split unit.
 
@@ -191,16 +196,36 @@ family and partition, except the groups of the original's own split unit.
   scores 1 minus the mean relative difference on protein, sugars and salt per 100.
 - `tfidf_char` is the cosine of character 4-gram TF-IDF vectors of the name and the
   ingredient text. Document frequencies come from the 1,045 train groups only.
+- `frozen_encoder` is the cosine of embeddings from
+  `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2` at a pinned
+  revision, with no weight updated. Each group contributes the name and ingredient
+  text of its lowest barcode.
 - `random_control` is a seeded hash of the two barcodes. It measures nothing and
   shows what a given rank statistic looks like by chance.
 
-The frozen-encoder baseline of the pipeline document is not implemented; it needs
-Sentence Transformers and a downloaded model. The report records the rank and
-percentile of every pair under each baseline, the statistics per sampling strategy
-and partition, the share of the top 10 that the rule and text baselines agree on,
-and the scores grouped by the model-drafted pilot labels. No baseline reads a
-label, and the pilot sample holds two `unacceptable` labels, so the label section
-describes that sample and establishes nothing about baseline quality.
+The embeddings are committed as 16-bit integers with a manifest, and cosines are
+computed from integer sums, so the rankings are identical on every machine and CI
+verifies them without installing the encoder. To encode again:
+
+```sh
+python -m pip install -r requirements-model.txt
+python scripts/encode_frozen.py              # downloads the model, rewrites the embeddings
+python scripts/encode_frozen.py --reencode   # encode again and compare with the stored file
+```
+
+The encoder reads at most 128 tokens; 329 of the 1,556 texts are longer and lose
+the end of their ingredient list.
+
+The report records the rank and percentile of every pair under each baseline, the
+statistics per sampling strategy, per partition and for same-language against
+cross-language pairs, the share of the top 10 that each two baselines agree on,
+and the scores grouped by the model-drafted pilot labels. Over the 300 sampled
+pairs the mean percentile is 0.709 for `tfidf_char`, 0.657 for `frozen_encoder`
+and 0.628 for `category_rules`. That order is not a quality ranking: a third of
+the pairs were sampled by name overlap, which favors a text-overlap baseline. No
+baseline reads a label, and the pilot sample holds two `unacceptable` labels, so
+the label section describes that sample and establishes nothing about baseline
+quality.
 
 ## Family-targeted expansion (step 2, in support of step 4)
 
