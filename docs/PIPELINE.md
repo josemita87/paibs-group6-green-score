@@ -126,9 +126,11 @@ each triplet needs an acceptable and an unacceptable candidate for the same
 original product and context.
 
 The [pilot guide](ANNOTATION.md) defines the three usage contexts and links the
-36 unlabeled tasks and Label Studio form. Two independent reviews are pending.
-The pilot reserves its own product groups for calibration. Step 5 will partition
-the remaining groups before any model-development pairs are constructed.
+36 unlabeled tasks and Label Studio form. `data/pilot_review_model.json` holds
+model-drafted labels for them; no human reviewer's export is in the repository.
+The pilot reserves its own product groups for calibration. The remaining groups
+are partitioned in `data/partitions.json` (step 5); build every further pair
+within one partition.
 
 **Output:** annotated pairs and annotation guidelines.
 
@@ -139,8 +141,13 @@ validation and test partitions BEFORE constructing pairs and triplets. No produc
 or near-duplicate may cross partitions.
 
 `scripts/inspect_aliases.py` writes a proposal for that grouping to
-`data/alias_report.json`. The clusters have not been reviewed and no partition
-has been frozen.
+`data/alias_report.json`. `scripts/freeze_partitions.py` joins every linked group
+into one split unit and writes `data/partitions.json` (version `partitions-v1`):
+72 calibration units holding the pilot groups, then 936 train, 200 validation and
+200 test units, sliced 70/15/15 within each family by a seeded hash. A plain hash
+order replaces scikit-learn group splitting so the result does not depend on a
+library version. No person has reviewed the alias links, and no pair or triplet
+has been built.
 
 - Training data updates model weights.
 - Validation data selects hyperparameters and acceptance thresholds.

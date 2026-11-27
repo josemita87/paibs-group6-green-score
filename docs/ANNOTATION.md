@@ -78,7 +78,7 @@ aliases from model splits and the separate 30-request classroom benchmark.
 `data/alias_report.json` (from `scripts/inspect_aliases.py`) currently proposes
 five such aliases, one each for five of the 72 reserved groups; they are listed
 under `calibration`. No pilot pair joins two groups that the report links.
-Before scaling up, review those proposed near-duplicates and freeze the remaining
-groups into train, validation and test partitions. Generate all further pairs
-within those partitions. Pilot agreement measures reviewer consistency on this
+`data/partitions.json` places the reserved groups and those aliases in a
+`calibration` partition and the remaining groups in train, validation and test.
+Generate all further pairs within one of those partitions. Pilot agreement measures reviewer consistency on this
 deliberately diverse sample.

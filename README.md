@@ -43,7 +43,9 @@ comparison; a chat API is not required.
 - `scripts/build_annotation_pilot.py`, `scripts/review_agreement.py`: build the
   unlabeled step-4 pilot tasks and check two reviewers' exports.
 - `scripts/inspect_aliases.py`: reports candidate near-duplicate groups in
-  `data/alias_report.json` for review before step 5.
+  `data/alias_report.json`.
+- `scripts/freeze_partitions.py`: freezes eligible groups into calibration, train,
+  validation and test partitions in `data/partitions.json` (step 5).
 - `basket/`: Pydantic basket models, validation and read-only catalog lookup (step 1);
   `basket/comparable.py` holds the step-3 normalization and eligibility rules.
 - `app/streamlit_app.py`: minimal Streamlit screen that builds and validates a basket.
@@ -114,7 +116,7 @@ python scripts/review_agreement.py ana.json ben.json   # two reviewers' full JSO
 agreement before discussion. It has been tested with synthetic exports only; no
 human review exists yet.
 
-## Inspect near-duplicate groups (before step 5)
+## Inspect near-duplicate groups (input to step 5)
 
 ```sh
 python scripts/inspect_aliases.py            # rebuild data/alias_report.json
@@ -128,8 +130,23 @@ the same name, the same ingredient text of at least 40 normalized characters, or
 a name-token Jaccard of at least 0.8. On the current catalog it proposes 81
 clusters covering 219 of the 1,556 groups, which leaves 1,418 split units. Twelve
 identical-ingredient links between different brands are listed for a human
-decision and merge nothing. The report is a proposal: it changes no `group_id`
-and freezes no partition.
+decision and merge nothing. The report is a proposal and changes no `group_id`.
+
+## Product partitions (step 5)
+
+```sh
+python scripts/freeze_partitions.py            # rebuild data/partitions.json
+python scripts/freeze_partitions.py --verify   # check the committed partitions against a rebuild
+```
+
+Groups joined by any link of the alias report, including the twelve cross-brand
+ones, form one split unit: 1,408 units from 1,556 eligible groups. The 72 units
+holding a pilot group are `calibration`. Within each family the others are ordered
+by a seeded hash and sliced into 200 test, 200 validation and 936 train units.
+Only products are partitioned; pairs and triplets do not exist yet. Flavor
+variants of one brand whose names and ingredient texts differ can fall in
+different partitions: 107 same-brand group pairs with a name-token Jaccard of at
+least 0.6 sit across train and test.
 
 ## Family-targeted expansion (step 2, in support of step 4)
 

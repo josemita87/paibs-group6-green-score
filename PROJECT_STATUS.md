@@ -9,10 +9,11 @@ version history; this file explains what is ready and what to do next.
 
 ## Current focus
 
-Steps 1–3 are implemented. Step 4 has a reproducible calibration pilot with 36
-unlabeled pairs and a blind review form. Two independent human reviews are the
-next dependency. No substitution model, optimizer or recommendation interface
-has been implemented.
+Steps 1–3 are implemented. Step 4 has a reproducible calibration pilot of 36 pairs
+with model-drafted labels; a human review agreeing with them is reported but no
+reviewer export is in the repository. Step 5 has frozen product partitions
+(`partitions-v1`); no pair or triplet exists yet. No substitution model, optimizer
+or recommendation interface has been implemented.
 
 Earlier conversation called raw acquisition “step 1.” In the canonical pipeline
 it is **step 2**. Use the document's 1–13 numbering from now on; do not rename steps.
@@ -25,7 +26,7 @@ it is **step 2**. Use the document's 1–13 numbering from now on; do not rename
 | 2 | Acquire and version the product catalog | Done — raw sample + family expansion | `scripts/fetch_data.py --catalog` (base snapshot) and `scripts/expand_catalog.py` (1,678 candidate rows of the three families from the same revision), each with a manifest and audit/tests. |
 | 3 | Build a comparable, usable catalog | Done — rebuilt with expansion | `basket/comparable.py`, `scripts/build_catalog.py`, `data/catalog.parquet` + report + manifest, `tests/test_comparable.py`. 1,684 eligible products in 1,556 groups across three families; CI verifies the committed outputs against a rebuild. |
 | 4 | Create the substitution dataset | In progress — pilot ready | 36 calibration pairs, guidelines, Label Studio form and `scripts/review_agreement.py` to validate two exports and report agreement. Model-drafted labels for the 36 pairs are in `data/pilot_review_model.json`; a human review agreeing with them is reported but no reviewer export is in the repository. |
-| 5 | Split the data before training | Not started | Freeze and verify group partitions; construct within-partition pairs/triplets. Input available: unreviewed alias proposal in `data/alias_report.json`. |
+| 5 | Split the data before training | In progress — product partitions frozen | `scripts/freeze_partitions.py`, `data/partitions.json` (`partitions-v1`), `tests/test_partitions.py`: 72 calibration, 936 train, 200 validation and 200 test units from 1,556 eligible groups. The alias links behind the units are unreviewed. Within-partition pairs and triplets are not built; they need step-4 labels. |
 | 6 | Establish the baselines | Not started | Category/rules, TF-IDF and frozen-encoder rankings on shared cases. |
 | 7 | Fine-tune the substitution encoder | Not started | Training and comparison with frozen embeddings. |
 | 8 | Encode and index the catalog | Not started | Versioned embeddings and retrieval. |
@@ -38,6 +39,9 @@ it is **step 2**. Use the document's 1–13 numbering from now on; do not rename
 Follow the steps in order, skipping completed work. Reproducibility applies to
 every step, even though final delivery is step 13. Product grouping must happen
 before annotation pairs are built; do not postpone leakage prevention until step 5.
+Order exception (2026-11-27): the product partitions of step 5 were frozen while
+step 4 is still in progress, because every further annotation pair must be built
+inside one partition and the remaining step-4 work depends on human reviewers.
 Record any other dependency-driven change of order here before proceeding.
 
 ## Available evidence and limitations
@@ -81,6 +85,12 @@ Record any other dependency-driven change of order here before proceeding.
   the largest hold 14 (Nestlé Greek and vanilla yogurts) and 13 (Yoplait Yop
   drinks). Five of the 72 calibration groups have one alias each outside the
   reservation (alias group IDs 11965, 12838, 12849, 13250, 13320).
+- Partitions (`data/partitions.json`): units / groups / products are 72 / 77 / 78
+  calibration, 936 / 1,045 / 1,131 train, 200 / 219 / 239 validation and
+  200 / 215 / 236 test. Test units per family: yogurts 96, breakfast cereals 58,
+  plant-based milk alternatives 46. Of 542 same-brand group pairs with a name-token
+  Jaccard of at least 0.6 that no alias link joins, 107 sit across train and test,
+  116 across train and validation and 22 across validation and test.
 - Families not selected (dairy desserts, cheeses, biscuits, breads, sweet
   spreads, plant-based beverages, fruit juices) are still reported with base-sample
   counts only; they were not expanded.
@@ -96,13 +106,42 @@ record naming them and saying whether they labeled before seeing the model's
 labels) and run `python scripts/review_agreement.py <first>.json <second>.json`.
 Decide how drinkable yogurts and cooking coconut milk are kept out of sampled
 originals, since they caused six of the nine ambiguous pilot pairs.
-Before generating model-development pairs, review the alias proposal in
-`data/alias_report.json` together with the reviewers' “possible duplicate” flags:
-accept or split the proposed clusters, decide the 12 cross-brand links, and choose
-whether flavor variants of one product line may sit in different partitions. Then
-freeze the remaining split units into disjoint partitions (step 5).
+Then generate annotation pairs inside each partition of `data/partitions.json`
+(hard negatives included) for human labeling; test pairs need human labels only.
+Before any of those pairs is labeled, a person should review the alias clusters
+and decide whether flavor variants of one brand line may sit in different
+partitions (107 such group pairs cross train and test). A change of rule means a
+new partition version, which is cheap now and costly once labels exist.
 
 ## Change log
+
+### 2026-11-27 — Product partitions frozen (step 5, first part)
+
+- Added `scripts/freeze_partitions.py` and `data/partitions.json`
+  (`partitions-v1`). Eligible groups joined by any alias link, including the 12
+  cross-brand links, form one split unit: 1,408 units from 1,556 groups. Units
+  holding a pilot group are `calibration` (72 units, 77 groups, which covers the
+  five aliases). Within each family the other units are ordered by a seeded
+  SHA-256 and sliced 15% test, 15% validation, rest train: 200, 200 and 936 units.
+- `scripts/inspect_aliases.py` now exposes its same-brand pair iteration for reuse;
+  `data/alias_report.json` is byte-identical after the change.
+- Validation: 8 new tests (transitive units, deterministic assignment and shares;
+  committed file reproducible under reversed row order, every eligible group in
+  exactly one single-family unit, no alias link across partitions, calibration
+  equal to the units holding pilot groups, counts and shares per family) pass with
+  the other 61. `freeze_partitions.py --verify`, the alias, pilot and catalog
+  verifications and both raw audits pass locally. CI gained the partition
+  verification; its remote result is not known at commit time. Remote CI was
+  observed passing for the earlier commits `68d92f8` (run 45791717131) and
+  `d8d2ff6` (run 45962893464).
+- Limitations: no person has reviewed the alias links, so the units rest on
+  unreviewed rules. Flavor variants of one brand with different names and
+  ingredient texts are separate units; 107 same-brand group pairs with a name
+  Jaccard of at least 0.6 cross train and test. Renamed products with different
+  brand entries and ingredient texts are not detected. Splitting is stratified by
+  family only, not by language or brand. A pure-Python hash order was used
+  instead of scikit-learn group splitting. No pair, triplet or label was created,
+  so step 5 is not complete.
 
 ### 2026-11-26 — Model-drafted pilot labels and reported human review (step 4)
 

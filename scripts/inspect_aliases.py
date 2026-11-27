@@ -63,19 +63,31 @@ def name_jaccard(first, second):
     return len(first['name_tokens'] & second['name_tokens']) / len(union) if union else 0.0
 
 
+def same_brand_pairs(profiles):
+    """Yield each pair of same-family groups sharing a brand entry once, with its name Jaccard."""
+    by_brand = defaultdict(set)
+    for group_id, profile in profiles.items():
+        for token in profile['brand_tokens']:
+            by_brand[(profile['family'], token)].add(group_id)
+    seen = set()
+    for members in by_brand.values():
+        for pair in combinations(sorted(members), 2):
+            if pair not in seen:
+                seen.add(pair)
+                yield pair, name_jaccard(profiles[pair[0]], profiles[pair[1]])
+
+
 def find_links(profiles):
     """Return ``(links, same_name_other_brand_pairs, jaccard_histogram)``.
 
     ``links`` maps an ordered pair of group ids to the set of signals joining them.
     """
     links = defaultdict(set)
-    by_name, by_ingredients, by_brand = defaultdict(set), defaultdict(set), defaultdict(set)
+    by_name, by_ingredients = defaultdict(set), defaultdict(set)
     for group_id, profile in profiles.items():
         by_name[(profile['family'], profile['name_key'])].add(group_id)
         for key in profile['ingredient_keys']:
             by_ingredients[(profile['family'], key)].add(group_id)
-        for token in profile['brand_tokens']:
-            by_brand[(profile['family'], token)].add(group_id)
 
     def shared_brand(first, second):
         return bool(profiles[first]['brand_tokens'] & profiles[second]['brand_tokens'])
@@ -91,17 +103,12 @@ def find_links(profiles):
         for pair in combinations(sorted(members), 2):
             links[pair].add('same_ingredients_shared_brand' if shared_brand(*pair)
                             else 'same_ingredients_other_brand')
-    histogram, seen = Counter(), set()
-    for members in by_brand.values():
-        for pair in combinations(sorted(members), 2):
-            if pair in seen:
-                continue
-            seen.add(pair)
-            first, second = (profiles[group_id] for group_id in pair)
-            similarity = name_jaccard(first, second)
-            histogram[f'{int(similarity * 10) / 10:.1f}'] += 1
-            if similarity >= NAME_JACCARD and first['name_key'] != second['name_key']:
-                links[pair].add('similar_name_shared_brand')
+    histogram = Counter()
+    for pair, similarity in same_brand_pairs(profiles):
+        histogram[f'{int(similarity * 10) / 10:.1f}'] += 1
+        if similarity >= NAME_JACCARD and \
+                profiles[pair[0]]['name_key'] != profiles[pair[1]]['name_key']:
+            links[pair].add('similar_name_shared_brand')
     return dict(links), same_name_other_brand, dict(sorted(histogram.items()))
 
 
