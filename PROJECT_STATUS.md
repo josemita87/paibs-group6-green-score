@@ -1,6 +1,6 @@
 # Project status
 
-Last updated: 2026-11-26
+Last updated: 2026-11-27
 
 This is the shared handoff for contributors and AI assistants. Read
 [AGENTS.md](AGENTS.md) before editing and update this file in every commit.
@@ -24,7 +24,7 @@ it is **step 2**. Use the document's 1–13 numbering from now on; do not rename
 | 1 | User input | Done — minimal flow | `basket/` Pydantic models and catalog lookup, `app/streamlit_app.py`, `tests/test_basket.py`. Preferences and nutritional constraints are declared fields only (`declared_not_checked`); enforcement belongs to steps 9–10. |
 | 2 | Acquire and version the product catalog | Done — raw sample + family expansion | `scripts/fetch_data.py --catalog` (base snapshot) and `scripts/expand_catalog.py` (1,678 candidate rows of the three families from the same revision), each with a manifest and audit/tests. |
 | 3 | Build a comparable, usable catalog | Done — rebuilt with expansion | `basket/comparable.py`, `scripts/build_catalog.py`, `data/catalog.parquet` + report + manifest, `tests/test_comparable.py`. 1,684 eligible products in 1,556 groups across three families; CI verifies the committed outputs against a rebuild. |
-| 4 | Create the substitution dataset | In progress — pilot ready | 36 calibration pairs, guidelines, Label Studio form and `scripts/review_agreement.py` to validate two exports and report agreement. Independent reviews and adjudication pending. |
+| 4 | Create the substitution dataset | In progress — pilot ready | 36 calibration pairs, guidelines, Label Studio form and `scripts/review_agreement.py` to validate two exports and report agreement. Model-drafted labels for the 36 pairs are in `data/pilot_review_model.json`; a human review agreeing with them is reported but no reviewer export is in the repository. |
 | 5 | Split the data before training | Not started | Freeze and verify group partitions; construct within-partition pairs/triplets. Input available: unreviewed alias proposal in `data/alias_report.json`. |
 | 6 | Establish the baselines | Not started | Category/rules, TF-IDF and frozen-encoder rankings on shared cases. |
 | 7 | Fine-tune the substitution encoder | Not started | Training and comparison with frozen embeddings. |
@@ -91,9 +91,11 @@ Record any other dependency-driven change of order here before proceeding.
 
 ## Next action
 
-Two people independently review the same 36 tasks using [the pilot guide](docs/ANNOTATION.md).
-Retain both exports, run `python scripts/review_agreement.py <first>.json <second>.json`
-before discussion to record agreement, and adjudicate disagreements.
+Make the reported pilot review verifiable: add each reviewer's own export (or a
+record naming them and saying whether they labeled before seeing the model's
+labels) and run `python scripts/review_agreement.py <first>.json <second>.json`.
+Decide how drinkable yogurts and cooking coconut milk are kept out of sampled
+originals, since they caused six of the nine ambiguous pilot pairs.
 Before generating model-development pairs, review the alias proposal in
 `data/alias_report.json` together with the reviewers' “possible duplicate” flags:
 accept or split the proposed clusters, decide the 12 cross-brand links, and choose
@@ -101,6 +103,34 @@ whether flavor variants of one product line may sit in different partitions. The
 freeze the remaining split units into disjoint partitions (step 5).
 
 ## Change log
+
+### 2026-11-26 — Model-drafted pilot labels and reported human review (step 4)
+
+- Reported by Joan on 2026-11-26: two people went over the 36 pairs and their
+  labels coincide with the model's on every pair. This is recorded as reported.
+  The repository holds no export from either reviewer, their identifiers are not
+  recorded, it is not recorded whether they labeled before seeing the model's
+  labels, and `scripts/review_agreement.py` has not been run on human exports.
+- `data/pilot_review_model.json` holds one label and reason for each of the 36
+  pilot pairs, written by an AI model (Claude Fable 5.2 through the Cursor agent)
+  from the context, names and ingredient texts. Each annotation records that
+  provenance in `completed_by`. The file uses the full-JSON export structure, so
+  `scripts/review_agreement.py` can compare it with a human reviewer's export.
+- Result: 25 acceptable, 9 ambiguous, 2 unacceptable. Five of the nine ambiguous
+  pairs are plant-based milks, mostly canned cooking coconut milk as the original.
+  Pair `…/8850813507010/8850367100019` (two “Kokosmilch” products) is marked
+  “possible duplicate”.
+- Validation: the file passes `parse_review` with no errors (36 pairs, one label
+  and a nonempty reason each). No agreement was computed; there is no second review.
+- Limitations: the label file is a model's review, not a human export. Until the
+  two reviewers' own exports or a signed-off record are added, the human review
+  rests on the report above and no measured agreement figure exists. The model
+  had seen brand strings for a few of these products during the alias inspection.
+  Step 4 stays in progress. Committed on 2026-11-27; no runtime code changed.
+- Finding for scale-up: six of the nine ambiguous pairs arise because the original
+  does not fit the stated use (three cooking coconut milks and a nata de coco soft
+  drink among plant-based milks, two drinkable yogurts). Eligibility by category
+  tag admits these products, so pair sampling needs a format check first.
 
 ### 2026-11-26 — Near-duplicate alias proposal (preparation for step 5)
 
