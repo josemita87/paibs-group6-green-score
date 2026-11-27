@@ -90,5 +90,8 @@ under `calibration`. No pilot pair joins two groups that the report links.
 `data/partitions.json` places the reserved groups and those aliases in a
 `calibration` partition and the remaining groups in train, validation and test.
 `scripts/build_pairs.py` generates those further pairs inside one partition at a
-time and writes them to `data/pairs.json` in this same form. Pilot agreement measures reviewer consistency on this
+time and writes them to `data/pairs.json` in this same form.
+`scripts/build_anchored_pairs.py` writes `data/anchored_pairs.json`, in which each
+anchor product meets up to four candidates so that labels can form triplets; label
+that file in the same way, with `--tasks data/anchored_pairs.json` for the check. Pilot agreement measures reviewer consistency on this
 deliberately diverse sample.

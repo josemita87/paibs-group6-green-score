@@ -11,8 +11,10 @@ version history; this file explains what is ready and what to do next.
 
 Steps 1–3 are implemented. Step 4 has a reproducible calibration pilot of 36 pairs
 with model-drafted labels; a human review agreeing with them is reported but no
-reviewer export is in the repository. Step 4 also has 300 unlabeled annotation
-pairs sampled inside the frozen partitions (`pairs-v1`); no human has labeled them.
+reviewer export is in the repository. Step 4 also has two unlabeled pair sets
+sampled inside the frozen partitions: 300 pairs (`pairs-v1`) and 364 pairs around
+96 anchor products (`anchored-pairs-v1`). No human export of either is in the
+repository.
 Step 5 has frozen product partitions (`partitions-v1`); no triplet exists yet.
 Step 6 has the three planned baselines ranked over those pairs (`baselines-v2`):
 rules, TF-IDF and a frozen pretrained encoder. None was trained here and none is
@@ -29,7 +31,7 @@ it is **step 2**. Use the document's 1–13 numbering from now on; do not rename
 | 1 | User input | Done — minimal flow | `basket/` Pydantic models and catalog lookup, `app/streamlit_app.py`, `tests/test_basket.py`. Preferences and nutritional constraints are declared fields only (`declared_not_checked`); enforcement belongs to steps 9–10. |
 | 2 | Acquire and version the product catalog | Done — raw sample + family expansion | `scripts/fetch_data.py --catalog` (base snapshot) and `scripts/expand_catalog.py` (1,678 candidate rows of the three families from the same revision), each with a manifest and audit/tests. |
 | 3 | Build a comparable, usable catalog | Done — rebuilt with expansion | `basket/comparable.py`, `scripts/build_catalog.py`, `data/catalog.parquet` + report + manifest, `tests/test_comparable.py`. 1,684 eligible products in 1,556 groups across three families; CI verifies the committed outputs against a rebuild. |
-| 4 | Create the substitution dataset | In progress — pairs ready, labels pending | 36 calibration pairs, guidelines, Label Studio form and `scripts/review_agreement.py` to validate two exports and report agreement. Model-drafted labels for the 36 pairs are in `data/pilot_review_model.json`; a human review agreeing with them is reported but no reviewer export is in the repository. `scripts/build_pairs.py` and `data/pairs.json` add 300 unlabeled pairs inside the train, validation and test partitions, in three sampling strategies, verified in CI. No pair outside the pilot carries a label. |
+| 4 | Create the substitution dataset | In progress — pairs ready, labels pending | 36 calibration pairs, guidelines, Label Studio form and `scripts/review_agreement.py` to validate two exports and report agreement. Model-drafted labels for the 36 pairs are in `data/pilot_review_model.json`; a human review agreeing with them is reported but no reviewer export is in the repository. `scripts/build_pairs.py` and `data/pairs.json` add 300 unlabeled pairs inside the train, validation and test partitions, in three sampling strategies, verified in CI. `scripts/build_anchored_pairs.py` and `data/anchored_pairs.json` add 364 unlabeled pairs around 96 anchors so that labels can form triplets. No pair outside the pilot carries a label. |
 | 5 | Split the data before training | In progress — product partitions frozen | `scripts/freeze_partitions.py`, `data/partitions.json` (`partitions-v1`), `tests/test_partitions.py`: 72 calibration, 936 train, 200 validation and 200 test units from 1,556 eligible groups. The alias links behind the units are unreviewed. Within-partition pairs exist in `data/pairs.json`; triplets need step-4 labels. |
 | 6 | Establish the baselines | In progress — three baselines ranked, evaluation needs labels | `basket/baselines.py`, `scripts/run_baselines.py`, `data/baseline_report.json` (`baselines-v2`), `tests/test_baselines.py`: `category_rules`, `tfidf_char`, `frozen_encoder` and a seeded `random_control` rank the recorded candidate of all 336 pairs inside its family and partition pool. `scripts/encode_frozen.py`, `basket/embeddings.py`, `data/frozen_embeddings.npy` + manifest and `tests/test_frozen_encoder.py` hold the frozen encoder. Without labels these are rank statistics against the sampling strategy, not accuracy. |
 | 7 | Fine-tune the substitution encoder | Not started | Training and comparison with frozen embeddings. |
@@ -102,6 +104,17 @@ Record any other dependency-driven change of order here before proceeding.
   family in one partition and in different split units. No calibration group is
   used. The sampled pools hold 540, 283 and 222 train groups and about 50 to 110
   groups per family in validation and test.
+- Anchored pairs (`data/anchored_pairs.json`, `anchored-pairs-v1`, unlabeled): 364
+  pairs around 96 anchors (16 per family in train, 8 in validation, 8 in test); 192
+  `same_format` and 172 `other_format`; 192 train, 86 validation and 86 test pairs.
+  Ceiling of 348 triplets (192 / 78 / 78) if labels fell evenly, against 45 for
+  `pairs-v1`. Format evidence flags 156 of the 1,463 non-calibration groups in
+  their family's comparison unit: yogurts 92 of 751, plant-based milks 48 of 308, cereals 16 of 404. Cereals have
+  two flagged groups in validation and two in test, so each of those cells holds
+  6 `other_format` pairs instead of 16. 143 of the 364 pairs join two languages.
+- Known issue in `pairs-v1`: 7 of its plant-based pairs hold a product recorded in
+  `g` although the pair states `ml`, because that sampler does not filter on the
+  comparison unit. The anchored set filters on it. `pairs-v1` is unchanged.
 - Baselines (`data/baseline_report.json`, no training, no label): mean percentile
   of the recorded candidate over the 300 sampled pairs is 0.709 for `tfidf_char`,
   0.628 for `category_rules` and 0.484 for `random_control`; median ranks 26, 46
@@ -137,21 +150,18 @@ Record any other dependency-driven change of order here before proceeding.
 
 ## Next action
 
-Decide the pair sampling before more labeling effort is spent. `pairs-v1` cannot
-supply the triplets of step 7 whatever its labels turn out to be: 216 of its 255
-original products appear in one pair only, so at most 45 triplets exist (27 train,
-7 validation, 11 test). A triplet needs one original with an acceptable and an
-unacceptable candidate. A second pair set should fix a number of anchor products
-per family and partition and give each several candidates, including candidates of
-another format (yogurt drink against spoonable yogurt, cooking coconut milk
-against a cereal drink), which is where the pilot found its negatives.
+Label `data/anchored_pairs.json` first: two people, independently, with the step-4
+form. It is the set that can yield triplets (ceiling 348, against 45 for
+`pairs-v1`, where 216 of 255 originals have one pair). Import its `tasks` list
+into Label Studio and compare the exports with
+`python scripts/review_agreement.py <first>.json <second>.json --tasks data/anchored_pairs.json`.
+`data/pairs.json` can be labeled afterwards for the baseline comparison; no human
+export of either set is in the repository.
 
-Two people still have to label the 300 pairs of `data/pairs.json` with the step-4
-form; no human export of them is in the repository. Compare their exports with
-`python scripts/review_agreement.py <first>.json <second>.json --tasks data/pairs.json`.
-The three baselines of step 6 can only be compared against each other until a
-human label exists; then add label-based metrics to `scripts/run_baselines.py`
-for the validation and test pairs.
+With labels: build triplets inside each partition (rest of step 5), rank the
+anchored pairs with the baselines and add label-based metrics for the validation
+and test pairs (rest of step 6). Decide whether the 7 `pairs-v1` pairs with a
+mismatched unit are dropped or the set is rebuilt as a new version.
 
 Make the reported pilot review verifiable: add each reviewer's own export (or a
 record naming them and saying whether they labeled before seeing the model's
@@ -166,6 +176,42 @@ partitions (107 such group pairs cross train and test). A change of rule means a
 new partition version, which is cheap now and costly once labels exist.
 
 ## Change log
+
+### 2026-11-27 — Anchored annotation pairs (step 4)
+
+- Added `basket/formats.py`, `basket/anchored.py`, `scripts/build_anchored_pairs.py`
+  and `data/anchored_pairs.json` (`anchored-pairs-v1`): 364 unlabeled Label Studio
+  tasks in the step-4 form. Each of 96 anchors is the original of up to four
+  pairs, two `same_format` and two `other_format`.
+- `basket/formats.py` flags keyword evidence of another format: drink or pouch
+  names and three drink brands among yogurts; coconut at 25 % or more, coconut
+  milk names without a drink word, cream, cooking or powder names and dessert or
+  juice names among plant-based milks; porridge, flour, bar, snack and bran names
+  among cereals. Anchors have no evidence; `other_format` candidates have some.
+- Anchors and candidates come in seeded hash order. No similarity score selects
+  a pair, unlike the `lookalike` strategy of `pairs-v1`. A candidate serves at
+  most three anchors. Candidates are handed out one round at a time, so a scarce
+  kind reaches as many anchors as possible. Group pairs already in `pairs-v1` are
+  not drawn again, and only products in the family's comparison unit are used.
+- Found while building: 7 `pairs-v1` pairs hold a `g` product under an `ml` pair
+  (see “Available evidence and limitations”). `pairs-v1` was not modified.
+- Validation: 14 new tests (format evidence per family, coconut percentage,
+  anchors never candidates, scarce candidates spread within the cap, skipped
+  same-unit and earlier pairs, triplet ceiling; committed file reproducible under
+  reversed row order, one partition, family and unit and two split units per pair,
+  strategy equal to the evidence, unique ids and no repeat of `pairs-v1`, counts,
+  caps, shortfalls and ceiling, review-form fields, no label, loadable by the
+  agreement check) pass with the other 115. `build_anchored_pairs.py --verify` and
+  every earlier verification pass locally. CI gained the anchored pair
+  verification; its remote result is not known at commit time. Remote CI was
+  observed passing for the earlier commit `458cb4b` (run 46055776641).
+- Limitations: no pair carries a label, so step 4 is not complete and the
+  triplet ceiling is not a triplet count. The format rules were written after
+  reading samples of flagged and unflagged names; their precision and recall were
+  not measured, and at least one drink (“Danonino aboire”) was unflagged before a
+  rule was added for it. Cereals have few products of another format, so their
+  validation and test cells have fewer negatives. The baselines have not ranked
+  this set. The alias links behind the partitions are still unreviewed.
 
 ### 2026-11-27 — Agreement check for the 300 pairs; triplet yield of `pairs-v1` (step 4)
 

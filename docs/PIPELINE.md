@@ -130,7 +130,9 @@ The [pilot guide](ANNOTATION.md) defines the three usage contexts and links the
 model-drafted labels for them; no human reviewer's export is in the repository.
 The pilot reserves its own product groups for calibration. The remaining groups
 are partitioned in `data/partitions.json` (step 5); build every further pair
-within one partition.
+within one partition. Two unlabeled pair sets exist: `data/pairs.json` (300 pairs,
+at most 45 triplets) and `data/anchored_pairs.json` (364 pairs around 96 anchors,
+at most 348 triplets).
 
 **Output:** annotated pairs and annotation guidelines.
 

@@ -48,13 +48,16 @@ comparison; a chat API is not required.
   validation and test partitions in `data/partitions.json` (step 5).
 - `scripts/build_pairs.py`: samples the unlabeled annotation pairs of each
   partition into `data/pairs.json` (step 4).
+- `scripts/build_anchored_pairs.py`: samples anchor products with several
+  candidates each into `data/anchored_pairs.json` (step 4).
 - `scripts/encode_frozen.py`: encodes the eligible groups with a pinned pretrained
   encoder into `data/frozen_embeddings.npy` and its manifest (step 6).
 - `scripts/run_baselines.py`: ranks every pair with the untrained baselines into
   `data/baseline_report.json` (step 6).
 - `basket/`: Pydantic basket models, validation and read-only catalog lookup (step 1);
   `basket/comparable.py` holds the step-3 normalization and eligibility rules;
-  `basket/pairs.py` holds the step-4 pair sampling rules, `basket/baselines.py`
+  `basket/pairs.py`, `basket/anchored.py` and `basket/formats.py` hold the step-4
+  pair sampling rules and the format evidence they use, `basket/baselines.py`
   the step-6 ranking baselines and `basket/embeddings.py` the exact comparison of
   stored embeddings.
 - `app/streamlit_app.py`: minimal Streamlit screen that builds and validates a basket.
@@ -180,6 +183,33 @@ and score below 0.4. A seeded barcode hash orders the last two and breaks ties i
 the first. No group appears in more than three pairs of one family and partition.
 The file records the strategy and the name overlap of every pair and no label; a
 strategy says how a pair was sampled, not whether the products substitute.
+
+## Anchored annotation pairs (step 4)
+
+```sh
+python scripts/build_anchored_pairs.py            # rebuild data/anchored_pairs.json
+python scripts/build_anchored_pairs.py --verify   # check the committed pairs against a rebuild
+```
+
+A training triplet needs one original product with an acceptable and an
+unacceptable candidate. In `data/pairs.json` 216 of 255 originals have a single
+pair, which allows at most 45 triplets. `data/anchored_pairs.json` adds 364
+unlabeled pairs around 96 anchor products: 16 anchors per family in train and 8
+each in validation and test, with up to four candidates per anchor.
+
+Two candidates per anchor are `same_format` and two are `other_format`. The second
+kind carries keyword evidence from `basket/formats.py` that it has another format
+than the family's use assumes: a yogurt drink, cooking coconut milk or cream,
+porridge, a bar. The rules flag 156 of the 1,463 non-calibration groups that are in their
+family's comparison unit.
+Anchors carry no such evidence. Anchors and candidates are drawn in seeded hash
+order, so no similarity score and no baseline chooses a pair. Breakfast cereals
+have two flagged groups in validation and two in test, so those two cells hold 6
+`other_format` pairs instead of 16; the file lists the shortfalls.
+
+If labels fell evenly the set would allow 348 triplets (192 train, 78 validation,
+78 test). That is a ceiling, not a count. The format evidence is a sampling
+signal that misses some products and flags others wrongly; it is not a label.
 
 ## Baseline rankings (step 6)
 
