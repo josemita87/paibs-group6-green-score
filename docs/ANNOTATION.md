@@ -48,7 +48,16 @@ Step 3 is one command. Name each export after its reviewer, for example
 
 ```sh
 python scripts/review_agreement.py ana.json ben.json --report pilot_agreement.json
+python scripts/review_agreement.py ana.json ben.json --tasks data/pairs.json   # the 300 sampled pairs
 ```
+
+With `--tasks data/pairs.json` the same checks run against the 300 sampled pairs,
+and the report adds identical-decision counts per partition and per sampling
+strategy. Label Studio imports a list of tasks, so import the `tasks` list of
+`data/pairs.json`, not the whole file. If an export declares a model as its
+annotator, the report names that reviewer and states that the figure is not
+agreement between two people. The script cannot prove that an undeclared export
+was made by a person.
 
 It refuses to compute anything unless both exports hold all 36 pairs with exactly
 one submitted annotation, one label and a nonempty reason each, and unless the

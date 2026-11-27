@@ -11,8 +11,12 @@ import tempfile
 import unittest
 
 from scripts.review_agreement import (
-    agreement, cohen_kappa, form_fields, load_tasks, main, parse_review,
+    ROOT, agreement, cohen_kappa, declared_model, form_fields, load_tasks, main, parse_review,
+    source_of,
 )
+
+PAIRS = ROOT / 'data/pairs.json'
+MODEL_PILOT_REVIEW = ROOT / 'data/pilot_review_model.json'
 
 DECISION, REASON, LABELS = form_fields()
 TASKS = load_tasks()
@@ -78,7 +82,7 @@ class ParseChecks(unittest.TestCase):
             PAIR_IDS[4]: 'expected exactly one label', PAIR_IDS[5]: 'expected exactly one label',
             PAIR_IDS[6]: 'task data differ', PAIR_IDS[7]: 'missing from the export',
             PAIR_IDS[8]: 'appears more than once', PAIR_IDS[9]: 'missing from the export',
-            'pilot-v1/unknown/1/2': 'not a pilot pair',
+            'pilot-v1/unknown/1/2': 'not a pair of the task file',
         }
         for pair_id, message in expected.items():
             self.assertTrue(any(e.startswith(f'{pair_id}: ') and message in e for e in errors),
@@ -130,7 +134,7 @@ class AgreementChecks(unittest.TestCase):
 
 
 class CommandChecks(unittest.TestCase):
-    def run_main(self, first, second, names=('ana.json', 'ben.json')):
+    def run_main(self, first, second, names=('ana.json', 'ben.json'), extra=()):
         with tempfile.TemporaryDirectory() as directory:
             paths = [Path(directory) / name for name in names]
             for path, items in zip(paths, (first, second)):
@@ -138,7 +142,7 @@ class CommandChecks(unittest.TestCase):
                 path.write_text(json.dumps(items))
             output = io.StringIO()
             with contextlib.redirect_stdout(output):
-                main([str(path) for path in paths])
+                main([str(path) for path in paths] + list(extra))
             return json.loads(output.getvalue())
 
     def test_command_reports_agreement_for_two_complete_reviews(self):
@@ -154,6 +158,71 @@ class CommandChecks(unittest.TestCase):
         self.assertIn(f'ben: {PAIR_IDS[-1]}: missing from the export', message)
         with self.assertRaisesRegex(SystemExit, 'file names must differ'):
             self.run_main(export(), export(), names=('a/x.json', 'b/x.json'))
+
+    def test_command_checks_the_sampled_pairs_with_another_task_file(self):
+        tasks = load_tasks(PAIRS)
+        self.assertEqual(len(tasks), 300)
+        first = [{'data': data, 'annotations': [annotation('acceptable')]}
+                 for data in tasks.values()]
+        changed = next(iter(tasks))
+        second = [{'data': data, 'annotations': [annotation(
+            'ambiguous' if pair_id == changed else 'acceptable')]}
+            for pair_id, data in tasks.items()]
+        report = self.run_main(first, second, extra=['--tasks', str(PAIRS)])
+        self.assertEqual((report['pairs'], report['identical_decisions']), (300, 299))
+        partition, strategy = tasks[changed]['partition'], tasks[changed]['strategy']
+        by_partition = report['identical_by_partition']
+        self.assertEqual({name: value['pairs'] for name, value in by_partition.items()},
+                         {'test': 60, 'train': 180, 'validation': 60})
+        self.assertEqual(by_partition[partition]['identical'], by_partition[partition]['pairs'] - 1)
+        by_strategy = report['identical_by_strategy']
+        self.assertEqual(sum(value['pairs'] for value in by_strategy.values()), 300)
+        self.assertEqual(by_strategy[strategy]['identical'], by_strategy[strategy]['pairs'] - 1)
+        # A pilot export is refused against the sampled pairs.
+        with self.assertRaisesRegex(SystemExit, 'not a pair of the task file'):
+            self.run_main(export(), export(), extra=['--tasks', str(PAIRS)])
+
+    def test_pilot_report_has_no_partition_or_strategy_section(self):
+        report = self.run_main(export(), export())
+        self.assertNotIn('identical_by_partition', report)
+        self.assertNotIn('identical_by_strategy', report)
+        self.assertEqual(report['reviewers_declared_as_model'], [])
+        self.assertIn('cannot prove who annotated', report['note'])
+
+
+class SourceChecks(unittest.TestCase):
+    def test_a_declared_model_annotation_is_recognized(self):
+        person = {'data': {}, 'annotations': [annotation('acceptable')]}
+        self.assertFalse(declared_model(person))
+        self.assertFalse(declared_model(dict(person, meta={'annotator': 'ana'})))
+        self.assertTrue(declared_model(dict(person, meta={'annotator_type': 'AI'})))
+        self.assertTrue(declared_model(dict(person, meta={'human_reviewed': False})))
+        by_model = dict(annotation('acceptable'), completed_by={'type': 'ai_model'})
+        self.assertTrue(declared_model({'data': {}, 'annotations': [by_model]}))
+        not_human = dict(annotation('acceptable'), completed_by={'is_human_review': False})
+        self.assertTrue(declared_model({'data': {}, 'annotations': [not_human]}))
+
+    def test_export_sources_are_counted(self):
+        self.assertEqual(source_of(export()), {'tasks_declaring_a_model': 0,
+                                               'declared_source': 'not declared as a model'})
+        committed = json.loads(MODEL_PILOT_REVIEW.read_text())
+        self.assertEqual(source_of(committed), {'tasks_declaring_a_model': 36,
+                                                'declared_source': 'model'})
+        self.assertEqual(source_of({'not': 'a list'})['tasks_declaring_a_model'], 0)
+
+    def test_the_report_names_a_model_reviewer(self):
+        committed = json.loads(MODEL_PILOT_REVIEW.read_text())
+        with tempfile.TemporaryDirectory() as directory:
+            paths = [Path(directory) / 'ana.json', Path(directory) / 'model.json']
+            paths[0].write_text(json.dumps(export()))
+            paths[1].write_text(json.dumps(committed))
+            output = io.StringIO()
+            with contextlib.redirect_stdout(output):
+                main([str(path) for path in paths])
+        report = json.loads(output.getvalue())
+        self.assertEqual(report['reviewers_declared_as_model'], ['model'])
+        self.assertEqual(report['sources']['model']['tasks_declaring_a_model'], 36)
+        self.assertIn('not agreement between two people', report['note'])
 
 
 if __name__ == '__main__':

@@ -120,6 +120,7 @@ Reproduce or verify the unlabeled pilot with the application dependencies instal
 python scripts/build_annotation_pilot.py
 python scripts/build_annotation_pilot.py --verify
 python scripts/review_agreement.py ana.json ben.json   # two reviewers' full JSON exports
+python scripts/review_agreement.py ana.json ben.json --tasks data/pairs.json   # the 300 pairs
 ```
 
 `review_agreement.py` validates both exports against the task file and reports

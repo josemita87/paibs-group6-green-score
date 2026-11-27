@@ -137,11 +137,21 @@ Record any other dependency-driven change of order here before proceeding.
 
 ## Next action
 
-Label the 300 pairs of `data/pairs.json` with the step-4 form. Every later number
-depends on them: the three baselines of step 6 can only be compared against each
-other until a label exists, and step 7 cannot train without triplets. The code
-for baselines is in place; with labels, add label-based metrics to
-`scripts/run_baselines.py` for the validation and test pairs.
+Decide the pair sampling before more labeling effort is spent. `pairs-v1` cannot
+supply the triplets of step 7 whatever its labels turn out to be: 216 of its 255
+original products appear in one pair only, so at most 45 triplets exist (27 train,
+7 validation, 11 test). A triplet needs one original with an acceptable and an
+unacceptable candidate. A second pair set should fix a number of anchor products
+per family and partition and give each several candidates, including candidates of
+another format (yogurt drink against spoonable yogurt, cooking coconut milk
+against a cereal drink), which is where the pilot found its negatives.
+
+Two people still have to label the 300 pairs of `data/pairs.json` with the step-4
+form; no human export of them is in the repository. Compare their exports with
+`python scripts/review_agreement.py <first>.json <second>.json --tasks data/pairs.json`.
+The three baselines of step 6 can only be compared against each other until a
+human label exists; then add label-based metrics to `scripts/run_baselines.py`
+for the validation and test pairs.
 
 Make the reported pilot review verifiable: add each reviewer's own export (or a
 record naming them and saying whether they labeled before seeing the model's
@@ -156,6 +166,32 @@ partitions (107 such group pairs cross train and test). A change of rule means a
 new partition version, which is cheap now and costly once labels exist.
 
 ## Change log
+
+### 2026-11-27 — Agreement check for the 300 pairs; triplet yield of `pairs-v1` (step 4)
+
+- `scripts/review_agreement.py` takes `--tasks`, so two exports of
+  `data/pairs.json` can be validated and compared like the pilot. For task files
+  that record them, the report adds identical decisions per partition and per
+  sampling strategy.
+- The report now states what each export declares about its annotator. An export
+  whose tasks declare a model (`meta.annotator_type`, `meta.human_reviewed: false`
+  or a `completed_by` object marked as a model) is compared but named, with a note
+  that the figure is not agreement between two people. An undeclared export is
+  reported as “not declared as a model”; the script cannot prove a person made it.
+- Measured from `data/pairs.json` alone, without any label: 255 distinct original
+  products for 300 pairs; 216 originals have one pair, 33 have two and 6 have
+  three. With the recorded direction this allows at most 45 triplets (27 train,
+  7 validation, 11 test). If either product of a pair could anchor, the bound
+  would be 143, but the guide asks for a decision in the direction shown.
+- Validation: 5 new tests (300 pairs loaded from the object form, partition and
+  strategy counts, a pilot export refused against the sampled pairs, declared
+  model recognition, the committed model pilot review named as a model) pass with
+  the other 110. No pair file, partition, embedding or baseline report changed;
+  their verifications pass locally. Remote CI is not known at commit time. Remote
+  CI was observed passing for the earlier commit `53033ce` (run 45989701961).
+- Limitations: no human export of the 300 pairs has been run through the script,
+  because none is in the repository. Step 4 stays in progress. The triplet bound
+  is a ceiling; the real number depends on how labels fall per original.
 
 ### 2026-11-27 — Frozen-encoder baseline (step 6, third baseline)
 
