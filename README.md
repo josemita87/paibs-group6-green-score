@@ -46,8 +46,14 @@ comparison; a chat API is not required.
   `data/alias_report.json`.
 - `scripts/freeze_partitions.py`: freezes eligible groups into calibration, train,
   validation and test partitions in `data/partitions.json` (step 5).
+- `scripts/build_pairs.py`: samples the unlabeled annotation pairs of each
+  partition into `data/pairs.json` (step 4).
+- `scripts/run_baselines.py`: ranks every pair with the untrained baselines into
+  `data/baseline_report.json` (step 6).
 - `basket/`: Pydantic basket models, validation and read-only catalog lookup (step 1);
-  `basket/comparable.py` holds the step-3 normalization and eligibility rules.
+  `basket/comparable.py` holds the step-3 normalization and eligibility rules;
+  `basket/pairs.py` holds the step-4 pair sampling rules and `basket/baselines.py`
+  the step-6 ranking baselines.
 - `app/streamlit_app.py`: minimal Streamlit screen that builds and validates a basket.
 - `requirements-app.txt`: pinned dependencies for the basket models, app and tests.
 - `requirements-data.txt`: optional dependencies for downloading the sample again.
@@ -147,6 +153,54 @@ Only products are partitioned; pairs and triplets do not exist yet. Flavor
 variants of one brand whose names and ingredient texts differ can fall in
 different partitions: 107 same-brand group pairs with a name-token Jaccard of at
 least 0.6 sit across train and test.
+
+## Annotation pairs inside the partitions (step 4)
+
+```sh
+python scripts/build_pairs.py            # rebuild data/pairs.json
+python scripts/build_pairs.py --verify   # check the committed pairs against a rebuild
+```
+
+`data/pairs.json` holds 300 unlabeled Label Studio tasks in the step-4 review form:
+60 pairs per family for train and 20 each for validation and test. Both sides of a
+pair are eligible groups of one family that sit in the same partition and in
+different split units, so no pair joins two near-duplicates and no pair crosses a
+partition. The 72 calibration groups stay reserved for the pilot.
+
+Each family and partition splits its budget over three sampling strategies. The
+`lookalike` strategy takes the pairs with the highest name-token Jaccard, which is
+at least 0.4. The `brand_variant` strategy takes pairs that share a brand entry and
+score below 0.4. The `family_random` strategy takes pairs that share no brand entry
+and score below 0.4. A seeded barcode hash orders the last two and breaks ties in
+the first. No group appears in more than three pairs of one family and partition.
+The file records the strategy and the name overlap of every pair and no label; a
+strategy says how a pair was sampled, not whether the products substitute.
+
+## Baseline rankings (step 6)
+
+```sh
+python scripts/run_baselines.py            # rebuild data/baseline_report.json
+python scripts/run_baselines.py --verify   # check the committed report against a rebuild
+```
+
+Three untrained baselines rank candidates for every pair of `data/pairs.json` and
+for the 36 pilot pairs. The pool of one pair is every eligible group of the same
+family and partition, except the groups of the original's own split unit.
+
+- `category_rules` scores 0 for another family or comparison unit. Otherwise it
+  scores 1 minus the mean relative difference on protein, sugars and salt per 100.
+- `tfidf_char` is the cosine of character 4-gram TF-IDF vectors of the name and the
+  ingredient text. Document frequencies come from the 1,045 train groups only.
+- `random_control` is a seeded hash of the two barcodes. It measures nothing and
+  shows what a given rank statistic looks like by chance.
+
+The frozen-encoder baseline of the pipeline document is not implemented; it needs
+Sentence Transformers and a downloaded model. The report records the rank and
+percentile of every pair under each baseline, the statistics per sampling strategy
+and partition, the share of the top 10 that the rule and text baselines agree on,
+and the scores grouped by the model-drafted pilot labels. No baseline reads a
+label, and the pilot sample holds two `unacceptable` labels, so the label section
+describes that sample and establishes nothing about baseline quality.
 
 ## Family-targeted expansion (step 2, in support of step 4)
 

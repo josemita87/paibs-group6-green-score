@@ -32,3 +32,7 @@ jobs:
         run: python scripts/inspect_aliases.py --verify
       - name: Verify frozen product partitions against a rebuild
         run: python scripts/freeze_partitions.py --verify
+      - name: Verify annotation pairs against a rebuild
+        run: python scripts/build_pairs.py --verify
+      - name: Verify baseline rankings against a rebuild
+        run: python scripts/run_baselines.py --verify
