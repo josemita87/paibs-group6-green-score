@@ -14,7 +14,9 @@ with model-drafted labels; a human review agreeing with them is reported but no
 reviewer export is in the repository. Step 4 also has 300 unlabeled annotation
 pairs sampled inside the frozen partitions (`pairs-v1`); no human has labeled them.
 Step 5 has frozen product partitions (`partitions-v1`); no triplet exists yet.
-No substitution model, optimizer or recommendation interface has been implemented.
+Step 6 has two of the three planned baselines, both untrained, ranked over those
+pairs (`baselines-v1`). No substitution model, optimizer or recommendation
+interface has been implemented.
 
 Earlier conversation called raw acquisition “step 1.” In the canonical pipeline
 it is **step 2**. Use the document's 1–13 numbering from now on; do not rename steps.
@@ -28,7 +30,7 @@ it is **step 2**. Use the document's 1–13 numbering from now on; do not rename
 | 3 | Build a comparable, usable catalog | Done — rebuilt with expansion | `basket/comparable.py`, `scripts/build_catalog.py`, `data/catalog.parquet` + report + manifest, `tests/test_comparable.py`. 1,684 eligible products in 1,556 groups across three families; CI verifies the committed outputs against a rebuild. |
 | 4 | Create the substitution dataset | In progress — pairs ready, labels pending | 36 calibration pairs, guidelines, Label Studio form and `scripts/review_agreement.py` to validate two exports and report agreement. Model-drafted labels for the 36 pairs are in `data/pilot_review_model.json`; a human review agreeing with them is reported but no reviewer export is in the repository. `scripts/build_pairs.py` and `data/pairs.json` add 300 unlabeled pairs inside the train, validation and test partitions, in three sampling strategies, verified in CI. No pair outside the pilot carries a label. |
 | 5 | Split the data before training | In progress — product partitions frozen | `scripts/freeze_partitions.py`, `data/partitions.json` (`partitions-v1`), `tests/test_partitions.py`: 72 calibration, 936 train, 200 validation and 200 test units from 1,556 eligible groups. The alias links behind the units are unreviewed. Within-partition pairs exist in `data/pairs.json`; triplets need step-4 labels. |
-| 6 | Establish the baselines | Not started | Category/rules, TF-IDF and frozen-encoder rankings on shared cases. |
+| 6 | Establish the baselines | In progress — two of three baselines | `basket/baselines.py`, `scripts/run_baselines.py`, `data/baseline_report.json` (`baselines-v1`), `tests/test_baselines.py`: `category_rules`, `tfidf_char` and a seeded `random_control` rank the recorded candidate of all 336 pairs inside its family and partition pool. The frozen-encoder baseline needs Sentence Transformers and is not run. Without labels these are rank statistics against the sampling strategy, not accuracy. |
 | 7 | Fine-tune the substitution encoder | Not started | Training and comparison with frozen embeddings. |
 | 8 | Encode and index the catalog | Not started | Versioned embeddings and retrieval. |
 | 9 | Filter and accept candidates | Not started | Eligibility, preference filters and abstention. |
@@ -99,6 +101,19 @@ Record any other dependency-driven change of order here before proceeding.
   family in one partition and in different split units. No calibration group is
   used. The sampled pools hold 540, 283 and 222 train groups and about 50 to 110
   groups per family in validation and test.
+- Baselines (`data/baseline_report.json`, no training, no label): mean percentile
+  of the recorded candidate over the 300 sampled pairs is 0.709 for `tfidf_char`,
+  0.628 for `category_rules` and 0.484 for `random_control`; median ranks 26, 46
+  and 76; recall@10 0.397, 0.200 and 0.060. On the 108 `lookalike` pairs
+  `tfidf_char` reaches 0.962 mean percentile and 0.815 recall@10; on the 96
+  `family_random` pairs it falls to 0.433, below `category_rules` at 0.490. The
+  two informative baselines share 0.284 of their top 10 on average. Pools hold 540
+  (yogurts), 283 (cereals) and 222 (plant-based) train groups and 25 to 26 groups
+  per family in calibration.
+- On the 36 model-drafted pilot labels (25 acceptable, 9 ambiguous, 2
+  unacceptable) `category_rules` scores 0.614 mean on acceptable against 0.286 on
+  unacceptable and `tfidf_char` 0.051 against 0.010. Two negative examples cannot
+  establish baseline quality; the report states this.
 - Families not selected (dairy desserts, cheeses, biscuits, breads, sweet
   spreads, plant-based beverages, fruit juices) are still reported with base-sample
   counts only; they were not expanded.
@@ -108,6 +123,10 @@ Record any other dependency-driven change of order here before proceeding.
   `archive/embeddings-v1`; their metrics are not Basket Optimizer results.
 
 ## Next action
+
+Label the 300 pairs of `data/pairs.json` with the step-4 form. Every later number
+depends on them: the baselines of step 6 can only be compared against each other
+until a label exists, and step 7 cannot train without triplets.
 
 Make the reported pilot review verifiable: add each reviewer's own export (or a
 record naming them and saying whether they labeled before seeing the model's
@@ -122,6 +141,39 @@ partitions (107 such group pairs cross train and test). A change of rule means a
 new partition version, which is cheap now and costly once labels exist.
 
 ## Change log
+
+### 2026-11-27 — Untrained ranking baselines (step 6, first part)
+
+- Added `basket/baselines.py`, `scripts/run_baselines.py` and
+  `data/baseline_report.json` (`baselines-v1`). Three baselines rank the recorded
+  candidate of all 336 pairs (300 sampled, 36 pilot) inside the eligible groups of
+  its family and partition, minus the groups of the original's own split unit.
+- `category_rules` scores 0 for another family or comparison unit and otherwise 1
+  minus the mean relative difference on protein, sugars and salt per 100, each
+  capped at 1 with denominator floors of 1.0, 1.0 and 0.1 g. `tfidf_char` is the
+  cosine of character 4-gram TF-IDF vectors of name and ingredient text, with
+  document frequencies from the 1,045 train groups only. `random_control` is a
+  seeded hash of the two barcodes. Ties break on the lowest barcode.
+- Measured: mean percentile 0.709 `tfidf_char`, 0.628 `category_rules`, 0.484
+  `random_control` over the 300 sampled pairs; recall@10 0.397, 0.200 and 0.060.
+  `tfidf_char` reaches 0.962 mean percentile on `lookalike` pairs and 0.433 on
+  `family_random`, where `category_rules` is higher at 0.490. The two informative
+  baselines share 0.284 of their top 10.
+- Validation: 19 new tests (n-grams, product text, TF-IDF and cosine, rule filters
+  and nutrient distance, seeded control, ranking order and tie break, percentile,
+  AUC ties; committed report reproducible under reversed row order, every sampled
+  and pilot pair ranked once, ranks inside their pool, pool equal to the family
+  and partition minus the own unit, text similarity separating lookalike from
+  unrelated pairs, control near 0.5, label section counts and declared source,
+  recorded input versions) pass with the other 81. `run_baselines.py --verify`
+  and every earlier verification pass locally. CI gained the baseline
+  verification; its remote result is not known at commit time.
+- Limitations: the frozen-encoder baseline of `docs/PIPELINE.md` is not
+  implemented, so step 6 is not complete. No baseline was trained and no human
+  label exists, so a high percentile reflects the sampling strategy rather than
+  substitutability. The pilot label section rests on 2 unacceptable and 9
+  ambiguous model-drafted labels and proves nothing about quality. The rule
+  baseline reads three nutrients only; it uses no label, allergen or dietary tag.
 
 ### 2026-11-27 — Annotation pairs inside the partitions (step 4)
 

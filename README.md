@@ -48,9 +48,12 @@ comparison; a chat API is not required.
   validation and test partitions in `data/partitions.json` (step 5).
 - `scripts/build_pairs.py`: samples the unlabeled annotation pairs of each
   partition into `data/pairs.json` (step 4).
+- `scripts/run_baselines.py`: ranks every pair with the untrained baselines into
+  `data/baseline_report.json` (step 6).
 - `basket/`: Pydantic basket models, validation and read-only catalog lookup (step 1);
   `basket/comparable.py` holds the step-3 normalization and eligibility rules;
-  `basket/pairs.py` holds the step-4 pair sampling rules.
+  `basket/pairs.py` holds the step-4 pair sampling rules and `basket/baselines.py`
+  the step-6 ranking baselines.
 - `app/streamlit_app.py`: minimal Streamlit screen that builds and validates a basket.
 - `requirements-app.txt`: pinned dependencies for the basket models, app and tests.
 - `requirements-data.txt`: optional dependencies for downloading the sample again.
@@ -172,6 +175,32 @@ and score below 0.4. A seeded barcode hash orders the last two and breaks ties i
 the first. No group appears in more than three pairs of one family and partition.
 The file records the strategy and the name overlap of every pair and no label; a
 strategy says how a pair was sampled, not whether the products substitute.
+
+## Baseline rankings (step 6)
+
+```sh
+python scripts/run_baselines.py            # rebuild data/baseline_report.json
+python scripts/run_baselines.py --verify   # check the committed report against a rebuild
+```
+
+Three untrained baselines rank candidates for every pair of `data/pairs.json` and
+for the 36 pilot pairs. The pool of one pair is every eligible group of the same
+family and partition, except the groups of the original's own split unit.
+
+- `category_rules` scores 0 for another family or comparison unit. Otherwise it
+  scores 1 minus the mean relative difference on protein, sugars and salt per 100.
+- `tfidf_char` is the cosine of character 4-gram TF-IDF vectors of the name and the
+  ingredient text. Document frequencies come from the 1,045 train groups only.
+- `random_control` is a seeded hash of the two barcodes. It measures nothing and
+  shows what a given rank statistic looks like by chance.
+
+The frozen-encoder baseline of the pipeline document is not implemented; it needs
+Sentence Transformers and a downloaded model. The report records the rank and
+percentile of every pair under each baseline, the statistics per sampling strategy
+and partition, the share of the top 10 that the rule and text baselines agree on,
+and the scores grouped by the model-drafted pilot labels. No baseline reads a
+label, and the pilot sample holds two `unacceptable` labels, so the label section
+describes that sample and establishes nothing about baseline quality.
 
 ## Family-targeted expansion (step 2, in support of step 4)
 
