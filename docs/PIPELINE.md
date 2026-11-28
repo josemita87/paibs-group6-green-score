@@ -130,9 +130,12 @@ The [pilot guide](ANNOTATION.md) defines the three usage contexts and links the
 model-drafted labels for them; no human reviewer's export is in the repository.
 The pilot reserves its own product groups for calibration. The remaining groups
 are partitioned in `data/partitions.json` (step 5); build every further pair
-within one partition. Two unlabeled pair sets exist: `data/pairs.json` (300 pairs,
-at most 45 triplets) and `data/anchored_pairs.json` (364 pairs around 96 anchors,
-at most 348 triplets).
+within one partition. Two pair sets exist: `data/pairs.json` (300 pairs, at most
+45 triplets) and `data/anchored_pairs.json` (364 pairs around 96 anchors, at most
+348 triplets). The first has model-drafted labels in
+`data/pairs_review_model.json`, which one person reports having checked without
+changing any (`data/pairs_review_record.json`); they allow one triplet. The
+second is unlabeled. No pair has labels from two independent people.
 
 **Output:** annotated pairs and annotation guidelines.
 
@@ -182,7 +185,9 @@ All three baselines and a random control rank the 336 pairs in
 instead of scikit-learn. The frozen encoder is
 `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2` at a pinned
 revision; its embeddings are stored in `data/frozen_embeddings.npy`. Evaluation
-metrics against human labels do not exist yet because no human label does.
+metrics against human labels do not exist yet because no independent human label
+does; the baselines have not been scored against the model-drafted labels of the
+300 pairs.
 
 **Output:** baseline rankings and evaluation metrics.
 

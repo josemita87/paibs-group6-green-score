@@ -127,8 +127,8 @@ python scripts/review_agreement.py ana.json ben.json --tasks data/pairs.json   #
 ```
 
 `review_agreement.py` validates both exports against the task file and reports
-agreement before discussion. It has been tested with synthetic exports only; no
-human review exists yet.
+agreement before discussion. It has been tested with synthetic exports and with
+the two model-drafted label files; no two independent human reviews exist yet.
 
 ## Inspect near-duplicate groups (input to step 5)
 
@@ -183,6 +183,15 @@ and score below 0.4. A seeded barcode hash orders the last two and breaks ties i
 the first. No group appears in more than three pairs of one family and partition.
 The file records the strategy and the name overlap of every pair and no label; a
 strategy says how a pair was sampled, not whether the products substitute.
+
+`data/pairs_review_model.json` holds a label and a reason for each of the 300
+pairs, drafted by an AI model (OpenAI Codex, as every task of the file declares):
+218 acceptable, 64 ambiguous and 18 unacceptable. `data/pairs_review_record.json`
+records that one person, Joan, reported on 2026-11-28 having checked the draft,
+and that no label or reason changed. These are a model draft checked by one
+person, not independent human labels, and no agreement figure exists for them.
+Validation holds no unacceptable pair and test holds one; one triplet can be
+formed, in train.
 
 ## Anchored annotation pairs (step 4)
 

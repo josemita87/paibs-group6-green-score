@@ -1,9 +1,12 @@
 """Checks for the pilot review validation and agreement report (pipeline step 4).
 
-Every export here is synthetic and built in memory from the unlabeled pilot tasks.
-No reviewer decision is stored in the repository.
+Every export here is synthetic and built in memory from the unlabeled pilot tasks,
+except the two committed label files, which a model drafted. No independent human
+reviewer's decision is stored in the repository.
 """
+from collections import Counter
 import contextlib
+import hashlib
 import io
 import json
 from pathlib import Path
@@ -17,6 +20,8 @@ from scripts.review_agreement import (
 
 PAIRS = ROOT / 'data/pairs.json'
 MODEL_PILOT_REVIEW = ROOT / 'data/pilot_review_model.json'
+MODEL_PAIRS_REVIEW = ROOT / 'data/pairs_review_model.json'
+REVIEW_RECORD = ROOT / 'data/pairs_review_record.json'
 
 DECISION, REASON, LABELS = form_fields()
 TASKS = load_tasks()
@@ -223,6 +228,60 @@ class SourceChecks(unittest.TestCase):
         self.assertEqual(report['reviewers_declared_as_model'], ['model'])
         self.assertEqual(report['sources']['model']['tasks_declaring_a_model'], 36)
         self.assertIn('not agreement between two people', report['note'])
+
+
+class SampledPairDraftChecks(unittest.TestCase):
+    """The 300 model-drafted labels of ``pairs-v1`` and the record of their review."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.record = json.loads(REVIEW_RECORD.read_text())
+        cls.tasks = load_tasks(PAIRS)
+        cls.items = json.loads(MODEL_PAIRS_REVIEW.read_text())
+        cls.reviews, cls.errors = parse_review(cls.items, cls.tasks, DECISION, REASON, LABELS)
+
+    def test_the_draft_labels_every_sampled_pair_once(self):
+        self.assertEqual(self.errors, [])
+        self.assertEqual(list(self.reviews), list(self.tasks))
+        self.assertEqual(len(self.reviews), 300)
+
+    def test_the_draft_still_declares_a_model_on_every_task(self):
+        self.assertEqual(source_of(self.items), {'tasks_declaring_a_model': 300,
+                                                 'declared_source': 'model'})
+        draft = self.record['draft']
+        self.assertEqual({item['meta']['annotator'] for item in self.items},
+                         {draft['declared_annotator']})
+        self.assertEqual({item['meta']['annotator_type'] for item in self.items},
+                         {draft['declared_annotator_type']})
+
+    def test_the_record_points_at_these_exact_labels(self):
+        self.assertEqual(self.record['labels_file'], 'data/pairs_review_model.json')
+        self.assertEqual(self.record['labels_sha256'],
+                         hashlib.sha256(MODEL_PAIRS_REVIEW.read_bytes()).hexdigest())
+        self.assertEqual(self.record['tasks_version'],
+                         json.loads(PAIRS.read_text())['version'])
+        self.assertIn('not independent human labels', self.record['label_status'])
+        self.assertTrue(self.record['review']['reviewer_saw_the_draft_labels'])
+
+    def test_the_recorded_counts_match_the_labels(self):
+        by_label, by_partition, by_original = Counter(), {}, {}
+        for pair_id, review in self.reviews.items():
+            task = self.tasks[pair_id]
+            by_label[review['label']] += 1
+            by_partition.setdefault(task['partition'], Counter())[review['label']] += 1
+            by_original.setdefault((task['partition'], task['original_group_id']),
+                                   Counter())[review['label']] += 1
+        triplets = Counter()
+        for (partition, _), labels in by_original.items():
+            triplets[partition] += labels['acceptable'] * labels['unacceptable']
+        counts = self.record['counts']
+        self.assertEqual(counts['pairs'], len(self.reviews))
+        self.assertEqual(counts['by_label'], {label: by_label[label] for label in sorted(LABELS)})
+        self.assertEqual(counts['by_partition'],
+                         {partition: {label: found[label] for label in sorted(LABELS)}
+                          for partition, found in by_partition.items()})
+        self.assertEqual(counts['triplets_possible'],
+                         {partition: triplets[partition] for partition in by_partition})
 
 
 if __name__ == '__main__':

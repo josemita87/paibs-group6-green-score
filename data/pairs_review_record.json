@@ -1,0 +1,40 @@
+{
+  "version": "pairs-review-record-v1",
+  "labels_file": "data/pairs_review_model.json",
+  "labels_sha256": "944e3ec26eb6444a39b22ab783e1d33fefc541cf00d8a091066c3e224aa9e5ff",
+  "tasks_file": "data/pairs.json",
+  "tasks_version": "pairs-v1",
+  "label_status": "model draft checked by one person; not independent human labels",
+  "draft": {
+    "declared_annotator": "OpenAI Codex",
+    "declared_annotator_type": "AI",
+    "declared_in": "the meta field of every task of the labels file, kept as received",
+    "file_dated": "2026-11-27"
+  },
+  "review": {
+    "reviewer": "Joan",
+    "reported_on": "2026-11-28",
+    "basis": "Reported by the reviewer. The repository holds no separate export of the review.",
+    "reviewer_saw_the_draft_labels": true,
+    "labels_changed": 0,
+    "reasons_changed": 0,
+    "how_changes_were_checked": "The 300 tasks the reviewer sent after the review equal the tasks of the draft file dated 2026-11-27, label by label and reason by reason."
+  },
+  "counts": {
+    "pairs": 300,
+    "by_label": {"acceptable": 218, "ambiguous": 64, "unacceptable": 18},
+    "by_partition": {
+      "train": {"acceptable": 131, "ambiguous": 32, "unacceptable": 17},
+      "validation": {"acceptable": 39, "ambiguous": 21, "unacceptable": 0},
+      "test": {"acceptable": 48, "ambiguous": 11, "unacceptable": 1}
+    },
+    "triplets_possible": {"train": 1, "validation": 0, "test": 0}
+  },
+  "limitations": [
+    "One person checked labels a model had already written; nobody labeled the pairs without seeing the draft.",
+    "There is no second review, so no agreement figure exists for these pairs.",
+    "The labels file still declares human_reviewed false; this record is the only trace of the review.",
+    "Validation holds no unacceptable pair and test holds one, so these labels cannot measure how a model separates acceptable from unacceptable candidates there.",
+    "One triplet can be formed, in train."
+  ]
+}

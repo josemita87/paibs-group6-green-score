@@ -59,6 +59,12 @@ annotator, the report names that reviewer and states that the figure is not
 agreement between two people. The script cannot prove that an undeclared export
 was made by a person.
 
+`data/pairs_review_model.json` is such a file for the 300 sampled pairs: a model
+drafted every label and reason. `data/pairs_review_record.json` records that one
+person reports having checked the draft and that nothing changed. A second
+reviewer who wants a measurable agreement figure should label the 300 pairs
+without opening that file, then run the command above against it.
+
 It refuses to compute anything unless both exports hold all 36 pairs with exactly
 one submitted annotation, one label and a nonempty reason each, and unless the
 task data still match the task file. It then prints the identical-decision count,

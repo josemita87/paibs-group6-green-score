@@ -1,6 +1,6 @@
 # Project status
 
-Last updated: 2026-11-27
+Last updated: 2026-11-28
 
 This is the shared handoff for contributors and AI assistants. Read
 [AGENTS.md](AGENTS.md) before editing and update this file in every commit.
@@ -11,10 +11,11 @@ version history; this file explains what is ready and what to do next.
 
 Steps 1–3 are implemented. Step 4 has a reproducible calibration pilot of 36 pairs
 with model-drafted labels; a human review agreeing with them is reported but no
-reviewer export is in the repository. Step 4 also has two unlabeled pair sets
-sampled inside the frozen partitions: 300 pairs (`pairs-v1`) and 364 pairs around
-96 anchor products (`anchored-pairs-v1`). No human export of either is in the
-repository.
+reviewer export is in the repository. Step 4 also has two pair sets sampled
+inside the frozen partitions: 300 pairs (`pairs-v1`) and 364 pairs around 96
+anchor products (`anchored-pairs-v1`). The 300 pairs have model-drafted labels
+that one person reports having checked; they are not independent human labels
+and allow one triplet. The 364 anchored pairs are unlabeled.
 Step 5 has frozen product partitions (`partitions-v1`); no triplet exists yet.
 Step 6 has the three planned baselines ranked over those pairs (`baselines-v2`):
 rules, TF-IDF and a frozen pretrained encoder. None was trained here and none is
@@ -31,7 +32,7 @@ it is **step 2**. Use the document's 1–13 numbering from now on; do not rename
 | 1 | User input | Done — minimal flow | `basket/` Pydantic models and catalog lookup, `app/streamlit_app.py`, `tests/test_basket.py`. Preferences and nutritional constraints are declared fields only (`declared_not_checked`); enforcement belongs to steps 9–10. |
 | 2 | Acquire and version the product catalog | Done — raw sample + family expansion | `scripts/fetch_data.py --catalog` (base snapshot) and `scripts/expand_catalog.py` (1,678 candidate rows of the three families from the same revision), each with a manifest and audit/tests. |
 | 3 | Build a comparable, usable catalog | Done — rebuilt with expansion | `basket/comparable.py`, `scripts/build_catalog.py`, `data/catalog.parquet` + report + manifest, `tests/test_comparable.py`. 1,684 eligible products in 1,556 groups across three families; CI verifies the committed outputs against a rebuild. |
-| 4 | Create the substitution dataset | In progress — pairs ready, labels pending | 36 calibration pairs, guidelines, Label Studio form and `scripts/review_agreement.py` to validate two exports and report agreement. Model-drafted labels for the 36 pairs are in `data/pilot_review_model.json`; a human review agreeing with them is reported but no reviewer export is in the repository. `scripts/build_pairs.py` and `data/pairs.json` add 300 unlabeled pairs inside the train, validation and test partitions, in three sampling strategies, verified in CI. `scripts/build_anchored_pairs.py` and `data/anchored_pairs.json` add 364 unlabeled pairs around 96 anchors so that labels can form triplets. No pair outside the pilot carries a label. |
+| 4 | Create the substitution dataset | In progress — model-drafted labels on 300 pairs, independent human labels pending | 36 calibration pairs, guidelines, Label Studio form and `scripts/review_agreement.py` to validate two exports and report agreement. Model-drafted labels for the 36 pairs are in `data/pilot_review_model.json`; a human review agreeing with them is reported but no reviewer export is in the repository. `scripts/build_pairs.py` and `data/pairs.json` add 300 unlabeled pairs inside the train, validation and test partitions, in three sampling strategies, verified in CI. `data/pairs_review_model.json` holds a model's draft label for each of the 300 pairs and `data/pairs_review_record.json` the reported review by one person. `scripts/build_anchored_pairs.py` and `data/anchored_pairs.json` add 364 unlabeled pairs around 96 anchors so that labels can form triplets. No pair has labels from two independent people. |
 | 5 | Split the data before training | In progress — product partitions frozen | `scripts/freeze_partitions.py`, `data/partitions.json` (`partitions-v1`), `tests/test_partitions.py`: 72 calibration, 936 train, 200 validation and 200 test units from 1,556 eligible groups. The alias links behind the units are unreviewed. Within-partition pairs exist in `data/pairs.json`; triplets need step-4 labels. |
 | 6 | Establish the baselines | In progress — three baselines ranked, evaluation needs labels | `basket/baselines.py`, `scripts/run_baselines.py`, `data/baseline_report.json` (`baselines-v2`), `tests/test_baselines.py`: `category_rules`, `tfidf_char`, `frozen_encoder` and a seeded `random_control` rank the recorded candidate of all 336 pairs inside its family and partition pool. `scripts/encode_frozen.py`, `basket/embeddings.py`, `data/frozen_embeddings.npy` + manifest and `tests/test_frozen_encoder.py` hold the frozen encoder. Without labels these are rank statistics against the sampling strategy, not accuracy. |
 | 7 | Fine-tune the substitution encoder | Not started | Training and comparison with frozen embeddings. |
@@ -104,6 +105,19 @@ Record any other dependency-driven change of order here before proceeding.
   family in one partition and in different split units. No calibration group is
   used. The sampled pools hold 540, 283 and 222 train groups and about 50 to 110
   groups per family in validation and test.
+- Label draft for `pairs-v1` (`data/pairs_review_model.json`, drafted by OpenAI
+  Codex, checked by Joan as reported on 2026-11-28 with no label changed): 218
+  acceptable, 64 ambiguous, 18 unacceptable. Train 131 / 32 / 17, validation
+  39 / 21 / 0, test 48 / 11 / 1. By family: cereals 86 / 10 / 4, plant-based
+  milks 58 / 37 / 5, yogurts 74 / 17 / 9. By strategy: `lookalike` 79 / 29 / 0,
+  `brand_variant` 69 / 18 / 9, `family_random` 70 / 17 / 9. One original has both
+  an acceptable and an unacceptable candidate, so one triplet exists, in train.
+  Ten reasons flag a possible duplicate.
+- The draft against the format evidence of `basket/formats.py`: 16 of the 18
+  unacceptable pairs have a flagged candidate and an unflagged original; 41 of
+  the 42 pairs with a flagged original are ambiguous; 217 of the 235 pairs with
+  no flag on either side are acceptable. This compares a keyword rule with a
+  model's draft and validates neither.
 - Anchored pairs (`data/anchored_pairs.json`, `anchored-pairs-v1`, unlabeled): 364
   pairs around 96 anchors (16 per family in train, 8 in validation, 8 in test); 192
   `same_format` and 172 `other_format`; 192 train, 86 validation and 86 test pairs.
@@ -143,7 +157,8 @@ Record any other dependency-driven change of order here before proceeding.
 - Families not selected (dairy desserts, cheeses, biscuits, breads, sweet
   spreads, plant-based beverages, fruit juices) are still reported with base-sample
   counts only; they were not expanded.
-- No substitution pairs have been labeled and no new model has been trained.
+- No substitution pair has labels from two independent people and no new model
+  has been trained.
 - Local data checks and remote CI passed for acquisition commit `2ecf444`.
 - Historical experiments remain available under `archive/claim-audit-v1` and
   `archive/embeddings-v1`; their metrics are not Basket Optimizer results.
@@ -155,8 +170,16 @@ form. It is the set that can yield triplets (ceiling 348, against 45 for
 `pairs-v1`, where 216 of 255 originals have one pair). Import its `tasks` list
 into Label Studio and compare the exports with
 `python scripts/review_agreement.py <first>.json <second>.json --tasks data/anchored_pairs.json`.
-`data/pairs.json` can be labeled afterwards for the baseline comparison; no human
-export of either set is in the repository.
+No human export of that set is in the repository.
+
+`data/pairs.json` has a model draft checked by one person
+(`data/pairs_review_model.json`, `data/pairs_review_record.json`). Decide as a
+team whether that is enough for the train pairs. It is not a held-out
+human-labeled set: validation has no unacceptable pair and test has one. A second
+person who labels the 300 pairs without opening the draft gives a measurable
+agreement figure with
+`python scripts/review_agreement.py <second>.json data/pairs_review_model.json --tasks data/pairs.json`.
+Inspect the ten pairs whose reason says “possible duplicate” against the grouping.
 
 With labels: build triplets inside each partition (rest of step 5), rank the
 anchored pairs with the baselines and add label-based metrics for the validation
@@ -168,14 +191,41 @@ record naming them and saying whether they labeled before seeing the model's
 labels) and run `python scripts/review_agreement.py <first>.json <second>.json`.
 Decide how drinkable yogurts and cooking coconut milk are kept out of sampled
 originals, since they caused six of the nine ambiguous pilot pairs.
-The 300 pairs of `data/pairs.json` are ready for human labeling with the step-4
-form; test pairs need human labels only.
-Before any of those pairs is labeled, a person should review the alias clusters
+Test pairs need human labels only.
+Before any further pair is labeled, a person should review the alias clusters
 and decide whether flavor variants of one brand line may sit in different
 partitions (107 such group pairs cross train and test). A change of rule means a
 new partition version, which is cheap now and costly once labels exist.
 
 ## Change log
+
+### 2026-11-28 — Model-drafted labels for the 300 sampled pairs and reported review (step 4)
+
+- Added `data/pairs_review_model.json`: one label and reason for each of the 300
+  pairs of `pairs-v1`, in the full-JSON export structure. Every task declares
+  OpenAI Codex as annotator, type AI, `human_reviewed: false`; the file is kept
+  as received (sha256 `944e3ec2…`, recorded in full in the review record).
+- Added `data/pairs_review_record.json`. Reported by Joan on 2026-11-28: he
+  reviewed the 300 drafted labels himself. The 300 tasks he sent after the review
+  equal the draft file dated 2026-11-27 task by task, so no label and no reason
+  changed. The record states that the reviewer saw the draft.
+- Result: 218 acceptable, 64 ambiguous, 18 unacceptable; counts per partition,
+  family and strategy are under “Available evidence and limitations”.
+- Validation: 4 new tests (the file parses against `data/pairs.json` with no
+  error and one label and reason per pair; every task still declares the model;
+  the record holds the file's sha256 and the task version; the recorded counts
+  and triplet count equal a recount) pass with the other 129. Every `--verify`
+  command and both raw audits pass locally. Remote CI was observed passing for
+  the earlier commit `42646f2` (run 46132426131); the result for this commit is
+  not known at commit time.
+- Limitations: these are a model draft checked by one person, not independent
+  human labels. Nobody labeled without seeing the draft, there is no second
+  review and no agreement figure, and the repository holds no export of the
+  review beyond the unchanged draft. The labels cannot serve as the held-out
+  human-labeled test set of step 5: validation has no unacceptable pair and test
+  has one. One triplet can be formed. The baselines were not scored against
+  these labels and no model was trained. The 7 pairs with a mismatched unit are
+  among the labeled pairs. Step 4 stays in progress; no runtime code changed.
 
 ### 2026-11-27 — Anchored annotation pairs (step 4)
 
